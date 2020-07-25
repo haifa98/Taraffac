@@ -1,5 +1,44 @@
 <resources>
-    <string name="app_name">Taraffac</string>
-    <string name="REGISTER_main">REGISTER</string>
-    <string name="LOG_IN_main">LOG_IN</string>
+    <string name="app_name" translatable="false">Taraffac</string>
+    <string name="REGISTER_main" translatable="false">REGISTER</string>
+    <string name="LOG_IN_main" translatable="false">LOG IN</string>
+    <string name="desc">Image</string>
+    <string name="desc_back">Image</string>
+    <string name="tatil_login">LOG IN </string>
+    <string name="email_login">Email: </string>
+    <string name="pass_login">Password:</string>
+    <string name="butt_login">LOG IN </string>
+    <string name="star_login">* </string>
+    <string name="star1_login">*</string>
+    <string name="hint_login">Email</string>
+    <string name="hint1_login">Password</string>
+    <string name="name_register">Name:</string>
+    <string name="email_register">Email:</string>
+    <string name="Password_register">Password:</string>
+    <string name="Confirm_Password_register">Confirm Password:</string>
+    <string name="butt_register"> REGISTER </string>
+    <string name="hint_register">User Name</string>
+    <string name="hint1_register">Email</string>
+    <string name="hint2_register">Password</string>
+    <string name="hint3_register">Confirm_Password</string>
+    <string name="tatil_register">REGISTER </string>
+    <string name="star1_register"> *</string>
+    <string name="star2_register">*</string>
+    <string name="star3_register">*</string>
+    <string name="star4_register">*</string>
+    <string name="desc_register">Image</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>
