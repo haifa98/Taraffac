@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Taraffac</string>
+    <string name="REGISTER_main">REGISTER</string>
+    <string name="LOG_IN_main">LOG_IN</string>
 </resources>
