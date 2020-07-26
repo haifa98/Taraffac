@@ -71,9 +71,20 @@
 
     <string name="profile_img">Image</string>
     <string name="name_profile">Name:</string>
-    <string name="email_profile">Email</string>
+    <string name="email_profile">Email:</string>
     <string name="adding_type">Adding type:</string>
     <string name="delete_acc">Delete Account</string>
     <string name="edit_profile">Edit</string>
+    <string name="name_pro">mohammed</string>
+    <string name="email_pro">mohammed@hotmail.com</string>
+    <string name="adding_pro">Voice command</string>
+
+
+    <string name="hint_name_edit">Name</string>
+    <string name="hint_email_edit">Email</string>
+    <string name="voice">Voice command</string>
+    <string name="display">Display option</string>
+
+
 
 </resources>
