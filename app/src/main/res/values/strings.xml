@@ -30,6 +30,21 @@
     <string name="profile">Profile</string>
     <string name="deactivate">Deactivate</string>
     <string name="log_out">Log out</string>
+    <string name="type">Type:</string>
+    <string name="size">Size:</string>
+    <string name="save">Save</string>
+    <string name="cushion_type">Cushion</string>
+    <string name="table_type">Table</string>
+    <string name="add_speed_bump">Add speed bump</string>
+    <string name="small">Small</string>
+    <string name="midium">Midium</string>
+    <string name="hump_type">Hump</string>
+    <string name="large">Large</string>
+    <string name="hump_image">Image</string>
+    <string name="cushion_image">Image</string>
+    <string name="table_image">Image</string>
+
+
 
 
 </resources>
