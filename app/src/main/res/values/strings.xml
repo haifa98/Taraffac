@@ -48,6 +48,19 @@
     <string name="x">X</string>
     <string name="delete_speedbump">Delete SpeedBump :</string>
     <string name="are_you_sure_you_want_to_delete_this_speedbump">Are you sure you want to delete this speedbump ?</string>
+    <string name="x1">x</string>
+    <string name="deleting_was_successful">Deleting was successful</string>
+    <string name="speed_bump_information">speed_bump_information</string>
+    <string name="edit">Edit</string>
+    <string name="report">Report</string>
+    <string name="edit_speed_bump">Edit speed bump</string>
+
+    <string name="hump">Hump</string>
+    <string name="table">Table</string>
+    <string name="cushion">Cushion</string>
+
+    <string name="editing">The editing was successful</string>
+
 
 
 </resources>

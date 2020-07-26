@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/textView33"
         android:layout_width="408dp"
-        android:layout_height="66dp"
+        android:layout_height="141dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -20,10 +20,9 @@
         android:text=""
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.059" />
 
     <Button
         android:id="@+id/but_Ppofile"
