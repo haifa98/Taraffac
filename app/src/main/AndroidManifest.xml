@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".notify"/>
+        <activity android:name=".report_msg"/>
+        <activity android:name=".report" />
+        <activity android:name=".edit_speed_bump" />
+        <activity android:name=".notify" />
         <activity android:name=".delete_msg" />
         <activity android:name=".delete" />
         <activity android:name=".add" />
