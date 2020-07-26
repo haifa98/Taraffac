@@ -226,6 +226,7 @@
         android:layout_height="61dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/style_button"
+        android:onClick="go_to_home1"
         android:text="@string/butt_register"
         android:textColor="#100808"
         android:textStyle="bold"

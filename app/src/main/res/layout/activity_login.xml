@@ -54,6 +54,7 @@
         android:layout_height="61dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/style_button"
+        android:onClick="go_to_home"
         android:text="@string/butt_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
