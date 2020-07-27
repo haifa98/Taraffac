@@ -15,9 +15,9 @@ public class view_speed_bump extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_speed_bump);
-        profile = (Button)findViewById(R.id.but_Ppofile);
-        log = (Button)findViewById(R.id.but_log_out);
-        add = (Button)findViewById(R.id.but_deactivate);
+        profile = (Button)findViewById(R.id.but_logout);
+        log = (Button)findViewById(R.id.but_logout);
+        add = (Button)findViewById(R.id.add_bump);
     }
     public void go_to_profile(View v){
         Intent profile = new Intent(this,profile.class);
@@ -29,7 +29,7 @@ public class view_speed_bump extends AppCompatActivity {
     }
 
     public void add(View v){
-        Intent a = new Intent(this,add.class);
+        Intent a = new Intent(this, add.class);
         startActivity(a);
     }
 
