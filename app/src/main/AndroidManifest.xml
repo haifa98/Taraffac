@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.taraffac">
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="false"
@@ -9,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".edit_profile"></activity>
+        <activity android:name=".edit_speed_bump_msg"></activity>
+        <activity android:name=".edit_profile" />
         <activity android:name=".profile" />
         <activity android:name=".view_spped_bump_msg" />
         <activity android:name=".report_msg" />

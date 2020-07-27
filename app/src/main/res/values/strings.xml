@@ -84,7 +84,8 @@
     <string name="hint_email_edit">Email</string>
     <string name="voice">Voice command</string>
     <string name="display">Display option</string>
-
+    <string name="Editing_was_successful">Editing was successful</string>
+    <string name="Speed_bump_information" >Speed bump information</string>
 
 
 </resources>
