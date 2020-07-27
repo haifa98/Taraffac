@@ -67,7 +67,7 @@
     <string name="violating_the_standard">Violating the standard</string>
     <string name="reprt_speedbump">Reprt speedbump :</string>
     <string name="why_do_you_want_to_report_this_speedbump">Why do you want to report this speedbump ?</string>
-    <string name="the_report_was_sent_successfuly">The report was sent successfuly</string>
+    <string name="the_report_was_sent_successfully">The report was sent successfully</string>
 
     <string name="profile_img">Image</string>
     <string name="name_profile">Name:</string>
