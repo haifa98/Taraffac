@@ -52,32 +52,31 @@
         app:layout_constraintVertical_bias="0.004" />
 
     <TextView
+        android:id="@+id/textView23"
+        android:layout_width="349dp"
+        android:layout_height="81dp"
+        android:text="@string/are_you_sure_you_want_to_delete_this_speedbump"
+        android:textColor="#373636"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.269" />
+
+    <TextView
         android:id="@+id/textView22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete_speedbump"
         android:textColor="#020829"
-        android:textSize="36sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.081" />
-
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="379dp"
-        android:layout_height="88dp"
-        android:text="@string/are_you_sure_you_want_to_delete_this_speedbump"
-        android:textColor="#373636"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.344"
+        app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.232" />
+        app:layout_constraintVertical_bias="0.159" />
 </androidx.constraintlayout.widget.ConstraintLayout>

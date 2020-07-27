@@ -28,7 +28,7 @@
         android:gravity="center"
         android:text="@string/deleting_was_successful"
         android:textColor="#020829"
-        android:textSize="36sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
