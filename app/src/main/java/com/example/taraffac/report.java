@@ -53,7 +53,7 @@ public class report extends Activity {
 
     }
     public void show_report(View v){
-        Toast to =  Toast.makeText(this, " The Report was sent successfully"  , Toast.LENGTH_SHORT);
+        Toast to =  Toast.makeText(this, " The Report Was Sent Successfully"  , Toast.LENGTH_SHORT);
         to.setGravity(Gravity.TOP,0, 90);
         to.show();
     }
