@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "947136168718",
+    "firebase_url": "https://taraffac.firebaseio.com",
+    "project_id": "taraffac",
+    "storage_bucket": "taraffac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947136168718:android:1c22a5b1f4e58a0576cd5f",
+        "android_client_info": {
+          "package_name": "com.example.taraffac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "947136168718-77lb4c8ktfc5ccd8vgjf6mq2veq0pfah.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUos8eies5B-6wewWizXCggLHNT9j1pFE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "947136168718-77lb4c8ktfc5ccd8vgjf6mq2veq0pfah.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
