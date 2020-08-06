@@ -50,16 +50,16 @@
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="@string/Speed_bump_information"
-        android:textColor="#020829"
-        android:textSize="25sp"
+        android:textColor="#100808"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.551"
+        app:layout_constraintHorizontal_bias="0.379"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.394" />
+        app:layout_constraintVertical_bias="0.361" />
 
     <TextView
         android:id="@+id/textView28"
@@ -72,15 +72,15 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/type"
-        android:textColor="#020829"
-        android:textSize="20sp"
+        android:textColor="#100808"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.139"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35" />
+        app:layout_constraintVertical_bias="0.321" />
 
     <TextView
         android:id="@+id/textView29"
@@ -94,14 +94,14 @@
         android:layout_marginBottom="8dp"
         android:text="@string/size"
         android:textColor="#020829"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.131"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.534" />
+        app:layout_constraintVertical_bias="0.519" />
 
     <Button
         android:id="@+id/btn_editopt"
@@ -115,8 +115,9 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/style_button"
         android:text="@string/edit"
+        android:textColor="#100808"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.27"
@@ -137,7 +138,7 @@
         android:background="@drawable/style_button"
         android:text="@string/report"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.697"
@@ -172,6 +173,7 @@
         android:background="@drawable/style_button"
         android:onClick="go_to_profile"
         android:text="@string/profile"
+        android:textColor="#100808"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -193,6 +195,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/style_button"
         android:text="@string/deactivate"
+        android:textColor="#100808"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -214,6 +217,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/style_button"
         android:text="@string/log_out"
+        android:textColor="#100808"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

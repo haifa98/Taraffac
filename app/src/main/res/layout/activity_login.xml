@@ -56,6 +56,7 @@
         android:background="@drawable/style_button"
         android:onClick="go_to_home"
         android:text="@string/butt_login"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/the_report_was_sent_successfully"
-        android:textColor="#020829"
+        android:textColor="#100808"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

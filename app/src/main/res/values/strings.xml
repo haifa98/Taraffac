@@ -47,7 +47,7 @@
     <string name="agree">Agree</string>
     <string name="x">X</string>
     <string name="delete_speedbump">Delete SpeedBump :</string>
-    <string name="are_you_sure_you_want_to_delete_this_speedbump">Are you sure you want to delete this speedbump ?</string>
+    <string name="are_you_sure_you_want_to_delete_this_speedbump">Are you sure you want to delete this speed bump ?</string>
     <string name="x1">x</string>
     <string name="deleting_was_successful">Deleting was successful</string>
     <string name="speed_bump_information">speed bump information</string>
@@ -65,8 +65,8 @@
     <string name="other">other</string>
     <string name="violating_the_location">Violating the location</string>
     <string name="violating_the_standard">Violating the standard</string>
-    <string name="report_speedbump">Report speedbump :</string>
-    <string name="why_do_you_want_to_report_this_speedbump">Why do you want to report this speedbump ?</string>
+    <string name="report_speedbump">Report speed bump :</string>
+    <string name="why_do_you_want_to_report_this_speedbump">Why do you want to report this speed bump ?</string>
     <string name="the_report_was_sent_successfully">The report was sent successfully</string>
 
     <string name="profile_img">Image</string>
