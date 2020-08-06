@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class view_speed_bump extends AppCompatActivity {
     Button profile;
     Button log;
@@ -24,8 +26,10 @@ public class view_speed_bump extends AppCompatActivity {
         startActivity(profile);
     }
     public void log_out(View v){
+        FirebaseAuth.getInstance().signOut();// R add it
         Intent log = new Intent(this,login.class);
         startActivity(log);
+        finish();// R add it
     }
 
     public void add(View v){
