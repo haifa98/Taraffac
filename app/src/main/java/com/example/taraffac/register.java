@@ -61,7 +61,7 @@ public class register extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         if(fAuth.getCurrentUser() != null){
-            Intent go_home1 = new Intent(getApplicationContext(),view_speed_bump.class);
+            Intent go_home1 = new Intent(getApplicationContext(),map.class);
             startActivity(go_home1);
             finish();
         }
@@ -99,7 +99,7 @@ public class register extends AppCompatActivity {
                   public void onComplete(@NonNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
                           Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();
-                          Intent go_home1 = new Intent(getApplicationContext(),view_speed_bump.class);
+                          Intent go_home1 = new Intent(getApplicationContext(),map.class);
                           startActivity(go_home1);
 
                       }else {

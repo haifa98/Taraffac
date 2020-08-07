@@ -37,6 +37,9 @@ public class add extends AppCompatActivity {
         t.setGravity(Gravity.TOP, 0,90);
         t.show();
 
+        Intent log = new Intent(this,map.class);
+        startActivity(log);
+
     }
 }
 

@@ -67,7 +67,7 @@ public class login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
                           Toast.makeText(login.this, " Logged in Successfully"  , Toast.LENGTH_SHORT).show();
-                          Intent go_home1 = new Intent(getApplicationContext(),view_speed_bump.class);
+                          Intent go_home1 = new Intent(getApplicationContext(),map.class);
                           startActivity(go_home1);
                       }else {
                           Toast.makeText(login.this, " Error " + task.getException().getMessage()  , Toast.LENGTH_SHORT).show();
@@ -88,7 +88,7 @@ public class login extends AppCompatActivity {
     }
 
     public void go_to_home(View view) {
-        Intent go_home = new Intent(this,view_speed_bump.class);
+        Intent go_home = new Intent(this,map.class);
         startActivity(go_home);
 
 
