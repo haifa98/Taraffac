@@ -47,7 +47,7 @@ public class login extends AppCompatActivity { // start class
         LEmail = findViewById(R.id.email_login);
         LPass = findViewById(R.id.password_login);
         fAuth = FirebaseAuth.getInstance();
-        forgotTextLink = findViewById(R.id.forgotPassword);
+        forgotTextLink = findViewById(R.id.ForgotPassword);
 
 
         go_login_to_register.setOnClickListener(new View.OnClickListener() {
