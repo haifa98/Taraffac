@@ -1,11 +1,14 @@
 package com.example.taraffac;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class register extends AppCompatActivity {
     ImageView return_main2;
@@ -29,6 +39,9 @@ public class register extends AppCompatActivity {
     //long maxid =0;
    // User user;
     FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    String userID;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +67,12 @@ public class register extends AppCompatActivity {
         return_main2= findViewById(R.id.image_back2);
         go_register_to_home1=findViewById(R.id.butt_register);
 
-        name = (EditText) findViewById(R.id.NAME);
-        email = (EditText) findViewById(R.id.email_register);
-        pass = (EditText) findViewById(R.id.password_register);
+        name =  findViewById(R.id.NAME);
+        email = findViewById(R.id.email_register);
+        pass =  findViewById(R.id.password_register);
 
         fAuth = FirebaseAuth.getInstance();
+        fStore= FirebaseFirestore.getInstance();
 
         if(fAuth.getCurrentUser() != null){
             Intent go_home1 = new Intent(getApplicationContext(),map.class);
@@ -78,8 +92,11 @@ public class register extends AppCompatActivity {
 
                Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();*/
 
-              String Email = email.getText().toString().trim();
+              final String Email = email.getText().toString().trim();
               String Pass = pass.getText().toString().trim();
+              //amjad
+                final String Name = name.getText().toString();
+                //amjad
 
               if(TextUtils.isEmpty(Email)){
                   email.setError("Email is Required");
@@ -95,15 +112,30 @@ public class register extends AppCompatActivity {
               }
 
               fAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                  @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                   @Override
                   public void onComplete(@NonNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
                           Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();
+                          //aamjad
+                          userID = fAuth.getCurrentUser().getUid();
+                          DocumentReference documentReferenc = fStore.collection("users").document(userID);
+                          Map<String , Object> user = new HashMap<>();
+                          user.put("Name",Name);
+                          user.put("email" , Email);
+                          documentReferenc.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                              @Override
+                              public void onSuccess(Void aVoid) {
+                                  Log.d("TAG", "onSuccess: user Profile is created for "+ userID);
+                              }
+                          });
+                          //amjad
+
                           Intent go_home1 = new Intent(getApplicationContext(),map.class);
                           startActivity(go_home1);
 
                       }else {
-                          Toast.makeText(register.this, " Error " + task.getException().getMessage()  , Toast.LENGTH_SHORT).show();
+                          Toast.makeText(register.this, " Error " + Objects.requireNonNull(task.getException()).getMessage()  , Toast.LENGTH_SHORT).show();
                       }
                   }
               });
