@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+//import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Objects;
-import java.util.jar.Attributes;
+//import java.util.jar.Attributes;
 
 public class profile extends AppCompatActivity {
     Button edit;
@@ -31,6 +32,9 @@ public class profile extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
 String usedId;
+/// amjad imge
+  // ImageView imageprofil;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -41,10 +45,13 @@ String usedId;
         edit = findViewById(R.id.edit_profile);
         log = findViewById(R.id.but_log_out5);
         del = findViewById(R.id.delete_profile);
-
+         //
+       // imageprofil= findViewById(R.id.imageProfil);
+        //
         fullName =findViewById(R.id.name_pro);
         Email= findViewById(R.id.email_pro);
         fAuth = FirebaseAuth.getInstance();
+
         fStore =FirebaseFirestore.getInstance();
         usedId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
         //retrev data ///
