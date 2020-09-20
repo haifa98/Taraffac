@@ -148,7 +148,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/style_button"
-        android:onClick="edit"
         android:text="@string/edit_profile"
         android:textColor="#100808"
         android:textSize="18sp"

@@ -28,6 +28,7 @@ public class profile extends AppCompatActivity {
     Button edit;
     Button log;
     Button del;
+   // Button edit_profile;
     TextView fullName , Email;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -52,6 +53,7 @@ String usedId;
         Email= findViewById(R.id.email_pro);
         fAuth = FirebaseAuth.getInstance();
 
+
         fStore =FirebaseFirestore.getInstance();
         usedId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
         //retrev data ///
@@ -64,17 +66,31 @@ String usedId;
                 fullName.setText(documentSnapshot.getString("Name"));
             }
         });//end method
+        //
+        edit.setOnClickListener(new View.OnClickListener() {// start setOnClickListener
+            @Override
+            public void onClick(View v) {
+                // open Gallery
+                //  Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                // startActivityForResult(openGalleryIntent, 1000 );
+                Intent i = new Intent(v.getContext(),edit_profile.class);
+                i.putExtra("fullName",fullName.getText().toString());
+                i.putExtra("email",Email.getText().toString());
 
+                startActivity(i);
+            }
+        });//End setOnClickListener
+        //
 
-    }
+    }//end Oncrate
     public void return_main(View view) {
         onBackPressed();
     }
 
-    public void edit(View v){
-        Intent profile = new Intent(this,edit_profile.class);
-        startActivity(profile);
-    }
+  //  public void edit(View v){
+    //    Intent profile = new Intent(this,edit_profile.class);
+    //    startActivity(profile);
+    //}
     public void log_out(View v){
         Intent log = new Intent(this,login.class);
         startActivity(log);

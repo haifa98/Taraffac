@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class register extends AppCompatActivity {
+    public static final String TAG = "TAG";
     ImageView return_main2;
     Button go_register_to_home1;
     EditText name,email,pass ;
@@ -126,7 +127,7 @@ public class register extends AppCompatActivity {
                           documentReferenc.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                               @Override
                               public void onSuccess(Void aVoid) {
-                                  Log.d("TAG", "onSuccess: user Profile is created for "+ userID);
+                                  Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
                               }
                           });
                           //amjad
