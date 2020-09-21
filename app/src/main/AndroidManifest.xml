@@ -45,7 +45,6 @@
         <activity android:name=".delete_msg" />
         <activity android:name=".delete" />
         <activity android:name=".add" />
-        <activity android:name=".view_speed_bump" />
         <activity android:name=".register" />
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
