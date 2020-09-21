@@ -43,9 +43,9 @@ public class map extends FragmentActivity implements LocationListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        profile = (Button) findViewById(R.id.but_pofile_map);
-        log = (Button) findViewById(R.id.but_logout_map);
-        add = (Button) findViewById(R.id.add_bump2);
+        profile = findViewById(R.id.but_pofile_map);
+        log =  findViewById(R.id.but_logout_map);
+        add =  findViewById(R.id.add_bump2);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -62,9 +62,9 @@ public class map extends FragmentActivity implements LocationListener{
         }
 
         //speedometer code
-        LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        this.onLocationChanged(null);
+       // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+      //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+      //  this.onLocationChanged(null);
 
     }
 
