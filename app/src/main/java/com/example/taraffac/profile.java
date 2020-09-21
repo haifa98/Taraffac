@@ -1,25 +1,37 @@
 package com.example.taraffac;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 //import android.widget.ImageView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 //import java.util.jar.Attributes;
@@ -28,10 +40,13 @@ public class profile extends AppCompatActivity {
     Button edit;
     Button log;
     Button del;
+    Button  ChangImage1;
+    ImageView imageProfil1;
    // Button edit_profile;
     TextView fullName , Email;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    StorageReference  storageReference;
 String usedId;
 /// amjad imge
   // ImageView imageprofil;
@@ -46,7 +61,11 @@ String usedId;
         edit = findViewById(R.id.edit_profile);
         log = findViewById(R.id.but_log_out5);
         del = findViewById(R.id.delete_profile);
-         //
+        imageProfil1= findViewById(R.id.imageProfil1);
+        ChangImage1= findViewById(R.id.ChangImage1);
+        storageReference = FirebaseStorage.getInstance().getReference();
+
+        //
        // imageprofil= findViewById(R.id.imageProfil);
         //
         fullName =findViewById(R.id.name_pro);
@@ -81,8 +100,66 @@ String usedId;
             }
         });//End setOnClickListener
         //
+        // start set ProfileImage1
+        StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
+
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(imageProfil1);
+            }
+        });
+        ChangImage1.setOnClickListener(new View.OnClickListener() {// start setOnClickListener
+            @Override
+            public void onClick(View v) {
+                // open Gallery
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent, 1000 );
+
+            }
+        });//End setOnClickListener
+        // end set ProfileImage1
 
     }//end Oncrate
+    // set ProfileImage1
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1000){
+            if(resultCode == Activity.RESULT_OK){
+                Uri imageUri = Objects.requireNonNull(data).getData();
+                // imageprofil.setImageURI(imageUri);
+                uploadImageToFirebase(imageUri);
+            }
+        }
+    }// end method
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void uploadImageToFirebase(Uri imageUri) {// start method
+        // uplood image to firebase storage
+        final StorageReference fileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Toast.makeText(edit_profile.this, " Image Uploaded", Toast.LENGTH_SHORT).show();
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        //ImageView imageProfilEdit = null;
+                        Picasso.get().load(uri).into(imageProfil1);
+
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(profile.this, "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }// end  method
+    // end set ProfileImage1
     public void return_main(View view) {
         onBackPressed();
     }

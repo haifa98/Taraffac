@@ -37,7 +37,8 @@ import java.util.Objects;
 
 public class edit_profile extends AppCompatActivity {
     public static final String TAG = "TAG";
-    Button saveProvil, ChangImage1;
+    Button saveProvil;
+    //Button ChangImage1;
     ImageView imageprofil;
     StorageReference  storageReference;
     FirebaseFirestore fStore;
@@ -56,8 +57,8 @@ public class edit_profile extends AppCompatActivity {
       //  fullNameProfileEdit = findViewById(R.id.name_edit);
         //  EmailProfileEdit = findViewById(R.id.email_edit);
         saveProvil = findViewById(R.id.save_profile);
-        imageprofil= findViewById(R.id.imageProfilEdit);
-        ChangImage1= findViewById(R.id.ChangImage);
+       imageprofil= findViewById(R.id.imageProfilEdit);
+       // ChangImage1= findViewById(R.id.ChangImage);
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
@@ -75,23 +76,23 @@ public class edit_profile extends AppCompatActivity {
         ProfileEditFullName.setText(fullName);
         ProfileEditEmail.setText(email);
         // set ProfileImage1
-        StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
+        //StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
 
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(imageprofil);
-            }
-        });
-        ChangImage1.setOnClickListener(new View.OnClickListener() {// start setOnClickListener
-            @Override
-            public void onClick(View v) {
+        //profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            //@Override
+          //  public void onSuccess(Uri uri) {
+          //      Picasso.get().load(uri).into(imageprofil);
+            //}
+        //});
+        //ChangImage1.setOnClickListener(new View.OnClickListener() {// start setOnClickListener
+          //  @Override
+            //public void onClick(View v) {
              // open Gallery
-               Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-               startActivityForResult(openGalleryIntent, 1000 );
+              // Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+               //startActivityForResult(openGalleryIntent, 1000 );
 
-            }
-       });//End setOnClickListener
+            //}
+       //});//End setOnClickListener
         // set ProfileImage1
        // هنا اتوقع تغيير الصوره اتاكد منه شوي
         imageprofil.setOnClickListener(new View.OnClickListener() {
@@ -144,44 +145,44 @@ public class edit_profile extends AppCompatActivity {
 
     }// end onCreate
     // set ProfileImage1
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000){
-            if(resultCode == Activity.RESULT_OK){
-                Uri imageUri = Objects.requireNonNull(data).getData();
+    //@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    //@Override
+    //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
+      //  super.onActivityResult(requestCode, resultCode, data);
+        //if(requestCode == 1000){
+          //  if(resultCode == Activity.RESULT_OK){
+            //    Uri imageUri = Objects.requireNonNull(data).getData();
                // imageprofil.setImageURI(imageUri);
-                uploadImageToFirebase(imageUri);
-            }
-        }
-    }// end method
+              //  uploadImageToFirebase(imageUri);
+            //}
+        //}
+   // }// end method
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void uploadImageToFirebase(Uri imageUri) {// start method
+    //@RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    //private void uploadImageToFirebase(Uri imageUri) {// start method
         // uplood image to firebase storage
-        final StorageReference fileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
-        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+      //  final StorageReference fileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
+        //fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+          //  @Override
+            //public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                // Toast.makeText(edit_profile.this, " Image Uploaded", Toast.LENGTH_SHORT).show();
-                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                     @Override
-                     public void onSuccess(Uri uri) {
+              //   fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                //     @Override
+                  //   public void onSuccess(Uri uri) {
                          //ImageView imageProfilEdit = null;
-                         Picasso.get().load(uri).into(imageprofil);
+                    //     Picasso.get().load(uri).into(imageprofil);
 
-                     }
-                 });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(edit_profile.this, "failed", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }// end  method
-    // end set ProfileImage1
+                     //}
+                 //});
+          //  }
+        //}).addOnFailureListener(new OnFailureListener() {
+           // @Override
+            //public void onFailure(@NonNull Exception e) {
+              //  Toast.makeText(edit_profile.this, "failed", Toast.LENGTH_SHORT).show();
+            //}
+        //});
+    //}// end  method
+    //// end set ProfileImage1
 
     public void return_main(View view) {
         onBackPressed();
