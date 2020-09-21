@@ -1,30 +1,34 @@
 package com.example.taraffac;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-
 import android.Manifest;
 import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class map extends FragmentActivity {
+//speedometer imports
+import android.location.LocationListener;
+import android.widget.TextView;
+import android.location.LocationManager;
+import android.location.GpsStatus;
+
+public class map extends FragmentActivity implements LocationListener{
 
     private GoogleMap mMap;
     Button profile;
@@ -33,6 +37,7 @@ public class map extends FragmentActivity {
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
+    TextView txtCurrentSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,10 @@ public class map extends FragmentActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
+        //speedometer code
+        LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        this.onLocationChanged(null);
 
     }
 
@@ -130,4 +139,42 @@ public class map extends FragmentActivity {
         startActivity(a);
     }
 
+    //speedometer code
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        if (location==null){
+            // if you can't get speed because reasons :)
+            txtCurrentSpeed.setText("00 km/h");
+        }
+        else{
+            //int speed=(int) ((location.getSpeed()) is the standard which returns meters per second. In this example i converted it to kilometers per hour
+
+            int speed=(int) ((location.getSpeed()*3600)/1000);
+
+            txtCurrentSpeed.setText(speed+" km/h");
+        }
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+
+    }
 }

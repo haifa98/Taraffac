@@ -6,20 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--suppress AndroidDomInspection -->
+
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logo"
+        android:layout_width="348dp"
+        android:layout_height="372dp"
         android:contentDescription="@string/desc"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.259" />
+        app:layout_constraintVertical_bias="0.069" />
 
-    <!--suppress AndroidDomInspection -->
     <Button
         android:id="@+id/but_register"
         android:layout_width="187dp"
