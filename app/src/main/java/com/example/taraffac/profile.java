@@ -74,9 +74,9 @@ String usedId;
 
 
         fStore =FirebaseFirestore.getInstance();
-        usedId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
+      //  usedId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
         //retrev data ///
-        final DocumentReference documentReference =fStore.collection("users").document(usedId);
+        final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method

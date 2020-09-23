@@ -75,25 +75,7 @@ public class edit_profile extends AppCompatActivity {
                 ProfileEditEmail = findViewById(R.id.email_edit);
         ProfileEditFullName.setText(fullName);
         ProfileEditEmail.setText(email);
-        // set ProfileImage1
-        //StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
 
-        //profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            //@Override
-          //  public void onSuccess(Uri uri) {
-          //      Picasso.get().load(uri).into(imageprofil);
-            //}
-        //});
-        //ChangImage1.setOnClickListener(new View.OnClickListener() {// start setOnClickListener
-          //  @Override
-            //public void onClick(View v) {
-             // open Gallery
-              // Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-               //startActivityForResult(openGalleryIntent, 1000 );
-
-            //}
-       //});//End setOnClickListener
-        // set ProfileImage1
        // هنا اتوقع تغيير الصوره اتاكد منه شوي
         imageprofil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,13 +93,14 @@ public class edit_profile extends AppCompatActivity {
                     Toast.makeText(edit_profile.this, "one or many fields are empty", Toast.LENGTH_SHORT).show();
                     return;//user
                 }
-                final String email = ProfileEditEmail.getText().toString();
-                user.updateEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() { // start OnSuccessListener
+               // final String email = ProfileEditEmail.getText().toString();
+                user.updateEmail(ProfileEditEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() { // start OnSuccessListener
                     @Override
                     public void onSuccess(Void aVoid) {
-                        DocumentReference docRef = fStore.collection("users").document(user.getUid());
+                        DocumentReference docRef = fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
+                        //DocumentReference docRef = fStore.collection("users").document(user.getUid());
                         Map<String , Object> edited = new HashMap<>();
-                       edited.put("email ",email);
+                       edited.put("email ",ProfileEditEmail.getText().toString());
                         edited.put("Name", ProfileEditFullName.getText().toString());
                         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -144,45 +127,7 @@ public class edit_profile extends AppCompatActivity {
         // end edit profile
 
     }// end onCreate
-    // set ProfileImage1
-    //@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    //@Override
-    //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
-      //  super.onActivityResult(requestCode, resultCode, data);
-        //if(requestCode == 1000){
-          //  if(resultCode == Activity.RESULT_OK){
-            //    Uri imageUri = Objects.requireNonNull(data).getData();
-               // imageprofil.setImageURI(imageUri);
-              //  uploadImageToFirebase(imageUri);
-            //}
-        //}
-   // }// end method
 
-    //@RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    //private void uploadImageToFirebase(Uri imageUri) {// start method
-        // uplood image to firebase storage
-      //  final StorageReference fileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
-        //fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-          //  @Override
-            //public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-               // Toast.makeText(edit_profile.this, " Image Uploaded", Toast.LENGTH_SHORT).show();
-              //   fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                //     @Override
-                  //   public void onSuccess(Uri uri) {
-                         //ImageView imageProfilEdit = null;
-                    //     Picasso.get().load(uri).into(imageprofil);
-
-                     //}
-                 //});
-          //  }
-        //}).addOnFailureListener(new OnFailureListener() {
-           // @Override
-            //public void onFailure(@NonNull Exception e) {
-              //  Toast.makeText(edit_profile.this, "failed", Toast.LENGTH_SHORT).show();
-            //}
-        //});
-    //}// end  method
-    //// end set ProfileImage1
 
     public void return_main(View view) {
         onBackPressed();
