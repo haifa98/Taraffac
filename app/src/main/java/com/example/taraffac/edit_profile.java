@@ -77,10 +77,21 @@ public class edit_profile extends AppCompatActivity {
         ProfileEditEmail.setText(email);
 
        // هنا اتوقع تغيير الصوره اتاكد منه شوي
+        StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
+
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(imageprofil);
+            }
+        });
         imageprofil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(edit_profile.this, "profile Image clicked", Toast.LENGTH_SHORT).show();
+                Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(openGalleryIntent, 1000 );
+
+
             }
         });
         // وقفت هنا
@@ -127,6 +138,43 @@ public class edit_profile extends AppCompatActivity {
         // end edit profile
 
     }// end onCreate
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1000){
+            if(resultCode == Activity.RESULT_OK){
+                Uri imageUri = Objects.requireNonNull(data).getData();
+                // imageprofil.setImageURI(imageUri);
+                uploadImageToFirebase(imageUri);
+            }
+        }
+    }// end method
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void uploadImageToFirebase(Uri imageUri) {// start method
+        // uplood image to firebase storage
+        final StorageReference fileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
+        fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // Toast.makeText(edit_profile.this, " Image Uploaded", Toast.LENGTH_SHORT).show();
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        //ImageView imageProfilEdit = null;
+                        Picasso.get().load(uri).into(imageprofil);
+
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }// end  method
+
 
 
     public void return_main(View view) {
