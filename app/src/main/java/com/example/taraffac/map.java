@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.core.content.ContextCompat;
+
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Address;
@@ -49,7 +51,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 
 
-
 import java.io.IOException;
 import java.util.List;
 
@@ -59,7 +60,7 @@ import android.widget.TextView;
 import android.location.LocationManager;
 import android.location.GpsStatus;
 
-public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
+public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
     Button profile;
@@ -70,6 +71,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     LatLng latLng;
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
+
 
     private static final String TAG = "MapsActivity";
 
@@ -82,15 +84,15 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         profile = findViewById(R.id.but_pofile_map);
-        log =  findViewById(R.id.but_logout_map);
-        add =  findViewById(R.id.add_bump2);
+        log = findViewById(R.id.but_logout_map);
+        add = findViewById(R.id.add_bump2);
+        client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
 
 
         //speedometer code
@@ -117,8 +119,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        mMap.setOnMapLongClickListener(this);
-        mMap.setOnMarkerDragListener(this);
+        // mMap.setOnMapLongClickListener(this);
+        // mMap.setOnMarkerDragListener(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             enableUserLocation();
@@ -133,30 +135,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
         }
 
-        // Add a marker at Taj Mahal and move the camera
-//        LatLng latLng = new LatLng(27.1751, 78.0421);
-//        MarkerOptions markerOptions = new MarkerOptions()
-//                                            .position(latLng)
-//                                            .title("Taj Mahal")
-//                                            .snippet("Wonder of the world!");
-//        mMap.addMarker(markerOptions);
-//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16);
-//        mMap.animateCamera(cameraUpdate);
 
-        try {
-            List<Address> addresses = geocoder.getFromLocationName("london", 1);
-            if (addresses.size() > 0) {
-                Address address = addresses.get(0);
-                LatLng london = new LatLng(address.getLatitude(), address.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions()
-                        .position(london)
-                        .title(address.getLocality());
-                mMap.addMarker(markerOptions);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(london, 16));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void enableUserLocation() {
@@ -189,56 +168,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             @Override
             public void onSuccess(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
-                //mMap.addMarker(new MarkerOptions().position(latLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
             }
         });
     }
 
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        Log.d(TAG, "onMapLongClick: " + latLng.toString());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addresses.size() > 0) {
-                Address address = addresses.get(0);
-                String streetAddress = address.getAddressLine(0);
-                mMap.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .title(streetAddress)
-                        .draggable(true)
-                );
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-        Log.d(TAG, "onMarkerDragStart: ");
-    }
 
-    @Override
-    public void onMarkerDrag(Marker marker) {
-        Log.d(TAG, "onMarkerDrag: ");
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        Log.d(TAG, "onMarkerDragEnd: ");
-        LatLng latLng = marker.getPosition();
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addresses.size() > 0) {
-                Address address = addresses.get(0);
-                String streetAddress = address.getAddressLine(0);
-                marker.setTitle(streetAddress);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -253,21 +190,46 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     }
 
 
-    public void go_to_profile(View v){
-        Intent profile = new Intent(this,profile.class);
+    public void go_to_profile(View v) {
+        Intent profile = new Intent(this, profile.class);
         startActivity(profile);
     }
-    public void log_out(View v){
+
+    public void log_out(View v) {
         FirebaseAuth.getInstance().signOut();// R add it
-        Intent log = new Intent(this,login.class);
+        Intent log = new Intent(this, login.class);
         startActivity(log);
         finish();// R add it
     }
+// add new speed bump
+    public void add(View v) {
 
-    public void add(View v){
-        Intent a = new Intent(this, add.class);
-        startActivity(a);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+                mMap.addMarker(new MarkerOptions().position(latLng));
+            }
+        });
+
+
+      //  Intent a = new Intent(this, add.class);
+      //  startActivity(a);
     }
+
+
 
     //speedometer code
 
