@@ -85,7 +85,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         setContentView(R.layout.activity_map);
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
-        add = findViewById(R.id.add_bump2);
+        add = (Button) findViewById(R.id.add_bump2);
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -93,7 +93,12 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                add();
+            }
+        });
 
         //speedometer code
         // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -202,7 +207,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         finish();// R add it
     }
 // add new speed bump
-    public void add(View v) {
+    public void add() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -223,7 +228,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 mMap.addMarker(new MarkerOptions().position(latLng));
             }
         });
-
+     addbumpdialog addb = new addbumpdialog();
+     addb.show(getSupportFragmentManager(), " add bump");
 
       //  Intent a = new Intent(this, add.class);
       //  startActivity(a);

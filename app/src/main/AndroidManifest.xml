@@ -44,7 +44,6 @@
         <activity android:name=".notify" />
         <activity android:name=".delete_msg" />
         <activity android:name=".delete" />
-        <activity android:name=".add" />
         <activity android:name=".register" />
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
