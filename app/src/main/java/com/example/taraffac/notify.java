@@ -10,7 +10,7 @@ import android.widget.Button;
 public class notify extends AppCompatActivity {
     Button profile;
     Button log;
-    Button btn_reportopt;
+    Button btn_reportopt,btn_edit;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,9 @@ public class notify extends AppCompatActivity {
         profile = findViewById(R.id.but_Ppofile2);
         log = findViewById(R.id.but_log_out2);
         btn_reportopt = findViewById(R.id.btn_reportopt);
+        btn_edit = findViewById(R.id.btn_editopt);
 
+        /*
         btn_reportopt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,7 +29,17 @@ public class notify extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
+                startActivity(i);
+            }
+        });
+        */
     }
+
     public void go_to_profile(View v){
         Intent profile = new Intent(this,profile.class);
         startActivity(profile);
@@ -36,6 +48,10 @@ public class notify extends AppCompatActivity {
         Intent log = new Intent(this,login.class);
         startActivity(log);
     }
+
+
+
+
 }
 
 

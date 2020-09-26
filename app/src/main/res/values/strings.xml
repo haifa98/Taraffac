@@ -90,6 +90,7 @@
     <string name="title_activity_map">Map</string>
     <string name="ForgotPassword">Forgot Password?</string>
     <string name="_000_0_miles_hour">000.0 miles/hour</string>
+    <string name="notify">Notify</string>
 
 
 </resources>
