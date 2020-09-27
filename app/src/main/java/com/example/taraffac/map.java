@@ -263,7 +263,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     }
 // add new speed bump
     public void add() {
-
+double x;
+double y;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -278,16 +279,25 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                double loc_lat = location.getLatitude();
+                double loc_long = location.getLongitude();
+                LatLng latLng = new LatLng(loc_lat,loc_long);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
                 mMap.addMarker(new MarkerOptions().position(latLng));
+
+                Intent intent = new Intent(map.this, add.class);
+                intent.putExtra("Latitude", loc_lat);
+                intent.putExtra("Longitude", loc_long);
+                startActivity(intent);
             }
         });
-     addbumpdialog addb = new addbumpdialog();
-     addb.show(getSupportFragmentManager(), " add bump");
 
-      //  Intent a = new Intent(this, add.class);
-      //  startActivity(a);
+
+
+
+
+        //Intent a = new Intent(this, add.class);
+       // startActivity(a);
     }
 
 
