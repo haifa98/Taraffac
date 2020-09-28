@@ -54,9 +54,15 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 //speedometer imports
@@ -80,6 +86,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button shownotificationbtn;
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
+    DatabaseReference ref;
 
 
     private static final String TAG = "MapsActivity";
@@ -96,7 +103,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
         shownotificationbtn = findViewById(R.id.showNotificationBtn);
-
+        ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -110,6 +117,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 add();
             }
         });
+        showbumps();
 
         //speedometer code
         // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -126,6 +134,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         });
 
     }
+
+
 
     private void shownotification() {
 
@@ -162,15 +172,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
 
 
     @Override
@@ -191,22 +192,12 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
             } else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-            }
+            } } }
 
-        }
-
-
-    }
 
     private void enableUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         mMap.setMyLocationEnabled(true);
@@ -214,13 +205,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
@@ -233,10 +217,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
     }
-
-
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == ACCESS_LOCATION_REQUEST_CODE) {
@@ -261,10 +241,38 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         startActivity(log);
         finish();// R add it
     }
+
+    // show markers on bumps
+    private void showbumps() {
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<SpeedBump> bumps = new ArrayList<>();
+                bumps.clear();
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    SpeedBump bump = postSnapshot.getValue(SpeedBump.class);
+                    bumps.add(bump);
+
+                    // here you can access to name property like university.name
+                   double bump_lat = bump.getLatitude();
+                   double bump_long = bump.getLongitude();
+
+                    LatLng latLng = new LatLng(bump_lat,bump_long);
+                    mMap.addMarker(new MarkerOptions().position(latLng));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }});
+    }
+
+
 // add new speed bump
     public void add() {
-double x;
-double y;
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -281,9 +289,6 @@ double y;
             public void onSuccess(Location location) {
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
-                LatLng latLng = new LatLng(loc_lat,loc_long);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-                mMap.addMarker(new MarkerOptions().position(latLng));
 
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);

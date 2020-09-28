@@ -1,5 +1,6 @@
 package com.example.taraffac;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,6 +14,11 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class add extends AppCompatActivity {
     Button profile;
@@ -24,6 +30,9 @@ public class add extends AppCompatActivity {
     RadioButton type1;
     RadioGroup size;
     RadioButton size1;
+    DatabaseReference dataBymp;
+    long id;
+
 
 
 
@@ -31,18 +40,20 @@ public class add extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
         profile = (Button)findViewById(R.id.but_Ppofile3);
         log = (Button)findViewById(R.id.but_log_out3);
         add = (Button)findViewById(R.id.add_save);
         type = (RadioGroup) findViewById(R.id.add_type);
         size = (RadioGroup) findViewById(R.id.add_size);
 
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
              latitude = extras.getDouble("Latitude");
              longitude = extras.getDouble("Longitude");
         }
+        dataBymp = FirebaseDatabase.getInstance().getReference("SpeedBump");
+
 
 
 
@@ -72,13 +83,32 @@ public class add extends AppCompatActivity {
         Intent log = new Intent(this,login.class);
         startActivity(log);
     }
+
+
     public void save(View v){
         String type2 = checkType();
         String size2 = checkSize();
-        Toast t =  Toast.makeText(this, " The Adding was successful"+ type2 + " " +  longitude +" "+ size2 , Toast.LENGTH_SHORT);
-        t.setGravity(Gravity.TOP, 0,90);
-        t.show();
+if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
 
+// add in database
+
+    String id = dataBymp.push().getKey();
+
+    SpeedBump bump = new SpeedBump ( latitude, longitude, type2, size2);
+
+    dataBymp.child(id).setValue(bump);
+
+
+    Toast t = Toast.makeText(this, " The Adding was successful", Toast.LENGTH_SHORT);
+    t.setGravity(Gravity.TOP, 0, 90);
+    t.show();
+}else {
+    Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
+    t.setGravity(Gravity.TOP, 0, 90);
+    t.show();
+
+
+}
         Intent log = new Intent(this,map.class);
         startActivity(log);
 
