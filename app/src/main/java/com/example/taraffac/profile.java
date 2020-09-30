@@ -20,9 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -47,7 +50,9 @@ public class profile extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference  storageReference;
-String usedId;
+    FirebaseUser  firebaseUser;
+
+    String usedId;
 /// amjad imge
   // ImageView imageprofil;
 
@@ -64,13 +69,15 @@ String usedId;
         imageProfil1= findViewById(R.id.imageProfil1);
         ChangImage1= findViewById(R.id.ChangImage1);
         storageReference = FirebaseStorage.getInstance().getReference();
+        fAuth = FirebaseAuth.getInstance();
+        firebaseUser = fAuth.getCurrentUser();
 
         //
        // imageprofil= findViewById(R.id.imageProfil);
         //
         fullName =findViewById(R.id.name_pro);
         Email= findViewById(R.id.email_pro);
-        fAuth = FirebaseAuth.getInstance();
+
 
 
         fStore =FirebaseFirestore.getInstance();
@@ -119,6 +126,46 @@ String usedId;
             }
         });//End setOnClickListener
         // end set ProfileImage1
+        // start delet Account
+        del.setOnClickListener(new View.OnClickListener() { // start setOnClickListener
+            @Override
+            public void onClick(View v) {// start onClick
+                AlertDialog.Builder b = new AlertDialog.Builder(profile.this);
+                b.setTitle("Are you sure you want to delete your account ?");
+                b.setPositiveButton("yes", new DialogInterface.OnClickListener() { // start setPositiveButton
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        firebaseUser.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                               if (task.isSuccessful()){
+                                   Toast.makeText(profile.this, "Account Deleted" , Toast.LENGTH_LONG).show();
+                                   Intent intent= new Intent(profile.this,MainActivity.class);
+                                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                   startActivity(intent);
+
+                               }else {
+                                   Toast.makeText(profile.this, Objects.requireNonNull(task.getException()).getMessage() , Toast.LENGTH_LONG).show();
+
+                               }
+                            }
+                        });
+
+
+                    }
+                });// end setPositiveButton
+                b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                                  dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = b.create();
+                alertDialog.show();
+
+            }//end onClick
+        }); // end setOnClickListener
 
     }//end Oncrate
     // set ProfileImage1
@@ -173,22 +220,24 @@ String usedId;
         startActivity(log);
     }
 
-    public void del(View v){
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle("Are you sure you want to delete your account ?");
-        b.setPositiveButton("yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+  //  public void del(View v){
+    //    AlertDialog.Builder b = new AlertDialog.Builder(this);
+      //  b.setTitle("Are you sure you want to delete your account ?");
+        //b.setPositiveButton("yes", new DialogInterface.OnClickListener() {
+          //  @Override
+            //public void onClick(DialogInterface dialogInterface, int i) {
 
-            }
-        });
-        b.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            //}
+        //});
+        //b.setNegativeButton("No", new DialogInterface.OnClickListener() {
+          //  @Override
+            //public void onClick(DialogInterface dialogInterface, int i) {
 
-            }
-        });
-        b.show();
-    }
+            //}
+      //  });
+       // b.show();
+    //}
+
+
 }
 
