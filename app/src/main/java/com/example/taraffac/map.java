@@ -1,80 +1,44 @@
 package com.example.taraffac;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
-import android.os.Build;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-
-import androidx.core.content.ContextCompat;
-
-import android.content.IntentSender;
-import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.Looper;
-import android.util.Log;
-
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.LocationSource;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 //speedometer imports
-import android.location.LocationListener;
-import android.widget.TextView;
-import android.location.LocationManager;
-import android.location.GpsStatus;
 
 public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback {
-
-    private static final String CHANNEL_ID = "channel_id01";
-    private static final int NOTIFICATION_ID = 1;
 
     private GoogleMap mMap;
     Button profile;
@@ -83,7 +47,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
-    Button shownotificationbtn;
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
     DatabaseReference ref;
@@ -102,7 +65,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
-        shownotificationbtn = findViewById(R.id.showNotificationBtn);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -124,54 +86,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         //  this.onLocationChanged(null);
 
-        //send notification code
-
-        shownotificationbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shownotification();
-            }
-        });
 
     }
-
-
-
-    private void shownotification() {
-
-        createNotificationChannel();
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-
-        // notification title
-        builder.setContentTitle("Taraffac :SPEED BUMP AHEAD");
-        //description
-        builder.setContentText("speed bump info here");
-        // notification priority
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        // notification manager
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
-            CharSequence name = "Taraffac :SPEED BUMP AHEAD";
-            String description = "speed bump info here2";
-
-            // priority
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-
-            NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
-            notificationManager.createNotificationChannel(notificationChannel);
-
-        }
-    }
-
 
 
     @Override

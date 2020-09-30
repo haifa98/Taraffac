@@ -23,9 +23,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
-        myRef.child("test").setValue("Hi, World! ");
-        myRef.child("test2").setValue("Hello, World! ");
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
