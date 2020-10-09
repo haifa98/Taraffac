@@ -1,6 +1,8 @@
 package com.example.taraffac;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
@@ -50,6 +52,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
     DatabaseReference ref;
+    AlertDialog.Builder builder; 
 
 
     private static final String TAG = "MapsActivity";
@@ -86,6 +89,24 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         //  this.onLocationChanged(null);
 
+        //notification code
+        builder = new AlertDialog.Builder(map.this);
+        builder.setCancelable(true);
+
+        // Setting Negative "Cancel" Button
+        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                go_to_edit( this);
+            }
+        });
+
+        // Setting Positive "Yes" Button
+        builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                go_to_report(this);
+            }
+        });
+        //notification code end
 
     }
 
@@ -221,6 +242,25 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
        // startActivity(a);
     }
 
+    //notification code start
+    public void sendMessage(View v) {
+        // Do something in response to button
+        builder.setTitle("SPEED BUMP AHEAD");
+        builder.setMessage("speed bump info here");
+
+        builder.show();
+    }
+
+    public void go_to_edit(DialogInterface.OnClickListener view) {
+        Intent go_register= new Intent(this,edit_speed_bump.class);
+        startActivity(go_register);
+    }
+
+    public void go_to_report(DialogInterface.OnClickListener view) {
+        Intent go_register= new Intent(this,report.class);
+        startActivity(go_register);
+    }
+    //notification code end
 
 
     //speedometer code
