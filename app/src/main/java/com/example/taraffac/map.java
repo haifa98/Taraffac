@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,6 +26,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -117,8 +121,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        // mMap.setOnMapLongClickListener(this);
-        // mMap.setOnMarkerDragListener(this);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             enableUserLocation();
@@ -187,19 +189,30 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<SpeedBump> bumps = new ArrayList<>();
                 bumps.clear();
+                // get bumps info from DB
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     SpeedBump bump = postSnapshot.getValue(SpeedBump.class);
                     bumps.add(bump);
 
-                    // here you can access to name property like university.name
                    double bump_lat = bump.getLatitude();
                    double bump_long = bump.getLongitude();
-
+                   String bump_type = bump.getType();
+                   String bump_size = bump.getSize();
+                   // create marker foe bumps
                     LatLng latLng = new LatLng(bump_lat,bump_long);
-                    mMap.addMarker(new MarkerOptions().position(latLng));
-                }
+                    String bump_info = " type : "+ bump_type + " size : "+bump_size ;
 
-            }
+                    int height = 130;
+                    int width = 130;
+                    Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                    BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+                 //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
+                    MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
+
+                    mMap.addMarker(marker);
+                } }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
