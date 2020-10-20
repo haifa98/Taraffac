@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+
 public class add extends AppCompatActivity {
     Button profile;
     Button log;
@@ -56,8 +58,6 @@ public class add extends AppCompatActivity {
 
 
 
-
-
     }
     public String checkType(){
         int radioID = type.getCheckedRadioButtonId();
@@ -91,12 +91,14 @@ public class add extends AppCompatActivity {
 if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
 
 // add in database
+    double newlat = Double.parseDouble(new DecimalFormat("##.####").format(latitude));
 
+    double newlng = Double.parseDouble(new DecimalFormat("##.###").format(longitude));
     String id = dataBymp.push().getKey();
 
-    SpeedBump bump = new SpeedBump ( latitude, longitude, type2, size2);
-
-    dataBymp.child(id).setValue(bump);
+    SpeedBump bump = new SpeedBump ( newlat, newlng, type2, size2);
+    String sub = new DecimalFormat("##.###").format(latitude) + ","+ new DecimalFormat("##.###").format(longitude);
+    dataBymp.child(id).child(sub).setValue(bump);
 
 
     Toast t = Toast.makeText(this, " The Adding was successful", Toast.LENGTH_SHORT);
@@ -108,7 +110,7 @@ if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
     t.show();
 
 
-}
+} // return to map
         Intent log = new Intent(this,map.class);
         startActivity(log);
 
