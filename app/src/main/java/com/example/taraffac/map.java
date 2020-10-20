@@ -65,9 +65,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     SharedPreferences pref;
     SharedPreferences.Editor editor;
 
-
-
-
     private static final String TAG = "MapsActivity";
 
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
