@@ -14,6 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,9 +35,7 @@ public class add extends AppCompatActivity {
     RadioGroup size;
     RadioButton size1;
     DatabaseReference dataBymp;
-    long id;
-
-
+    String sub;
 
 
     @Override
@@ -48,17 +48,16 @@ public class add extends AppCompatActivity {
         add = (Button)findViewById(R.id.add_save);
         type = (RadioGroup) findViewById(R.id.add_type);
         size = (RadioGroup) findViewById(R.id.add_size);
-
+// get latlng from map class
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
              latitude = extras.getDouble("Latitude");
              longitude = extras.getDouble("Longitude");
         }
+
         dataBymp = FirebaseDatabase.getInstance().getReference("SpeedBump");
 
-
-
-    }
+    }// get type & size from the layout and store it in variable  as string
     public String checkType(){
         int radioID = type.getCheckedRadioButtonId();
         type1 = findViewById(radioID);
@@ -91,26 +90,35 @@ public class add extends AppCompatActivity {
 if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
 
 // add in database
+
+    String id = dataBymp.push().getKey();
+
+    // change format to dd.ddd
     double newlat = Double.parseDouble(new DecimalFormat("##.####").format(latitude));
 
     double newlng = Double.parseDouble(new DecimalFormat("##.###").format(longitude));
-    String id = dataBymp.push().getKey();
 
     SpeedBump bump = new SpeedBump ( newlat, newlng, type2, size2);
-    String sub = new DecimalFormat("##.###").format(latitude) + ","+ new DecimalFormat("##.###").format(longitude);
-    dataBymp.child(id).child(sub).setValue(bump);
+    // create sub child for bump - replace '.' with '-' because '.' is not allowed id firebase
 
+    String sub1 = new DecimalFormat("##.##").format(latitude);
+    String sub2=  new DecimalFormat("##.##").format(longitude);
+
+    sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
+    dataBymp.child(sub).child(id).setValue(bump);
 
     Toast t = Toast.makeText(this, " The Adding was successful", Toast.LENGTH_SHORT);
     t.setGravity(Gravity.TOP, 0, 90);
     t.show();
-}else {
+
+}else{
+
     Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
     t.setGravity(Gravity.TOP, 0, 90);
     t.show();
 
 
-} // return to map
+}
         Intent log = new Intent(this,map.class);
         startActivity(log);
 

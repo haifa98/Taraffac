@@ -1,8 +1,6 @@
 package com.example.taraffac;
 
 public class SpeedBump {
-
-
     double latitude;
     double longitude;
     String type;
@@ -13,7 +11,7 @@ public class SpeedBump {
 
     }
 
-    public SpeedBump(double latitude, double longitude, String type, String size) {
+    public SpeedBump( double latitude, double longitude, String type, String size) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.type = type;
@@ -44,6 +42,7 @@ public class SpeedBump {
     public double getLatitude() {
         return latitude;
     }
+
 
     public double getLongitude() {
         return longitude;

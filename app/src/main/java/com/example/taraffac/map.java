@@ -2,8 +2,10 @@ package com.example.taraffac;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -50,13 +53,19 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button profile;
     Button log;
     Button add;
+    Button active;
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
     DatabaseReference ref;
-    AlertDialog.Builder builder; 
+    AlertDialog.Builder builder;
+    boolean state ;
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
+
 
 
     private static final String TAG = "MapsActivity";
@@ -72,6 +81,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
+        active = findViewById(R.id.but_deactivate5);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -80,42 +90,71 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        add.setOnClickListener(new View.OnClickListener() {
+        //showbumps();
+
+// activate snd deactivate
+         pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+         editor = pref.edit();
+        editor.putBoolean("state",false);
+
+        editor.commit();
+
+        active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                add();
-            }
-        });
-        showbumps();
-
-        //speedometer code
-        // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        //  this.onLocationChanged(null);
-
-        //notification code
-        builder = new AlertDialog.Builder(map.this);
-        builder.setCancelable(true);
-
-        // Setting Negative "Cancel" Button
-        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                go_to_edit( this);
+                checkButton();
             }
         });
 
-        // Setting Positive "Yes" Button
-        builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                go_to_report(this);
-            }
-        });
-        //notification code end
+                    //speedometer code
+                    // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+                    //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                    //  this.onLocationChanged(null);
 
+    }
+// check if it is activate or deactivate
+    private void checkButton() {
+        pref = getSharedPreferences("MyPref", 0);
+       state = pref.getBoolean("state", false);
+
+        if (!state) {
+            active.setText("Deactivate");
+            editor.putBoolean("state", true).commit();
+            //notification code
+            builder = new AlertDialog.Builder(map.this);
+            builder.setCancelable(true);
+
+            // Setting Negative "Cancel" Button
+            builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    go_to_edit(this);
+                }
+            });
+            // Setting Positive "Yes" Button
+            builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    go_to_report(this);
+                }
+            });
+            //notification code end
+            // add
+            add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    add();
+                }
+            });
+
+        } else {
+            active.setText("Activate");
+            //   active.setBackgroundColor(getResources().getColor(R.color.green));
+            editor.putBoolean("state", false);
+        }
     }
 
 
-    @Override
+
+    @Override // set the map
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
@@ -133,7 +172,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
             } } }
 
-
+// set the user location
     private void enableUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -141,7 +180,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
         mMap.setMyLocationEnabled(true);
     }
-
+// zoom on user location
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -156,14 +195,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
     }
-    @Override
+    @Override // check if user allow GPS service
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == ACCESS_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableUserLocation();
                 zoomToUserLocation();
             } else {
-                //We can show a dialog that permission is not granted...
+
             }
         }
     }
@@ -198,10 +237,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                    double bump_long = bump.getLongitude();
                    String bump_type = bump.getType();
                    String bump_size = bump.getSize();
-                   // create marker foe bumps
+
                     LatLng latLng = new LatLng(bump_lat,bump_long);
                     String bump_info = " type : "+ bump_type + " size : "+bump_size ;
-
+// set height & width - apply style
                     int height = 130;
                     int width = 130;
                     Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
@@ -210,7 +249,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
                  //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
                     MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
-
+// create marker for bumps
                     mMap.addMarker(marker);
                 } }
 
@@ -232,24 +271,20 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
-        }
+        } // get user location
         Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
-
+// send info to add class
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
                 startActivity(intent);
             }
         });
-
-
-
-
 
         //Intent a = new Intent(this, add.class);
        // startActivity(a);
