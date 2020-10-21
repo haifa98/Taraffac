@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -40,10 +41,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import dagger.Module;
 
 //speedometer imports
 
@@ -64,7 +69,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     boolean state ;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
-
+    SpeedBump sb;
     private static final String TAG = "MapsActivity";
 
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
@@ -109,6 +114,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     //  this.onLocationChanged(null);
 
     }
+
 // check if it is activate or deactivate
     private void checkButton() {
         pref = getSharedPreferences("MyPref", 0);
@@ -124,6 +130,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             // Setting Negative "Cancel" Button
             builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
+                    //SpeedBump editedsb = sb;
                     go_to_edit(this);
                 }
             });
@@ -141,6 +148,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     add();
                 }
             });
+
+            sendMessage();
 
         } else {
             active.setText("Activate");
@@ -288,12 +297,66 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     }
 
     //notification code start
-    public void sendMessage(View v) {
-        // Do something in response to button
-        builder.setTitle("SPEED BUMP AHEAD");
-        builder.setMessage("speed bump info here");
+    public void sendMessage() {
 
-        builder.show();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        } // get user location
+
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                double user_lat = location.getLatitude();
+                double user_long = location.getLongitude();
+
+                String sub1 = new DecimalFormat("##.##").format(user_lat);
+                String sub2=  new DecimalFormat("##.##").format(user_long);
+                String userLoc1km = sub1.replace('.','-')+"_"+sub2.replace('.','-');
+
+                double newlat = Double.parseDouble(new DecimalFormat("##.###").format(user_lat));
+
+                double newlng = Double.parseDouble(new DecimalFormat("##.###").format(user_long));
+
+
+                checkforspeedbump(userLoc1km,newlat,newlng);
+
+            }
+        });
+
+
+    }
+
+    public void checkforspeedbump(String usercoordinates1km, final double userlat100m,final double userlong100m){
+
+        FirebaseDatabase.getInstance().getReference("SpeedBump").child(usercoordinates1km).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                   sb= snapshot.getValue(SpeedBump.class);
+
+                   if (sb.getLatitude()==userlat100m && sb.getLongitude()==userlong100m){
+                       // Do something in response to button
+                       builder.setTitle("SLOW DOWN SPEED BUMP AHEAD");
+                       builder.setMessage("Type: "+sb.getType()+"/n"+"Size: "+sb.getSize());
+                       builder.show();
+                   }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //handle databaseError
+            }
+        });
     }
 
     public void go_to_edit(DialogInterface.OnClickListener view) {
@@ -312,6 +375,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     @Override
     public void onLocationChanged(Location location) {
+
 
         if (location==null){
             // if you can't get speed because reasons :)
