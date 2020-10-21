@@ -21,7 +21,7 @@ public class notify extends AppCompatActivity {
         btn_reportopt = findViewById(R.id.btn_reportopt);
         btn_edit = findViewById(R.id.btn_editopt);
 
-        /*
+
         btn_reportopt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,7 +37,7 @@ public class notify extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        */
+
     }
 
     public void go_to_profile(View v){

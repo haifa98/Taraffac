@@ -92,6 +92,13 @@
     <string name="ForgotPassword">Forgot Password?</string>
     <string name="_000_0_miles_hour">000.0 miles/hour</string>
     <string name="notify">Notify</string>
+    <string name="delete">Delete</string>
+    <string name="type1Home">Type1</string>
+    <string name="size1Home">Size1</string>
+    <string name="editebumpHome">editeBump</string>
+    <string name="reportbumpHOme">ReportBump</string>
+    <string name="show">show</string>
+    <string name="deleteEdit">Delete</string>
 
 
 </resources>

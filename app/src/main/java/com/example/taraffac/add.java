@@ -1,11 +1,9 @@
 package com.example.taraffac;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +18,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 
@@ -46,6 +43,9 @@ public class add extends AppCompatActivity {
         profile = (Button)findViewById(R.id.but_Ppofile3);
         log = (Button)findViewById(R.id.but_log_out3);
         add = (Button)findViewById(R.id.add_save);
+        type = (RadioGroup) findViewById(R.id.update_type);
+        size = (RadioGroup) findViewById(R.id.update_size);
+
         type = (RadioGroup) findViewById(R.id.add_type);
         size = (RadioGroup) findViewById(R.id.add_size);
 // get latlng from map class

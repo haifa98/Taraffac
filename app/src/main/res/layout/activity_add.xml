@@ -240,7 +240,7 @@
 
 
     <RadioGroup
-        android:id="@+id/add_type"
+        android:id="@+id/update_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -294,7 +294,7 @@
         <RadioButton
             android:id="@+id/add_cushion"
             android:layout_width="96dp"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
@@ -338,7 +338,7 @@
 
 
         <RadioGroup
-            android:id="@+id/add_size"
+            android:id="@+id/update_size"
             android:layout_width="281dp"
             android:layout_height="52dp"
             android:orientation="horizontal"
