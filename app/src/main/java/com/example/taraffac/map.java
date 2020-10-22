@@ -94,6 +94,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
+        // get state from add - edit
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            stateFrom = extras.getBoolean("stateFrom");
+
+        }
+
 
 // activate snd deactivate
      //    pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
