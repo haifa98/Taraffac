@@ -120,6 +120,7 @@ if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
 
 }
         Intent log = new Intent(this,map.class);
+        log.putExtra("stateFrom", true);
         startActivity(log);
 
     }
