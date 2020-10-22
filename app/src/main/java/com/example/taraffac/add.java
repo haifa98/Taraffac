@@ -94,15 +94,15 @@ if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
     String id = dataBymp.push().getKey();
 
     // change format to dd.ddd
-    double newlat = Double.parseDouble(new DecimalFormat("##.####").format(latitude));
+    double newlat = Double.parseDouble(new DecimalFormat("00.000").format(latitude));
 
-    double newlng = Double.parseDouble(new DecimalFormat("##.###").format(longitude));
+    double newlng = Double.parseDouble(new DecimalFormat("00.000").format(longitude));
 
     SpeedBump bump = new SpeedBump ( newlat, newlng, type2, size2);
     // create sub child for bump - replace '.' with '-' because '.' is not allowed id firebase
 
-    String sub1 = new DecimalFormat("##.##").format(latitude);
-    String sub2=  new DecimalFormat("##.##").format(longitude);
+    String sub1 = new DecimalFormat("00.00").format(latitude);
+    String sub2=  new DecimalFormat("00.00").format(longitude);
 
     sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
     dataBymp.child(sub).child(id).setValue(bump);
