@@ -66,7 +66,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private Geocoder geocoder;
     DatabaseReference ref;
     AlertDialog.Builder builder;
-    boolean state ;
+    boolean state = false;
+    boolean stateFrom =false;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     SpeedBump sb;
@@ -92,37 +93,42 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        //showbumps();
+        showbumps();
+        // get state from add - edit
 
 // activate snd deactivate
-         pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-         editor = pref.edit();
-        editor.putBoolean("state",false);
-
-        editor.commit();
-
+     //    pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+       //  editor = pref.edit();
+      //  editor.putBoolean("state",false);
+       // editor.commit();
+        checkButton();
+   //     active.setOnClickListener(new View.OnClickListener() {
+     //       @Override
+       //     public void onClick(View view) {
+         //       checkButton(); }});
         active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                checkButton();
-            }
-        });
+                state = true; }});
+
 
                     //speedometer code
                     // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
                     //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                     //  this.onLocationChanged(null);
-
-    }
+}
 
 // check if it is activate or deactivate
     private void checkButton() {
-        pref = getSharedPreferences("MyPref", 0);
-       state = pref.getBoolean("state", false);
-
-        if (!state) {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            stateFrom = extras.getBoolean("stateFrom"); }
+       // pref = getSharedPreferences("MyPref", 0);
+     //  state = pref.getBoolean("state", false);
+state= true;
+        if (state|| stateFrom ) {
+            stateFrom = true;
             active.setText("Deactivate");
-            editor.putBoolean("state", true).commit();
             //notification code
             builder = new AlertDialog.Builder(map.this);
             builder.setCancelable(true);
@@ -154,7 +160,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         } else {
             active.setText("Activate");
             //   active.setBackgroundColor(getResources().getColor(R.color.green));
-            editor.putBoolean("state", false);
+            state = false;
         }
     }
 
@@ -230,14 +236,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private void showbumps() {
 
         ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<SpeedBump> bumps = new ArrayList<>();
-                bumps.clear();
-                // get bumps info from DB
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    SpeedBump bump = postSnapshot.getValue(SpeedBump.class);
-                    bumps.add(bump);
+         @Override
+         public void onDataChange(@NonNull DataSnapshot snapshot) {
+          List<SpeedBump> bumps = new ArrayList<>();
+          bumps.clear();
+          for (DataSnapshot locationSnapshot: snapshot.getChildren()) {
+             for (DataSnapshot bumpSnapshot: locationSnapshot.getChildren()) {
+                SpeedBump bump = bumpSnapshot.getValue(SpeedBump.class);
+                bumps.add(bump);
 
                    double bump_lat = bump.getLatitude();
                    double bump_long = bump.getLongitude();
@@ -256,7 +262,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                  //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
                     MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
 // create marker for bumps
-                    mMap.addMarker(marker);
+                    mMap.addMarker(marker); }
                 } }
 
             @Override
@@ -288,6 +294,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
+                intent.putExtra("stateFrom", stateFrom);
                 startActivity(intent);
             }
         });
@@ -361,11 +368,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     public void go_to_edit(DialogInterface.OnClickListener view) {
         Intent go_register= new Intent(this,edit_speed_bump.class);
+        go_register.putExtra("stateFrom", stateFrom);
         startActivity(go_register);
     }
 
     public void go_to_report(DialogInterface.OnClickListener view) {
         Intent go_register= new Intent(this,report.class);
+        go_register.putExtra("stateFrom", stateFrom);
         startActivity(go_register);
     }
     //notification code end
