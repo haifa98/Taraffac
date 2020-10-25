@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -114,8 +115,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
                     //speedometer code
                     // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                    //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                    //  this.onLocationChanged(null);
+                      //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                     // this.onLocationChanged(null);
 }
 
 // check if it is activate or deactivate
@@ -154,8 +155,15 @@ state= true;
                     add();
                 }
             });
+            try {
+                while (state|| stateFrom) {
+                    sendMessage();
+                    Thread.sleep(5 * 10000);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            sendMessage();
 
         } else {
             active.setText("Activate");
@@ -341,12 +349,15 @@ state= true;
 
     }
 
-    public void checkforspeedbump(String usercoordinates1km, final double userlat100m,final double userlong100m){
+    public void checkforspeedbump(final String usercoordinates1km, final double userlat100m, final double userlong100m){
 
-        FirebaseDatabase.getInstance().getReference("SpeedBump").child(usercoordinates1km).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("SpeedBump").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                if (dataSnapshot.hasChild(usercoordinates1km)) {
+                    // run some code
+
+                for (DataSnapshot snapshot : dataSnapshot.child(usercoordinates1km).getChildren()){
                    sb= snapshot.getValue(SpeedBump.class);
 
                    if (sb.getLatitude()==userlat100m && sb.getLongitude()==userlong100m){
@@ -356,7 +367,7 @@ state= true;
                        builder.show();
                    }
 
-                }
+                }}
             }
 
             @Override
@@ -386,7 +397,7 @@ state= true;
     public void onLocationChanged(Location location) {
 
 
-        if (location==null){
+       /* if (location==null){
             // if you can't get speed because reasons :)
             txtCurrentSpeed.setText("00 km/h");
         }
@@ -396,7 +407,8 @@ state= true;
             int speed=(int) ((location.getSpeed()*3600)/1000);
 
             txtCurrentSpeed.setText(speed+" km/h");
-        }
+        }*/
+
     }
 
 
