@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -59,7 +60,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button profile;
     Button log;
     Button add;
-    Button active;
+    ToggleButton active;
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
@@ -68,7 +69,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     DatabaseReference ref;
     AlertDialog.Builder builder;
     boolean state = false;
-    boolean stateFrom =false;
+
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     SpeedBump sb;
@@ -85,7 +86,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
-        active = findViewById(R.id.but_deactivate5);
+        active = findViewById(R.id.map_deactive);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -95,83 +96,73 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
-        // get state from add - edit
+        // get state value from activities
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) { state = extras.getBoolean("state"); }
 
-// activate snd deactivate
-     //    pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-       //  editor = pref.edit();
-      //  editor.putBoolean("state",false);
-       // editor.commit();
-        checkButton();
-   //     active.setOnClickListener(new View.OnClickListener() {
-     //       @Override
-       //     public void onClick(View view) {
-         //       checkButton(); }});
+        SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
+        active.setChecked(sharedPrefs.getBoolean("active", state));
+
+
+// activate and deactivate
         active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                state = true; }});
+                isActive();
+            } });
+
+if(active.isChecked()) {
+    //notification code
+    builder = new AlertDialog.Builder(map.this);
+    builder.setCancelable(true);
+
+    // Setting Negative "Cancel" Button
+    builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int whichButton) {
+            //SpeedBump editedsb = sb;
+            go_to_edit(this);
+        }
+    });
+    // Setting Positive "Yes" Button
+    builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+            go_to_report(this);
+        }
+    });
+    //    try {
+    //  sendMessage();
+    //   Thread.sleep(5 * 10000);
+
+    //   } catch (InterruptedException e) {
+    //    e.printStackTrace();}
+}  //notification code end
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {add(); }});
 
 
-                    //speedometer code
+        //speedometer code
                     // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
                       //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                      // this.onLocationChanged(null);
 }
+public void isActive(){
 
-// check if it is activate or deactivate
-    private void checkButton() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            stateFrom = extras.getBoolean("stateFrom"); }
-       // pref = getSharedPreferences("MyPref", 0);
-     //  state = pref.getBoolean("state", false);
-state= true;
-        if (state|| stateFrom ) {
-            stateFrom = true;
-            active.setText("Deactivate");
-            //notification code
-            builder = new AlertDialog.Builder(map.this);
-            builder.setCancelable(true);
+    if (active.isChecked()){
+       // active.setText("Activated");
+          SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
+           editor.putBoolean("active", true);
+           editor.commit();
 
-            // Setting Negative "Cancel" Button
-            builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    //SpeedBump editedsb = sb;
-                    go_to_edit(this);
-                }
-            });
-            // Setting Positive "Yes" Button
-            builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    go_to_report(this);
-                }
-            });
-            //notification code end
-            // add
-            add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    add();
-                }
-            });
-            try {
-                while (state|| stateFrom) {
-                    sendMessage();
-                    Thread.sleep(5 * 10000);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-        } else {
-            active.setText("Activate");
-            //   active.setBackgroundColor(getResources().getColor(R.color.green));
-            state = false;
-        }
     }
+    else {
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
+           editor.putBoolean("active", false);
+           editor.commit();
+    }// end if else
 
+}
 
 
     @Override // set the map
@@ -281,6 +272,8 @@ state= true;
 
 // add new speed bump
     public void add() {
+        if (active.isChecked()) {
+
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -302,11 +295,10 @@ state= true;
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
-                intent.putExtra("stateFrom", stateFrom);
                 startActivity(intent);
             }
         });
-
+        }
         //Intent a = new Intent(this, add.class);
        // startActivity(a);
     }
@@ -332,16 +324,16 @@ state= true;
                 double user_lat = location.getLatitude();
                 double user_long = location.getLongitude();
 
-                String sub1 = new DecimalFormat("##.##").format(user_lat);
-                String sub2=  new DecimalFormat("##.##").format(user_long);
+                String sub1 = new DecimalFormat("00.00").format(user_lat);
+                String sub2=  new DecimalFormat("00.00").format(user_long);
                 String userLoc1km = sub1.replace('.','-')+"_"+sub2.replace('.','-');
 
-                double newlat = Double.parseDouble(new DecimalFormat("##.###").format(user_lat));
+                double newlat = Double.parseDouble(new DecimalFormat("00.000").format(user_lat));
 
-                double newlng = Double.parseDouble(new DecimalFormat("##.###").format(user_long));
+                double newlng = Double.parseDouble(new DecimalFormat("00.000").format(user_long));
 
-
-                checkforspeedbump(userLoc1km,newlat,newlng);
+                txtCurrentSpeed.bringToFront();
+                //checkforspeedbump(userLoc1km,newlat,newlng);
 
             }
         });
@@ -379,13 +371,11 @@ state= true;
 
     public void go_to_edit(DialogInterface.OnClickListener view) {
         Intent go_register= new Intent(this,edit_speed_bump.class);
-        go_register.putExtra("stateFrom", stateFrom);
         startActivity(go_register);
     }
 
     public void go_to_report(DialogInterface.OnClickListener view) {
         Intent go_register= new Intent(this,report.class);
-        go_register.putExtra("stateFrom", stateFrom);
         startActivity(go_register);
     }
     //notification code end

@@ -45,34 +45,6 @@
         tools:context=".map" />
 
     <Button
-        android:id="@+id/but_deactivate5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="127dp"
-        android:layout_marginLeft="127dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="159dp"
-        android:layout_marginRight="159dp"
-        android:layout_marginBottom="667dp"
-        android:background="@drawable/style_button"
-        android:text="@string/activate"
-        android:textColor="#100808"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.011"
-        tools:textSize="18sp"
-        tools:textStyle="bold" />
-
-    <Button
         android:id="@+id/add_bump2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -203,6 +175,26 @@
         android:layout_marginBottom="86dp"
         android:text="@string/_000_0_miles_hour" />
 
+    <ToggleButton
+        android:id="@+id/map_deactive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="147dp"
+        android:layout_marginLeft="147dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="176dp"
+        android:layout_marginRight="176dp"
+        android:layout_marginBottom="667dp"
+        android:background="@drawable/style_button"
+        android:text="@string/deactivate"
+        android:textOff="@string/deactivate"
+        android:textOn="@string/activate" />
 
 
 </RelativeLayout>
