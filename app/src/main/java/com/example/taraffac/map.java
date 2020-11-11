@@ -60,6 +60,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button profile;
     Button log;
     Button add;
+    Button notify;////////////////////////////////////////
     ToggleButton active;
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
@@ -87,6 +88,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
+        notify = (Button) findViewById(R.id.showNotificationBtn);///////////////////////////////////////
+
         active = findViewById(R.id.map_deactive);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
@@ -102,9 +105,18 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         if (extras != null) {
             state = extras.getBoolean("state");
         }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        notify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
+
 
         SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
         active.setChecked(sharedPrefs.getBoolean("active", state));
+
 
 
         // activate and deactivate
@@ -119,7 +131,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             //notification code
             builder = new AlertDialog.Builder(map.this);
             builder.setCancelable(true);
-            //speedometer code
+
             LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -131,53 +143,35 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-            this.onLocationChanged(null);
+          //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+          //  this.onLocationChanged(null);
 
         }
-    }// end on create
-    
-// check if it is activate or deactivate
-        private void checkButton(){
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                stateFrom = extras.getBoolean("stateFrom");
-            }
-            // pref = getSharedPreferences("MyPref", 0);
-            //  state = pref.getBoolean("state", false);
-            state = true;
-            if (state || stateFrom) {
-                stateFrom = true;
-                active.setText("Deactivate");
-                //notification code
-                builder = new AlertDialog.Builder(map.this);
-                builder.setCancelable(true);
+        if (state || stateFrom) {
+            stateFrom = true;
+            active.setText("Deactivate");
+            //notification code
+            builder = new AlertDialog.Builder(map.this);
+            builder.setCancelable(true);
 
-                // Setting Negative "Cancel" Button
-                builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //SpeedBump editedsb = sb;
-                        go_to_edit(this);
-                    }
-                });
-                // Setting Positive "Yes" Button
-                builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        go_to_report(this);
-                    }
-                });
-
-            }
-
-            add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    add();
+            // Setting Negative "Cancel" Button
+            builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    //SpeedBump editedsb = sb;
+                    go_to_edit(this);
+                }
+            });
+            // Setting Positive "Yes" Button
+            builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    go_to_report(this);
                 }
             });
 
         }
+    }// end on create
 
+// check if it is activate or deactivate
         public void isActive() {
 
             if (active.isChecked()) {
@@ -367,12 +361,11 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
                     double newlng = Double.parseDouble(new DecimalFormat("00.000").format(user_long));
 
-                  //  txtCurrentSpeed.bringToFront();
-                    checkforspeedbump(userLoc1km,newlat,newlng);
+                    txtCurrentSpeed.setText(userLoc1km+newlat+newlng);
+                   // checkforspeedbump(userLoc1km,newlat,newlng);
 
                 }
             });
-
 
         }
 
