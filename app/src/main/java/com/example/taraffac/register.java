@@ -43,7 +43,8 @@ public class register extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-    SpeedBump sb;
+   String Voice_Command;
+
 
 
     @Override
@@ -96,9 +97,9 @@ public class register extends AppCompatActivity {
                Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();*/
 
               final String Email = email.getText().toString().trim();
-              String Pass = pass.getText().toString().trim();
+             final String Pass = pass.getText().toString().trim();
               //amjad
-                final String Name = name.getText().toString();
+                final String Name = name.getText().toString().trim();
                 //amjad
 
               if(TextUtils.isEmpty(Email)){
@@ -126,6 +127,10 @@ public class register extends AppCompatActivity {
                           Map<String , Object> user = new HashMap<>();
                           user.put("Name",Name);
                           user.put("email" , Email);
+                          user.put("password" , Pass);
+                        user.put("addingType" , Voice_Command);
+
+
                           documentReferenc.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                               @Override
                               public void onSuccess(Void aVoid) {
