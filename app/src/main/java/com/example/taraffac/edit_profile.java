@@ -69,7 +69,8 @@ public class edit_profile extends AppCompatActivity {
         Intent data = getIntent();
         String  fullName = data.getStringExtra("fullName");
         String  email  = data.getStringExtra("email");
-        Log.d(TAG, "onCreate: " + fullName + " " + email);
+        String  type = data.getStringExtra("addingType");
+        Log.d(TAG, "onCreate: " + fullName + " " + email + type);
         final EditText ProfileEditFullName , ProfileEditEmail;
         ProfileEditFullName = findViewById(R.id.name_edit);
                 ProfileEditEmail = findViewById(R.id.email_edit);

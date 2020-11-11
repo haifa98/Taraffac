@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void go_to_register(View view) {
-        Intent go_register= new Intent(this,register.class);
-        startActivity(go_register);
+        Intent go_register1= new Intent(this,register.class);
+        startActivity(go_register1);
     }
 
     public void go_to_login(View view) {
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(go_login);
     }
 
-    public void gotomap(View view) {
-        Intent go_map= new Intent(this,register.class);
-        startActivity(go_map);
-    }
+   // public void gotomap(View view) {
+    //    Intent go_map= new Intent(this,register.class);
+    //    startActivity(go_map);
+   // }
 }

@@ -46,7 +46,7 @@ public class profile extends AppCompatActivity {
     Button  ChangImage1;
     ImageView imageProfil1;
    // Button edit_profile;
-    TextView fullName , Email;
+    TextView fullName , Email, type;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference  storageReference;
@@ -71,6 +71,7 @@ public class profile extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         firebaseUser = fAuth.getCurrentUser();
+        type=findViewById(R.id.adding_pro);
 
         //
        // imageprofil= findViewById(R.id.imageProfil);
@@ -90,6 +91,7 @@ public class profile extends AppCompatActivity {
                 assert documentSnapshot != null;
                 Email.setText(documentSnapshot.getString("email"));
                 fullName.setText(documentSnapshot.getString("Name"));
+                type.setText(documentSnapshot.getString("addingType"));
             }
         });//end method
         //
@@ -102,6 +104,8 @@ public class profile extends AppCompatActivity {
                 Intent i = new Intent(v.getContext(),edit_profile.class);
                 i.putExtra("fullName",fullName.getText().toString());
                 i.putExtra("email",Email.getText().toString());
+                i.putExtra("addingType",type.getText().toString());
+
 
                 startActivity(i);
             }

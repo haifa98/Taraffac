@@ -43,7 +43,7 @@ public class register extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
-   String Voice_Command;
+  // String Display_Option;
 
 
 
@@ -78,11 +78,11 @@ public class register extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore= FirebaseFirestore.getInstance();
 
-        if(fAuth.getCurrentUser() != null){
-            Intent go_home1 = new Intent(getApplicationContext(),map.class);
-            startActivity(go_home1);
-            finish();
-        }
+      // if(fAuth.getCurrentUser() != null){
+         //  Intent go_home1 = new Intent(getApplicationContext(),map.class);
+         //  startActivity(go_home1);
+         //  finish();
+       // }
 
        // user= new User();
         go_register_to_home1.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +100,8 @@ public class register extends AppCompatActivity {
              final String Pass = pass.getText().toString().trim();
               //amjad
                 final String Name = name.getText().toString().trim();
+                //final String type = Display_Option;
+
                 //amjad
 
               if(TextUtils.isEmpty(Email)){
@@ -128,7 +130,7 @@ public class register extends AppCompatActivity {
                           user.put("Name",Name);
                           user.put("email" , Email);
                           user.put("password" , Pass);
-                        user.put("addingType" , Voice_Command);
+                        user.put("addingType" ,"Display Option");
 
 
                           documentReferenc.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -139,8 +141,8 @@ public class register extends AppCompatActivity {
                           });
                           //amjad
 
-                          Intent go_home1 = new Intent(getApplicationContext(),map.class);
-                          startActivity(go_home1);
+                         Intent go_home1 = new Intent(getApplicationContext(),map.class);
+                         startActivity(go_home1);
 
                       }else {
                           Toast.makeText(register.this, " Error " + Objects.requireNonNull(task.getException()).getMessage()  , Toast.LENGTH_SHORT).show();
