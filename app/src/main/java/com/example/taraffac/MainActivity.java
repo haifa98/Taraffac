@@ -40,4 +40,9 @@ public class MainActivity extends AppCompatActivity {
             Intent go_login= new Intent(this,login.class);
             startActivity(go_login);
     }
+
+    public void gotomap(View view) {
+        Intent go_map= new Intent(this,register.class);
+        startActivity(go_map);
+    }
 }

@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class register extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
+    SpeedBump sb;
 
 
     @Override
@@ -144,6 +146,8 @@ public class register extends AppCompatActivity {
                 startActivity(go_home1);*/
             }
         });
+
+
     }
 
     public void return_main2(View view) {

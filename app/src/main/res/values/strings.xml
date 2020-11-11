@@ -28,8 +28,8 @@
     <string name="star4_register">*</string>
     <string name="desc_register">Image</string>
     <string name="profile">Profile</string>
-    <string name="deactivate">Deactivate</string>
-    <string name="activate">Activate</string>
+    <string name="deactivate">Deactivated</string>
+    <string name="activate">Activated</string>
     <string name="log_out">Log out</string>
     <string name="type">Type:</string>
     <string name="size">Size:</string>
@@ -55,6 +55,7 @@
     <string name="edit">Edit</string>
     <string name="report">Report</string>
     <string name="edit_speed_bump">Edit speed bump</string>
+    <string name="cancel">Cancel</string>
 
     <string name="hump">Hump</string>
     <string name="table">Table</string>
