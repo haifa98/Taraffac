@@ -80,7 +80,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +104,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         if (extras != null) {
             state = extras.getBoolean("state");
         }
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
