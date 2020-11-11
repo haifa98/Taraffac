@@ -17,17 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".homeEditee">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".homeEditee"/>
 
 
 
-        </activity>
+
         <activity android:name=".add" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -57,6 +51,11 @@
         <activity android:name=".register" />
         <activity android:name=".login" />
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
     </application>

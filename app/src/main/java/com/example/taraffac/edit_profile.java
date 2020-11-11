@@ -112,7 +112,8 @@ public class edit_profile extends AppCompatActivity {
                        // DocumentReference docRef = fStore.collection("SpeedBump").document(SpeedBump(MIJKeFHd1ikAjpOvBsY1));
                         Map<String , Object> edited = new HashMap<>();
                        edited.put("email",ProfileEditEmail.getText().toString());
-                        edited.put("Name", ProfileEditFullName.getText().toString());
+                        edited.put("Name",ProfileEditFullName.getText().toString());
+
                         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {

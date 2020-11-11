@@ -5,14 +5,14 @@ public class User {
     private String email;
     private String password;
     private String addingType;
-    //private String Display_Option;
-   // private String voice_command;
+    private String Display_Option;
+    private String voice_command;
 
     public User() {
 
 
     }
-    public User(String username, String email, String password, String size, String addingType) {
+    public User(String username, String email, String password,  String addingType) {
         this.username = username;
         this.email = email;
         this.password = password;
