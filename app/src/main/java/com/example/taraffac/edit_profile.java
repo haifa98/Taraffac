@@ -114,6 +114,7 @@ public class edit_profile extends AppCompatActivity {
                        edited.put("email",ProfileEditEmail.getText().toString());
                         edited.put("Name",ProfileEditFullName.getText().toString());
                         ////
+                        ////
 
                         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
