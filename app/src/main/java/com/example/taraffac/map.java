@@ -68,7 +68,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     DatabaseReference ref;
     AlertDialog.Builder builder;
     boolean state = false;
-    boolean stateFrom =false;
+    boolean stateFrom = false;
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     SpeedBump sb;
@@ -96,28 +96,41 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
         // get state from add - edit
-
+        //txtCurrentSpeed.bringToFront();
 // activate snd deactivate
-     //    pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
-       //  editor = pref.edit();
-      //  editor.putBoolean("state",false);
-       // editor.commit();
+        //    pref = getSharedPreferences("MyPref", Context.MODE_PRIVATE);
+        //  editor = pref.edit();
+        //  editor.putBoolean("state",false);
+        // editor.commit();
         checkButton();
-   //     active.setOnClickListener(new View.OnClickListener() {
-     //       @Override
-       //     public void onClick(View view) {
-         //       checkButton(); }});
+        //     active.setOnClickListener(new View.OnClickListener() {
+        //       @Override
+        //     public void onClick(View view) {
+        //       checkButton(); }});
         active.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                state = true; }});
+                state = true;
+            }
+        });
 
 
-                    //speedometer code
-                    // LocationManager lm =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                      //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                     // this.onLocationChanged(null);
-}
+        //speedometer code
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+                      this.onLocationChanged(null);
+
+    }
 
 // check if it is activate or deactivate
     private void checkButton() {
@@ -155,14 +168,7 @@ state= true;
                     add();
                 }
             });
-            try {
-                while (state|| stateFrom) {
-                    sendMessage();
-                    Thread.sleep(5 * 10000);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
 
 
         } else {
@@ -171,8 +177,7 @@ state= true;
             state = false;
         }
     }
-
-
+    
 
     @Override // set the map
     public void onMapReady(GoogleMap googleMap) {
@@ -298,7 +303,7 @@ state= true;
             public void onSuccess(Location location) {
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
-// send info to add class
+                // send info to add class
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
@@ -332,16 +337,17 @@ state= true;
                 double user_lat = location.getLatitude();
                 double user_long = location.getLongitude();
 
-                String sub1 = new DecimalFormat("##.##").format(user_lat);
-                String sub2=  new DecimalFormat("##.##").format(user_long);
+                String sub1 = new DecimalFormat("00.00").format(user_lat);
+                String sub2=  new DecimalFormat("00.00").format(user_long);
                 String userLoc1km = sub1.replace('.','-')+"_"+sub2.replace('.','-');
 
-                double newlat = Double.parseDouble(new DecimalFormat("##.###").format(user_lat));
+                double newlat = Double.parseDouble(new DecimalFormat("00.000").format(user_lat));
 
-                double newlng = Double.parseDouble(new DecimalFormat("##.###").format(user_long));
+                double newlng = Double.parseDouble(new DecimalFormat("00.000").format(user_long));
 
 
-                checkforspeedbump(userLoc1km,newlat,newlng);
+                txtCurrentSpeed.setText(userLoc1km+newlat+newlng);
+               // checkforspeedbump(userLoc1km,newlat,newlng);
 
             }
         });
@@ -388,47 +394,14 @@ state= true;
         go_register.putExtra("stateFrom", stateFrom);
         startActivity(go_register);
     }
-    //notification code end
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        if (state|| stateFrom) {
+            sendMessage();
+        }
+    }
 
     //speedometer code
 
-    @Override
-    public void onLocationChanged(Location location) {
-
-
-       /* if (location==null){
-            // if you can't get speed because reasons :)
-            txtCurrentSpeed.setText("00 km/h");
-        }
-        else{
-            //int speed=(int) ((location.getSpeed()) is the standard which returns meters per second. In this example i converted it to kilometers per hour
-
-            int speed=(int) ((location.getSpeed()*3600)/1000);
-
-            txtCurrentSpeed.setText(speed+" km/h");
-        }*/
-
-    }
-
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-
-    }
 }
