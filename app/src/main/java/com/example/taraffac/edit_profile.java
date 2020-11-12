@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +47,11 @@ public class edit_profile extends AppCompatActivity {
    // TextView fullNameProfileEdit , EmailProfileEdit;
     FirebaseUser user;
     //String usedId;
+ RadioButton  Radiodisplay, RadioVoice , RadioType;
+     EditText ProfileEditFullName , ProfileEditEmail;
+    RadioGroup RadioGroupTypeUpdate;
 
+    public String voiceType ="Voice command";
 
     FirebaseAuth fAuth;
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -58,6 +64,11 @@ public class edit_profile extends AppCompatActivity {
         //  EmailProfileEdit = findViewById(R.id.email_edit);
         saveProvil = findViewById(R.id.save_profile);
        imageprofil= findViewById(R.id.imageProfilEdit);
+        Radiodisplay = findViewById(R.id.displayEdit);
+        RadioVoice= findViewById(R.id.voiceEdit);
+        RadioGroupTypeUpdate= findViewById(R.id.update_Adding_type);
+        ProfileEditFullName = findViewById(R.id.name_edit);
+        ProfileEditEmail = findViewById(R.id.email_edit);
        // ChangImage1= findViewById(R.id.ChangImage);
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
@@ -71,11 +82,16 @@ public class edit_profile extends AppCompatActivity {
         String  email  = data.getStringExtra("email");
         String  type = data.getStringExtra("addingType");
         Log.d(TAG, "onCreate: " + fullName + " " + email + type);
-        final EditText ProfileEditFullName , ProfileEditEmail;
-        ProfileEditFullName = findViewById(R.id.name_edit);
-                ProfileEditEmail = findViewById(R.id.email_edit);
+
         ProfileEditFullName.setText(fullName);
         ProfileEditEmail.setText(email);
+
+        if (type.equals(voiceType) ){
+            RadioVoice.setChecked(true);
+        }else{
+            Radiodisplay.setChecked(true);}
+
+
 
        // هنا اتوقع تغيير الصوره اتاكد منه شوي
         StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
@@ -101,10 +117,13 @@ public class edit_profile extends AppCompatActivity {
         saveProvil.setOnClickListener(new View.OnClickListener() {// start method
             @Override
             public void onClick(View v) { // start onclick
-                if (ProfileEditFullName.getText().toString().isEmpty() || ProfileEditEmail.getText().toString().isEmpty()) {
+                final String TypeText;
+                TypeText=checkType();
+                if (ProfileEditFullName.getText().toString().isEmpty() || ProfileEditEmail.getText().toString().isEmpty()|| TypeText.isEmpty()) {
                     Toast.makeText(edit_profile.this, "one or many fields are empty", Toast.LENGTH_SHORT).show();
                     return;//user
                 }
+
                // final String email = ProfileEditEmail.getText().toString();
                 user.updateEmail(ProfileEditEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() { // start OnSuccessListener
                     @Override
@@ -114,6 +133,7 @@ public class edit_profile extends AppCompatActivity {
                         Map<String , Object> edited = new HashMap<>();
                        edited.put("email",ProfileEditEmail.getText().toString());
                         edited.put("Name",ProfileEditFullName.getText().toString());
+                        edited.put("addingType",TypeText);
                         ////
                         ////
                         ///
@@ -143,6 +163,15 @@ public class edit_profile extends AppCompatActivity {
         // end edit profile
 
     }// end onCreate
+// updata adding type in profile
+    public String checkType(){
+        int radioID = RadioGroupTypeUpdate.getCheckedRadioButtonId();
+        RadioType = findViewById(radioID);
+        String CheckType = (String) RadioType.getText();
+        return CheckType ;
+
+
+    }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
@@ -181,16 +210,13 @@ public class edit_profile extends AppCompatActivity {
     }// end  method
 
 
-
     public void return_main(View view) {
         onBackPressed();
 
     }
    // public void save(View v){
-     //   Intent saveProvil = new Intent(this,profile.class);
-     //  startActivity(saveProvil);
-//}//
-
+       // Intent saveProvil = new Intent(this,profile.class);
+       //startActivity(saveProvil);}
 }
 
 

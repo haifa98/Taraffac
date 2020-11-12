@@ -185,9 +185,9 @@
 
     <TextView
         android:id="@+id/adding_pro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/adding_pro"
+        android:layout_width="38dp"
+        android:layout_height="21dp"
+        android:text=""
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

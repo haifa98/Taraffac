@@ -141,7 +141,7 @@ public class register extends AppCompatActivity {
                           });
                           //amjad
 
-                         Intent go_home1 = new Intent(getApplicationContext(),map.class);
+                         Intent go_home1 = new Intent(getApplicationContext(),profile.class);
                          startActivity(go_home1);
 
                       }else {
