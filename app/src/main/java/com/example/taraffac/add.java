@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -24,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class add extends AppCompatActivity {
     Button profile;
@@ -38,7 +41,9 @@ public class add extends AppCompatActivity {
     RadioButton size1;
     DatabaseReference dataBymp;
     String sub;
-
+    String userType;
+    String Vtype;
+    String Vsize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +59,62 @@ public class add extends AppCompatActivity {
 // get latlng from map class
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            userType = extras.getString("userType");
              latitude = extras.getDouble("Latitude");
              longitude = extras.getDouble("Longitude");
         }
-
         dataBymp = FirebaseDatabase.getInstance().getReference("SpeedBump");
-
+if(userType=="Voice command" ||userType=="Voice"){
+read();
+}
     }
+
+// voice command
+public void read(){
+      //  String readT = "what is the type of the bump ? is it cushion, table or hump ?";
+//////
+    getSpeechInput();
+
+    if (Vtype=="add_cushion" ) {((RadioButton)type.getChildAt(0)).setChecked(true);}
+    if (Vtype=="add_table" ) {((RadioButton)type.getChildAt(1)).setChecked(true); }
+    if (Vtype=="add_hump" ) { ((RadioButton)type.getChildAt(2)).setChecked(true);}
+       // String readS = "what is the size of speed bump ? is it small, medium or large?";
+/////
+    //getSpeechInput();
+    if (Vsize=="small" ) { type.check(R.id.add_small); }
+    if (Vsize=="small" ) { type.check(R.id.add_mid); }
+    if (Vsize=="large" ) { type.check(R.id.add_large); }
+}
+private void getSpeechInput() {
+    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+    if (intent.resolveActivity(getPackageManager()) != null) {
+        startActivityForResult(intent, 10);
+    } else {
+        Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+    }
+}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    assert result != null;
+
+                   if (result.contains("cushion")) { Vtype="add_cushion"; }
+                   if (result.contains("table")) { Vtype="add_table"; }
+                   if (result.contains("hump")) { Vtype="add_hump"; }
+                   if (result.contains("small")) { Vsize="small"; }
+                   if (result.contains("medium")) { Vsize="medium"; }
+                   if (result.contains("large")) { Vsize="large"; }
+
+
+                    break;} }}
 
 
     // cancel add
@@ -87,8 +141,9 @@ public class add extends AppCompatActivity {
     }
 
     public void go_to_profile(View v){
-        Intent profile = new Intent(this,profile.class);
-        startActivity(profile);
+        read();
+       // Intent profile = new Intent(this,profile.class);
+        //startActivity(profile);
     }
     public void log_out(View v){
         Intent log = new Intent(this,login.class);

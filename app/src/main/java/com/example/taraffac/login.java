@@ -54,7 +54,7 @@ public class login extends AppCompatActivity { // start class
             @Override
             public void onClick(View view) {
 
-                String Email = LEmail.getText().toString().trim();
+                final String Email = LEmail.getText().toString().trim();
                 String Pass = LPass.getText().toString().trim();
 
                 if(TextUtils.isEmpty(Email)){
@@ -78,7 +78,7 @@ public class login extends AppCompatActivity { // start class
                     public void onComplete(@NonNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
                           Toast.makeText(login.this, " Logged in Successfully"  , Toast.LENGTH_SHORT).show();
-                          Intent go_home11 = new Intent(getApplicationContext(),profile.class);
+                          Intent go_home11 = new Intent(getApplicationContext(),map.class);
                           startActivity(go_home11);
                       }else {
                           Toast.makeText(login.this, " Error " + Objects.requireNonNull(task.getException()).getMessage() , Toast.LENGTH_SHORT).show();

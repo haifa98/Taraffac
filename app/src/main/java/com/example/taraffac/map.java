@@ -13,15 +13,20 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -39,16 +44,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 import dagger.Module;
 
@@ -70,7 +84,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     DatabaseReference ref;
     AlertDialog.Builder builder;
     boolean state = false;
-    boolean stateFrom =false;
+    String addingType;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -80,6 +94,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +103,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
         notify = (Button) findViewById(R.id.showNotificationBtn);///////////////////////////////////////
-
         active = findViewById(R.id.map_deactive);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
@@ -99,11 +113,15 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
+        addingType = getFirebaseUser();
+
         // get state value from activities
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             state = extras.getBoolean("state");
         }
+        SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
+        active.setChecked(sharedPrefs.getBoolean("active", state));
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,12 +129,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 sendMessage();
             }
         });
-
-
-        SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
-        active.setChecked(sharedPrefs.getBoolean("active", state));
-
-
 
         // activate and deactivate
         active.setOnClickListener(new View.OnClickListener() {
@@ -142,12 +154,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-          //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-          //  this.onLocationChanged(null);
+            //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+            //  this.onLocationChanged(null);
 
-        }
-        if (state || stateFrom) {
-            stateFrom = true;
             active.setText("Deactivate");
             //notification code
             builder = new AlertDialog.Builder(map.this);
@@ -166,254 +175,306 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     go_to_report(this);
                 }
             });
-
         }
+// check if active for add
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (active.isChecked()) {
+                    add();
+                }
+            }
+        });
+
     }// end on create
 
-// check if it is activate or deactivate
-        public void isActive() {
+    // check if it is activate or deactivate
+    public void isActive() {
+        if (active.isChecked()) {
+            getSpeechInput();
+            // active.setText("Activated");
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
+            editor.putBoolean("active", true);
+            editor.commit();
+        } else {
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
+            editor.putBoolean("active", false);
+            editor.commit();
+        }// end if else
+    }
 
-            if (active.isChecked()) {
-                // active.setText("Activated");
-                SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
-                editor.putBoolean("active", true);
-                editor.commit();
+    private void getSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
 
-            } else {
-                SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
-                editor.putBoolean("active", false);
-                editor.commit();
-            }// end if else
-
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 10);
+        } else {
+            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
         }
-
-        @Override // set the map
-        public void onMapReady(GoogleMap googleMap){
-            mMap = googleMap;
-
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    }
 
 
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public String getFirebaseUser() {
+        // String type= "Display Option";
+        final String[] type = new String[1];
+        type[0] = "Display Option";
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+        final DocumentReference documentReference = fStore.collection("users").document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
+                assert documentSnapshot != null;
+                type[0] = (documentSnapshot.getString("addingType"));
+            }
+        });
+
+        return type[0];
+    }
+
+    @Override // set the map
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            enableUserLocation();
+            zoomToUserLocation();
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                //We can show user a dialog why this permission is necessary
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+            }
+        }
+    }
+
+    // set the user location
+    private void enableUserLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+    }
+
+    // zoom on user location
+    private void zoomToUserLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
+            }
+        });
+    }
+
+    @Override // check if user allow GPS service
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == ACCESS_LOCATION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableUserLocation();
                 zoomToUserLocation();
             } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    //We can show user a dialog why this permission is necessary
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-                }
+
             }
         }
-
-// set the user location
-        private void enableUserLocation () {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                return;
-            }
-            mMap.setMyLocationEnabled(true);
-        }
-// zoom on user location
-        private void zoomToUserLocation () {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
-            locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
-                }
-            });
-        }
-        @Override // check if user allow GPS service
-        public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions,
-        @NonNull int[] grantResults){
-            if (requestCode == ACCESS_LOCATION_REQUEST_CODE) {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    enableUserLocation();
-                    zoomToUserLocation();
-                } else {
-
-                }
-            }
-        }
+    }
 
 
-        public void go_to_profile (View v){
-            Intent profile = new Intent(this, profile.class);
-            startActivity(profile);
-        }
+    public void go_to_profile(View v) {
+        Intent profile = new Intent(this, profile.class);
+        startActivity(profile);
+    }
 
-        public void log_out (View v){
-            FirebaseAuth.getInstance().signOut();// R add it
-            Intent log = new Intent(this, login.class);
-            startActivity(log);
-            finish();// R add it
-        }
+    public void log_out(View v) {
+        FirebaseAuth.getInstance().signOut();// R add it
+        Intent log = new Intent(this, login.class);
+        startActivity(log);
+        finish();// R add it
+    }
 
-        // show markers on bumps
-        private void showbumps () {
+    // show markers on bumps
+    private void showbumps() {
 
-            ref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    List<SpeedBump> bumps = new ArrayList<>();
-                    bumps.clear();
-                    for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
-                        for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
-                            SpeedBump bump = bumpSnapshot.getValue(SpeedBump.class);
-                            bumps.add(bump);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<SpeedBump> bumps = new ArrayList<>();
+                bumps.clear();
+                for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
+                        SpeedBump bump = bumpSnapshot.getValue(SpeedBump.class);
+                        bumps.add(bump);
 
-                            double bump_lat = bump.getLatitude();
-                            double bump_long = bump.getLongitude();
-                            String bump_type = bump.getType();
-                            String bump_size = bump.getSize();
+                        double bump_lat = bump.getLatitude();
+                        double bump_long = bump.getLongitude();
+                        String bump_type = bump.getType();
+                        String bump_size = bump.getSize();
 
-                            LatLng latLng = new LatLng(bump_lat, bump_long);
-                            String bump_info = " type : " + bump_type + " size : " + bump_size;
+                        LatLng latLng = new LatLng(bump_lat, bump_long);
+                        String bump_info = " type : " + bump_type + " size : " + bump_size;
 // set height & width - apply style
-                            int height = 130;
-                            int width = 130;
-                            Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
-                            Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                            BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
+                        int height = 130;
+                        int width = 130;
+                        Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
+                        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                        BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
-                            //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
-                            MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
+                        //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
+                        MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
 // create marker for bumps
-                            mMap.addMarker(marker);
-                        }
+                        mMap.addMarker(marker);
                     }
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                }
-            });
-        }
-
-
-// add new speed bump
-        public void add () {
-            if (active.isChecked()) {
-
-
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                } // get user location
-                Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
-                locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        double loc_lat = location.getLatitude();
-                        double loc_long = location.getLongitude();
-                        // send info to add class
-                        Intent intent = new Intent(map.this, add.class);
-                        intent.putExtra("Latitude", loc_lat);
-                        intent.putExtra("Longitude", loc_long);
-                        startActivity(intent);
-                    }
-                });
             }
-            //Intent a = new Intent(this, add.class);
-            // startActivity(a);
-        }
 
-        //notification code start
-        public void sendMessage () {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            } // get user location
 
-            Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
-            locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    double user_lat = location.getLatitude();
-                    double user_long = location.getLongitude();
+    // add new speed bump
+    public void add() {
 
-                    String sub1 = new DecimalFormat("00.00").format(user_lat);
-                    String sub2 = new DecimalFormat("00.00").format(user_long);
-                    String userLoc1km = sub1.replace('.', '-') + "_" + sub2.replace('.', '-');
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        } // get user location
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                double loc_lat = location.getLatitude();
+                double loc_long = location.getLongitude();
+                // send info to add class
+                Intent intent = new Intent(map.this, add.class);
+                intent.putExtra("Latitude", loc_lat);
+                intent.putExtra("Longitude", loc_long);
+                intent.putExtra("userType", addingType);
+                startActivity(intent);
+            }
+        });
 
-                    double newlat = Double.parseDouble(new DecimalFormat("00.000").format(user_lat));
+        //Intent a = new Intent(this, add.class);
+        // startActivity(a);
+    }
 
-                    double newlng = Double.parseDouble(new DecimalFormat("00.000").format(user_long));
+    //notification code start
+    public void sendMessage() {
 
-                    txtCurrentSpeed.setText(userLoc1km+newlat+newlng);
-                   // checkforspeedbump(userLoc1km,newlat,newlng);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        } // get user location
 
-                }
-            });
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                double user_lat = location.getLatitude();
+                double user_long = location.getLongitude();
 
-        }
+                String sub1 = new DecimalFormat("00.00").format(user_lat);
+                String sub2 = new DecimalFormat("00.00").format(user_long);
+                String userLoc1km = sub1.replace('.', '-') + "_" + sub2.replace('.', '-');
 
-        public void checkforspeedbump ( final String usercoordinates1km, final double userlat100m, final double userlong100m){
+                double newlat = Double.parseDouble(new DecimalFormat("00.000").format(user_lat));
 
-            FirebaseDatabase.getInstance().getReference("SpeedBump").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.hasChild(usercoordinates1km)) {
-                        // run some code
+                double newlng = Double.parseDouble(new DecimalFormat("00.000").format(user_long));
 
-                        for (DataSnapshot snapshot : dataSnapshot.child(usercoordinates1km).getChildren()) {
-                            sb = snapshot.getValue(SpeedBump.class);
+                txtCurrentSpeed.setText(userLoc1km + newlat + newlng);
+                // checkforspeedbump(userLoc1km,newlat,newlng);
 
-                            if (sb.getLatitude() == userlat100m && sb.getLongitude() == userlong100m) {
-                                // Do something in response to button
-                                builder.setTitle("SLOW DOWN SPEED BUMP AHEAD");
-                                builder.setMessage("Type: " + sb.getType() + "/n" + "Size: " + sb.getSize());
-                                builder.show();
-                            }
+            }
+        });
 
+    }
+
+    public void checkforspeedbump(final String usercoordinates1km, final double userlat100m, final double userlong100m) {
+
+        FirebaseDatabase.getInstance().getReference("SpeedBump").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(usercoordinates1km)) {
+                    // run some code
+
+                    for (DataSnapshot snapshot : dataSnapshot.child(usercoordinates1km).getChildren()) {
+                        sb = snapshot.getValue(SpeedBump.class);
+
+                        if (sb.getLatitude() == userlat100m && sb.getLongitude() == userlong100m) {
+                            // Do something in response to button
+                            builder.setTitle("SLOW DOWN SPEED BUMP AHEAD");
+                            builder.setMessage("Type: " + sb.getType() + "/n" + "Size: " + sb.getSize());
+                            builder.show();
                         }
+
                     }
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    //handle databaseError
-                }
-            });
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //handle databaseError
+            }
+        });
+    }
 
-        public void go_to_edit (DialogInterface.OnClickListener view){
-            Intent go_register = new Intent(this, edit_speed_bump.class);
-            startActivity(go_register);
-        }
+    public void go_to_edit(DialogInterface.OnClickListener view) {
+        Intent go_register = new Intent(this, edit_speed_bump.class);
+        startActivity(go_register);
+    }
 
-        public void go_to_report (DialogInterface.OnClickListener view){
-            Intent go_register = new Intent(this, report.class);
-            startActivity(go_register);
-        }
+    public void go_to_report(DialogInterface.OnClickListener view) {
+        Intent go_register = new Intent(this, report.class);
+        startActivity(go_register);
+    }
 
-        @Override
-        public void onLocationChanged (@NonNull Location location){
-         //   if (checkButton()) {
-                sendMessage();
-         //   }
-        }
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        //   if (checkButton()) {
+        sendMessage();
+        //   }
+    }
 
-        //speedometer code
+    //speedometer code
 
+
+    ////// Voice command code
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    assert result != null;
+
+                    if (result.contains("at")) {
+                        add(); }
+                    break;} }}
 }
