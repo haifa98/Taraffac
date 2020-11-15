@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -215,23 +216,24 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
     }
 
-
+////////// not working
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String getFirebaseUser() {
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
         // String type= "Display Option";
         final String[] type = new String[1];
-        type[0] = "Display Option";
+       // type[0] = "Display Option";
         FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-        final DocumentReference documentReference = fStore.collection("users").document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
+        final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
                 assert documentSnapshot != null;
-                type[0] = (documentSnapshot.getString("addingType"));
+
+                type[0] = documentSnapshot.getString("addingType");
             }
         });
-
-        return type[0];
+             return type[0];
     }
 
     @Override // set the map
@@ -474,7 +476,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     assert result != null;
 
-                    if (result.contains("at")) {
+                    if (result.contains("1")) {
                         add(); }
                     break;} }}
 }
