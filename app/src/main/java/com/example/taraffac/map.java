@@ -137,7 +137,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 sendMessage();
             }
         });
-
         // activate and deactivate
         active.setOnClickListener(new View.OnClickListener() {
             @Override
