@@ -28,6 +28,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -77,21 +78,24 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button add;
     Button notify;////////////////////////////////////////
     ToggleButton active;
+    Button listen;
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
-    DatabaseReference ref;
+    DatabaseReference ref,refV;
+    FirebaseUser user;
     AlertDialog.Builder builder;
     boolean state = false;
     String addingType;
+
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
     SpeedBump sb;
     private static final String TAG = "MapsActivity";
-
+    TextView type1;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -105,6 +109,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         add = (Button) findViewById(R.id.add_bump2);
         notify = (Button) findViewById(R.id.showNotificationBtn);///////////////////////////////////////
         active = findViewById(R.id.map_deactive);
+        listen = findViewById(R.id.listen);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -114,7 +119,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
-        addingType = getFirebaseUser();
+        ////////////
+
+
 
         // get state value from activities
         Bundle extras = getIntent().getExtras();
@@ -158,7 +165,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
             //  this.onLocationChanged(null);
 
-            active.setText("Deactivate");
             //notification code
             builder = new AlertDialog.Builder(map.this);
             builder.setCancelable(true);
@@ -178,21 +184,17 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             });
         }
 // check if active for add
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (active.isChecked()) {
-                    add();
-                }
-            }
-        });
+        add.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { if (active.isChecked()) {add();}     }});
+
+
+        listen.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) { if (active.isChecked()) {getSpeechInput();}   }});
 
     }// end on create
 
     // check if it is activate or deactivate
     public void isActive() {
         if (active.isChecked()) {
-            getSpeechInput();
+            //getSpeechInput();
             // active.setText("Activated");
             SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
             editor.putBoolean("active", true);
@@ -204,36 +206,26 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }// end if else
     }
 
-    private void getSpeechInput() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 10);
-        } else {
-            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
-        }
-    }
-
 ////////// not working
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String getFirebaseUser() {
-        FirebaseAuth fAuth = FirebaseAuth.getInstance();
-        // String type= "Display Option";
-        final String[] type = new String[1];
-       // type[0] = "Display Option";
-        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
-        final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
-                assert documentSnapshot != null;
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        final String uid = user.getUid();
+        final String[] adding = new String[1];
+        refV = FirebaseDatabase.getInstance().getReference();
 
-                type[0] = documentSnapshot.getString("addingType");
+        refV.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                adding[0] = (String) snapshot.child(uid).child("addingType").getValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
-             return type[0];
+             return adding[0];
     }
 
     @Override // set the map
@@ -463,8 +455,19 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     //speedometer code
 
-
     ////// Voice command code
+
+    private void getSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 10);
+        } else {
+            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -476,7 +479,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     assert result != null;
 
-                    if (result.contains("1")) {
+                    if (result.contains("add")) {
                         add(); }
                     break;} }}
 }
