@@ -84,8 +84,8 @@ public class add extends AppCompatActivity {
 //if(userType=="Voice command"){
 read(); }
 
-    // text to speech
 
+// this method convert text to speech
     void speak(String s){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.v(TAG, "Speak new API");
@@ -110,7 +110,7 @@ read(); }
         }
     }
 
-// voice command
+// the result from user voice become as array list and this method split the values for each element in arraylist
 public static String[] spliteArray(ArrayList<String> array) {
     String[] tmp= new String[20];
     for(String line : array) {
@@ -119,8 +119,7 @@ public static String[] spliteArray(ArrayList<String> array) {
     return tmp;
 }
 
-
-
+// this is the main methon for voice command
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public void read(){
 
@@ -149,7 +148,7 @@ public void read(){
         public void run() {getSpeechInput(); }}, 9000); //  1000 = 1 sec
     }
 
-
+// speech to text
 private void getSpeechInput() {
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -161,7 +160,7 @@ private void getSpeechInput() {
         Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
     }
 }
-
+// this function get the result from the above function
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -173,10 +172,10 @@ private void getSpeechInput() {
                     assert result != null;
                     String[] newA = spliteArray(result);
                     testtype(newA);
-                   // save();
+                    save();
 
                     break;} }}
-
+   // this method check radio buttons
     public void testtype(String[] x){
         for (String n: x){
         if (n.equals("cushion")) { ((RadioButton)type.getChildAt(0)).setChecked(true);}
@@ -195,15 +194,17 @@ private void getSpeechInput() {
     }
     // get type & size from the layout and store it in variable  as string
     public String checkType(){
+        String t=null;
         int radioID = type.getCheckedRadioButtonId();
         type1 = findViewById(radioID);
-        String t = (String) type1.getText();
+        if(type1!=null) { t = (String) type1.getText(); }
         return t ; }
 
     public String checkSize(){
+        String s =null ;
         int radioID = size.getCheckedRadioButtonId();
         size1 = findViewById(radioID);
-        String s = (String) size1.getText();
+        if(size!=null){ s = (String) size1.getText();}
         return s ; }
 
     public void go_to_profile(View v){
@@ -215,45 +216,51 @@ private void getSpeechInput() {
         startActivity(log);
     }
 
-
     public void save(){
         String type2 = checkType();
         String size2 = checkSize();
-if(!type2.isEmpty() & !size2.isEmpty() &  longitude > 0 & latitude > 0 ) {
 
-// add in database
-    String id = dataBymp.push().getKey();
+if(type2 != null & size2 != null  &  longitude > 0 & latitude > 0 ) {
 
-    // change format to dd.ddd
-    double newlat = Double.parseDouble(new DecimalFormat("00.000").format(latitude));
-
-    double newlng = Double.parseDouble(new DecimalFormat("00.000").format(longitude));
-
-    SpeedBump bump = new SpeedBump ( newlat, newlng, type2, size2);
-    // create sub child for bump - replace '.' with '-' because '.' is not allowed id firebase
-
-    String sub1 = new DecimalFormat("00.00").format(latitude);
-    String sub2=  new DecimalFormat("00.00").format(longitude);
-
-    sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
-    dataBymp.child(sub).child(id).setValue(bump);
-
-    Toast t = Toast.makeText(this, " The Adding was successful", Toast.LENGTH_SHORT);
-    t.setGravity(Gravity.TOP, 0, 90);
-    t.show();
-
-}else{
-
-    Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
-    t.setGravity(Gravity.TOP, 0, 90);
-    t.show();
-
-
+    //saveInDB(type2,size2);
+}else {
+    if (type2 == null) {
+        Toast.makeText(this, "Please check the type ", Toast.LENGTH_SHORT).show();
+    } else if (size2 == null) {
+        Toast.makeText(this, "Please check the size ", Toast.LENGTH_SHORT).show();
+    } else {
+        Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
+        t.setGravity(Gravity.TOP, 0, 90);
+        t.show();
+    }
 }
-        Intent log = new Intent(this,map.class);
-        log.putExtra("state", true);
-        startActivity(log); }
+}
 
 
+        public void saveInDB(String type, String size){
+            String id = dataBymp.push().getKey();
 
+            // change format to dd.ddd
+            double newlat = Double.parseDouble(new DecimalFormat("00.000").format(latitude));
+
+            double newlng = Double.parseDouble(new DecimalFormat("00.000").format(longitude));
+
+            SpeedBump bump = new SpeedBump ( newlat, newlng, type, size);
+            // create sub child for bump - replace '.' with '-' because '.' is not allowed id firebase
+
+            String sub1 = new DecimalFormat("00.00").format(latitude);
+            String sub2=  new DecimalFormat("00.00").format(longitude);
+
+            sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
+            dataBymp.child(sub).child(id).setValue(bump);
+
+            Toast t = Toast.makeText(this, " The Adding was successful", Toast.LENGTH_SHORT);
+            t.setGravity(Gravity.TOP, 0, 90);
+            t.show();
+// return to map page
+            Intent log = new Intent(this,map.class);
+            log.putExtra("state", true);
+            startActivity(log);
+
+        }
 }

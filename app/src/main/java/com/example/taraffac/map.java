@@ -15,6 +15,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -185,10 +187,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 // check if active for add
         add.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { if (active.isChecked()) {add();}     }});
 
-
         listen.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) { if (active.isChecked()) {getSpeechInput();}   }});
 
     }// end on create
+
 
     // check if it is activate or deactivate
     public void isActive() {
