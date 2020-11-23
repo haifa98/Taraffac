@@ -40,13 +40,10 @@ import java.util.Objects;
 public class edit_profile extends AppCompatActivity {
     public static final String TAG = "TAG";
     Button saveProvil;
-    //Button ChangImage1;
     ImageView imageprofil;
     StorageReference  storageReference;
     FirebaseFirestore fStore;
-   // TextView fullNameProfileEdit , EmailProfileEdit;
     FirebaseUser user;
-    //String usedId;
  RadioButton  Radiodisplay, RadioVoice , RadioType;
      EditText ProfileEditFullName , ProfileEditEmail;
     RadioGroup RadioGroupTypeUpdate;
@@ -59,9 +56,6 @@ public class edit_profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-        //
-      //  fullNameProfileEdit = findViewById(R.id.name_edit);
-        //  EmailProfileEdit = findViewById(R.id.email_edit);
         saveProvil = findViewById(R.id.save_profile);
        imageprofil= findViewById(R.id.imageProfilEdit);
         Radiodisplay = findViewById(R.id.displayEdit);
@@ -69,11 +63,9 @@ public class edit_profile extends AppCompatActivity {
         RadioGroupTypeUpdate= findViewById(R.id.update_Adding_type);
         ProfileEditFullName = findViewById(R.id.name_edit);
         ProfileEditEmail = findViewById(R.id.email_edit);
-       // ChangImage1= findViewById(R.id.ChangImage);
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
-        //
         fStore= FirebaseFirestore.getInstance();
 
         // edit profile
@@ -91,8 +83,8 @@ public class edit_profile extends AppCompatActivity {
         }else{
             Radiodisplay.setChecked(true);}
 
-
-
+        ///////////////////////////// method ProfileImage////////////////////////////////
+       // start set ProfileImage
        // هنا اتوقع تغيير الصوره اتاكد منه شوي
         StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
 
@@ -102,7 +94,7 @@ public class edit_profile extends AppCompatActivity {
                 Picasso.get().load(uri).into(imageprofil);
             }
         });
-        imageprofil.setOnClickListener(new View.OnClickListener() {
+        imageprofil.setOnClickListener(new View.OnClickListener() { // start setOnClickListener
             @Override
             public void onClick(View v) {
                 Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -110,10 +102,12 @@ public class edit_profile extends AppCompatActivity {
 
 
             }
-        });
-        // وقفت هنا
-        // start edit profile
-        //نبي نخزنها في الداتا بيس نسوي ابديت يعني
+        }); // end setOnClickListener
+        ///////////////////////////// end method ProfileImage ////////////////////////////////
+
+
+        ///////////////////// ///////////////// start edit profile /////////////////////////////////////////////////////////////////////////////
+        //Update Profile, save changed in firebase
         saveProvil.setOnClickListener(new View.OnClickListener() {// start method
             @Override
             public void onClick(View v) { // start onclick
@@ -124,7 +118,6 @@ public class edit_profile extends AppCompatActivity {
                     return;//user
                 }
 
-               // final String email = ProfileEditEmail.getText().toString();
                 user.updateEmail(ProfileEditEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() { // start OnSuccessListener
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -172,6 +165,9 @@ public class edit_profile extends AppCompatActivity {
 
 
     }
+    ///////////////////// ///////////////// end edit profile /////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////// method ProfileImage////////////////////////////////
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {// start method
@@ -207,16 +203,16 @@ public class edit_profile extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_SHORT).show();
             }
         });
-    }// end  method
+    }// end  method ProfileImage
+    ///////////////////////////// method ProfileImage////////////////////////////////
+
 
 
     public void return_main(View view) {
         onBackPressed();
 
     }
-   // public void save(View v){
-       // Intent saveProvil = new Intent(this,profile.class);
-       //startActivity(saveProvil);}
+
 }
 
 

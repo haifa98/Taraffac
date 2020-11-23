@@ -101,6 +101,12 @@
     <string name="show">show</string>
     <string name="deleteEdit">Delete</string>
     <string name="userType" />
+    <string name="taraffac">Taraffac</string>
+    <string name="navi_o">Open navigation drawer</string>
+    <string name="navi_c">Close navigation drawer</string>
+
+
+
 
 
 </resources>
