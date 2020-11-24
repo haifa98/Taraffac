@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,9 +36,10 @@ import java.util.Objects;
 
 public class register extends AppCompatActivity {
     public static final String TAG = "TAG";
-    ImageView return_main2;
-    Button go_register_to_home1;
-    EditText name,email,pass ;
+    //ImageView return_main2;
+    Button go_register_to_home1,return_main2,go_login;
+   // EditText name,email,pass ;
+    TextInputLayout name,email,pass ;
     //long maxid =0;
    // User user;
     FirebaseAuth fAuth;
@@ -68,12 +70,14 @@ public class register extends AppCompatActivity {
         });*/
 
         setContentView(R.layout.activity_register);
-        return_main2= findViewById(R.id.image_back2);
+        return_main2= findViewById(R.id.butt_login_register);
         go_register_to_home1=findViewById(R.id.butt_register);
 
         name =  findViewById(R.id.NAME);
         email = findViewById(R.id.email_register);
         pass =  findViewById(R.id.password_register);
+
+        go_login= findViewById(R.id.butt_login_register);
 
         fAuth = FirebaseAuth.getInstance();
         fStore= FirebaseFirestore.getInstance();
@@ -96,10 +100,10 @@ public class register extends AppCompatActivity {
 
                Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();*/
 
-              final String Email = email.getText().toString().trim();
-             final String Pass = pass.getText().toString().trim();
+              final String Email = String.valueOf(email.getEditText().getText());//.getText().toString().trim();
+             final String Pass = String.valueOf(pass.getEditText().getText());//.getText().toString().trim();
               //amjad
-                final String Name = name.getText().toString().trim();
+                final String Name = String.valueOf(name.getEditText().getText());//.getText().toString().trim();
                 //final String type = Display_Option;
 
                 //amjad
@@ -156,7 +160,10 @@ public class register extends AppCompatActivity {
 
 
     }
-
+    public void go_to_login(View view) {
+        Intent go_login= new Intent(this,login.class);
+        startActivity(go_login);
+    }
     public void return_main2(View view) {
         onBackPressed();
     }

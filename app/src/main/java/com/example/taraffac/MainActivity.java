@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         // animation
         topAnim= (Animation)AnimationUtils.loadAnimation(this,R.anim.top_animation);
         //image.setAnimation(topAnim);
-        bottomAnim=(Animation) AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
+       bottomAnim=(Animation) AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
         //Hooks
         //logo.setAnimation(bottomAnim);
 
