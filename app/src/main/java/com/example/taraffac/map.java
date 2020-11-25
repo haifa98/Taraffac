@@ -86,11 +86,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     LatLng latLng;
     TextView txtCurrentSpeed;
     private Geocoder geocoder;
-    DatabaseReference ref,refV;
+    DatabaseReference ref, refV;
     FirebaseUser user;
     AlertDialog.Builder builder;
     boolean state = false;
     String addingType;
+    double not_lat;
+    double not_long;
+    String sub;
 
 
     SharedPreferences pref;
@@ -124,7 +127,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         ////////////
 
 
-
         // get state value from activities
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -136,7 +138,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+                Notify();
             }
         });
         // activate and deactivate
@@ -147,47 +149,37 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
 
-        if (active.isChecked()) {
-            //notification code
-            builder = new AlertDialog.Builder(map.this);
-            builder.setCancelable(true);
 
-            LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            //  lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
-            //  this.onLocationChanged(null);
-
-            //notification code
-            builder = new AlertDialog.Builder(map.this);
-            builder.setCancelable(true);
-
-            // Setting Negative "Cancel" Button
-            builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    //SpeedBump editedsb = sb;
-                    go_to_edit(this);
-                }
-            });
-            // Setting Positive "Yes" Button
-            builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    go_to_report(this);
-                }
-            });
-        }
 // check if active for add
-        add.setOnClickListener(new View.OnClickListener() { @Override public void onClick(View view) { if (active.isChecked()) {add();}     }});
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (active.isChecked()) {
+                    add();
+                }
+            }
+        });
 
-        listen.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) { if (active.isChecked()) {getSpeechInput();}   }});
+        listen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (active.isChecked()) {
+                    getSpeechInput();
+                }
+            }
+        });
+
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(active.isChecked()){ Notify();}
+                handler.postDelayed(this, 10000);
+            }
+        };
+
+//Start
+        handler.postDelayed(runnable, 1000);
 
     }// end on create
 
@@ -207,7 +199,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }// end if else
     }
 
-////////// not working
+    ////////// not working
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String getFirebaseUser() {
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -226,7 +218,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
             }
         });
-             return adding[0];
+        return adding[0];
     }
 
     @Override // set the map
@@ -372,7 +364,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     }
 
     //notification code start
-    public void sendMessage() {
+  /*  public void sendMessage() {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -406,9 +398,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
 
-    }
+    }  */
 
-    public void checkforspeedbump(final String usercoordinates1km, final double userlat100m, final double userlong100m) {
+  /*  public void checkforspeedbump(final String usercoordinates1km, final double userlat100m, final double userlong100m) {
+
 
         FirebaseDatabase.getInstance().getReference("SpeedBump").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -435,7 +428,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 //handle databaseError
             }
         });
-    }
+    }  */
 
     public void go_to_edit(DialogInterface.OnClickListener view) {
         Intent go_register = new Intent(this, edit_speed_bump.class);
@@ -450,7 +443,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     @Override
     public void onLocationChanged(@NonNull Location location) {
         //   if (checkButton()) {
-        sendMessage();
+        // sendMessage();
         //   }
     }
 
@@ -481,6 +474,144 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     assert result != null;
 
                     if (result.contains("add")) {
-                        add(); }
-                    break;} }}
+                        add();
+                    }
+                    break;
+                }
+        }
+    }
+
+
+    public void Notify() {
+   /*
+
+        zone1Ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<SpeedBump> bumps = new ArrayList<>();
+                bumps.clear();
+                for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
+                        SpeedBump bump = locationSnapshot.getValue(SpeedBump.class);
+                        bumps.add(bump);
+
+                        double bump_lat_not = bump.getLatitude();
+                        double bump_long_not = bump.getLongitude();
+                        String bump_type_not  = bump.getType();
+                        String bump_size_not  = bump.getSize();  */
+
+        // compare
+        double[] lat = {10.001, 24.801, 10.040, 10.006, 23.007, 34.004};
+        double[] lon = {33.020, 46.702, 23.050, 56.006, 22.006, 12.005};
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                not_lat = location.getLatitude();
+                not_long = location.getLongitude();}});
+
+        String sub1 = new DecimalFormat("00.00").format(not_lat);
+        String sub2=  new DecimalFormat("00.00").format(not_long);
+        sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
+
+        DatabaseReference zonesRef = FirebaseDatabase.getInstance().getReference("SpeSpeedBumped");
+        DatabaseReference zone1Ref = zonesRef.child(sub);
+
+
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<SpeedBump> bumps = new ArrayList<>();
+                bumps.clear();
+                for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
+
+                    for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
+                        SpeedBump bump = bumpSnapshot.getValue(SpeedBump.class);
+                        bumps.add(bump);
+
+                        double bump_lat_not = bump.getLatitude();
+                        double bump_long_not = bump.getLongitude();
+                        String bump_type = bump.getType();
+                        String bump_size = bump.getSize();
+
+                       // LatLng latLng = new LatLng(bump_lat, bump_long);
+                        String bump_info = " type : " + bump_type + " size : " + bump_size;
+// set height & width - apply style
+
+                        double x;
+                        x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
+                        if(x<1.1){
+                            // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
+                            Alertt(bump_info); }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+    }
+
+    private void Alertt(String info) {
+
+        AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
+// Setting Dialog Title
+        alertDialog2.setTitle("Speed bump info");
+// Setting Dialog Message
+        alertDialog2.setMessage(info);
+// Setting Positive "Yes" Btn
+        alertDialog2.setPositiveButton("Edit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
+                        startActivity(i);
+                    }});
+// Setting Negative "NO" Btn
+        alertDialog2.setNegativeButton("Report",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(getApplicationContext(), report.class);
+                        startActivity(i);
+                    }});
+// Showing Alert Dialog
+        alertDialog2.show(); }
+
+    /** calculates the distance between two locations in MILES */
+    // lat long 2 is user
+    private double distance(double lat1, double lng1, double lat2, double lng2) {
+
+        double earthRadius = 6371; // in miles, change to 6371 for kilometer output
+
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        double dist = earthRadius * c;
+
+        return dist; // output distance, in MILES
+    }
+
 }
