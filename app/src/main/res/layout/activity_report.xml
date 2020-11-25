@@ -72,13 +72,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="2dp">
 
         <RadioGroup
-            android:layout_width="411dp"
-            android:layout_height="264dp"
+            android:layout_width="match_parent"
+            android:layout_height="196dp"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="2dp">
 
             <RadioButton
                 android:id="@+id/radioButton5"
