@@ -19,7 +19,7 @@ public class report extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        but_close_re = findViewById(R.id.but_close_re);
+      /*  but_close_re = findViewById(R.id.but_close_re);
         but_close_re.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
