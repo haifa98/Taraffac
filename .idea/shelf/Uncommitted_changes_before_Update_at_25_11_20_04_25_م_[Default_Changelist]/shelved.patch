@@ -1,0 +1,458 @@
+Index: app/src/main/java/com/example/taraffac/register.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taraffac;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.RequiresApi;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\n\r\n\r\nimport java.util.HashMap;\r\nimport java.util.Map;\r\nimport java.util.Objects;\r\n\r\npublic class register extends AppCompatActivity {\r\n    public static final String TAG = \"TAG\";\r\n    ImageView return_main2;\r\n    Button go_register_to_home1;\r\n    EditText name,email,pass ;\r\n    //long maxid =0;\r\n   // User user;\r\n    FirebaseAuth fAuth;\r\n    FirebaseFirestore fStore;\r\n    String userID;\r\n  // String Display_Option;\r\n\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n\r\n        FirebaseDatabase database = FirebaseDatabase.getInstance();\r\n        final DatabaseReference myRef = database.getReference().child(\"User\") ;\r\n\r\n       /* myRef.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                if(snapshot.exists() )\r\n                    maxid = (snapshot.getChildrenCount());\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError error) {\r\n\r\n            }\r\n        });*/\r\n\r\n        setContentView(R.layout.activity_register);\r\n        return_main2= findViewById(R.id.image_back2);\r\n        go_register_to_home1=findViewById(R.id.butt_register);\r\n\r\n        name =  findViewById(R.id.NAME);\r\n        email = findViewById(R.id.email_register);\r\n        pass =  findViewById(R.id.password_register);\r\n\r\n        fAuth = FirebaseAuth.getInstance();\r\n        fStore= FirebaseFirestore.getInstance();\r\n\r\n      // if(fAuth.getCurrentUser() != null){\r\n         //  Intent go_home1 = new Intent(getApplicationContext(),map.class);\r\n         //  startActivity(go_home1);\r\n         //  finish();\r\n       // }\r\n\r\n       // user= new User();\r\n        go_register_to_home1.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n              /*  user.setUsername(name.getText().toString().trim());\r\n                user.setEmail(email.getText().toString().trim());\r\n                user.setPassword(pass.getText().toString().trim());\r\n\r\n                myRef.child(String.valueOf(maxid+1)).setValue(user);\r\n\r\n               Toast.makeText(register.this, \" User is registered\"  , Toast.LENGTH_SHORT).show();*/\r\n\r\n              final String Email = email.getText().toString().trim();\r\n             final String Pass = pass.getText().toString().trim();\r\n              //amjad\r\n                final String Name = name.getText().toString().trim();\r\n                //final String type = Display_Option;\r\n\r\n                //amjad\r\n\r\n              if(TextUtils.isEmpty(Email)){\r\n                  email.setError(\"Email is Required\");\r\n                  return;\r\n              }\r\n              if(TextUtils.isEmpty(Pass)){\r\n                  pass.setError(\"Password is Required\");\r\n                  return;\r\n              }\r\n              if(Pass.length() < 6){\r\n                  pass.setError(\"Password Must be 6 Characters\");\r\n                  return;\r\n              }\r\n\r\n              fAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {\r\n                  @RequiresApi(api = Build.VERSION_CODES.KITKAT)\r\n                  @Override\r\n                  public void onComplete(@NonNull Task<AuthResult> task) {\r\n                      if(task.isSuccessful()){\r\n                          Toast.makeText(register.this, \" User is registered\"  , Toast.LENGTH_SHORT).show();\r\n                          //aamjad\r\n                          userID = fAuth.getCurrentUser().getUid();\r\n                          DocumentReference documentReferenc = fStore.collection(\"users\").document(userID);\r\n                          Map<String , Object> user = new HashMap<>();\r\n                          user.put(\"Name\",Name);\r\n                          user.put(\"email\" , Email);\r\n                          user.put(\"password\" , Pass);\r\n                        user.put(\"addingType\" ,\"Display Option\");\r\n\r\n\r\n                          documentReferenc.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {\r\n                              @Override\r\n                              public void onSuccess(Void aVoid) {\r\n                                  Log.d(TAG, \"onSuccess: user Profile is created for \"+ userID);\r\n                              }\r\n                          });\r\n                          //amjad\r\n\r\n                         Intent go_home1 = new Intent(getApplicationContext(),profile.class);\r\n                         startActivity(go_home1);\r\n\r\n                      }else {\r\n                          Toast.makeText(register.this, \" Error \" + Objects.requireNonNull(task.getException()).getMessage()  , Toast.LENGTH_SHORT).show();\r\n                      }\r\n                  }\r\n              });\r\n                /*Intent go_home1 = new Intent(getApplicationContext(),view_speed_bump.class);\r\n                startActivity(go_home1);*/\r\n            }\r\n        });\r\n\r\n\r\n    }\r\n\r\n    public void return_main2(View view) {\r\n        onBackPressed();\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taraffac/register.java	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/src/main/java/com/example/taraffac/register.java	(date 1606261979443)
+@@ -141,7 +141,7 @@
+                           });
+                           //amjad
+ 
+-                         Intent go_home1 = new Intent(getApplicationContext(),profile.class);
++                         Intent go_home1 = new Intent(getApplicationContext(),MainActivity2.class);
+                          startActivity(go_home1);
+ 
+                       }else {
+Index: app/src/main/res/layout/activity_delete.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"#ABB9C5\"\r\n    tools:context=\".delete\">\r\n\r\n    <Button\r\n        android:id=\"@+id/btn_disagree_de\"\r\n        android:layout_width=\"116dp\"\r\n        android:layout_height=\"71dp\"\r\n        android:background=\"@drawable/style_button\"\r\n        android:text=\"@string/disagree\"\r\n        android:textColor=\"#100808\"\r\n        android:textSize=\"18sp\"\r\n        android:textStyle=\"normal\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.816\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/btn_agree_de\"\r\n        android:layout_width=\"116dp\"\r\n        android:layout_height=\"71dp\"\r\n        android:background=\"@drawable/style_button\"\r\n        android:text=\"@string/agree\"\r\n        android:textColor=\"#100808\"\r\n        android:textSize=\"18sp\"\r\n        android:textStyle=\"normal\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.148\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.499\" />\r\n\r\n    <Button\r\n        android:id=\"@+id/btn_close_de\"\r\n        android:layout_width=\"46dp\"\r\n        android:layout_height=\"41dp\"\r\n        android:background=\"@drawable/style_button\"\r\n        android:text=\"@string/x\"\r\n        android:textSize=\"18sp\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.978\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.004\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView23\"\r\n        android:layout_width=\"349dp\"\r\n        android:layout_height=\"81dp\"\r\n        android:text=\"@string/are_you_sure_you_want_to_delete_this_speedbump\"\r\n        android:textColor=\"#373636\"\r\n        android:textSize=\"18sp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"1.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.287\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView22\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"@string/delete_speedbump\"\r\n        android:textColor=\"#100808\"\r\n        android:textSize=\"24sp\"\r\n        android:textStyle=\"bold\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.497\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toTopOf=\"parent\"\r\n        app:layout_constraintVertical_bias=\"0.163\" />\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_delete.xml	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/src/main/res/layout/activity_delete.xml	(date 1606136784906)
+@@ -1,84 +1,40 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/drawer_layout"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:background="#ABB9C5"
+-    tools:context=".delete">
++    tools:context=".delete"
++    android:fitsSystemWindows="true"
++    tools:openDrawer="start">
+ 
+-    <Button
+-        android:id="@+id/btn_disagree_de"
+-        android:layout_width="116dp"
+-        android:layout_height="71dp"
+-        android:background="@drawable/style_button"
+-        android:text="@string/disagree"
+-        android:textColor="#100808"
+-        android:textSize="18sp"
+-        android:textStyle="normal"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.816"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
++    <com.google.android.material.navigation.NavigationView
++        android:id="@+id/nav_view"
++        android:layout_width="wrap_content"
++        android:layout_height="match_parent"
++        app:headerLayout="@layout/header"
++        app:menu="@menu/main_menu"
++        android:layout_gravity="start"/>
++    <ScrollView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent">
+ 
+-    <Button
+-        android:id="@+id/btn_agree_de"
+-        android:layout_width="116dp"
+-        android:layout_height="71dp"
+-        android:background="@drawable/style_button"
+-        android:text="@string/agree"
+-        android:textColor="#100808"
+-        android:textSize="18sp"
+-        android:textStyle="normal"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.148"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.499" />
++        <androidx.constraintlayout.widget.ConstraintLayout
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
+ 
+-    <Button
+-        android:id="@+id/btn_close_de"
+-        android:layout_width="46dp"
+-        android:layout_height="41dp"
+-        android:background="@drawable/style_button"
+-        android:text="@string/x"
+-        android:textSize="18sp"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.978"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.004" />
+ 
+-    <TextView
+-        android:id="@+id/textView23"
+-        android:layout_width="349dp"
+-        android:layout_height="81dp"
+-        android:text="@string/are_you_sure_you_want_to_delete_this_speedbump"
+-        android:textColor="#373636"
+-        android:textSize="18sp"
+-        android:textStyle="bold"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="1.0"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.287" />
+-
+-    <TextView
+-        android:id="@+id/textView22"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="@string/delete_speedbump"
+-        android:textColor="#100808"
+-        android:textSize="24sp"
+-        android:textStyle="bold"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.497"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent"
+-        app:layout_constraintVertical_bias="0.163" />
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++            <TextView
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                app:layout_constraintBottom_toBottomOf="parent"
++                app:layout_constraintEnd_toEndOf="parent"
++                app:layout_constraintStart_toStartOf="parent"
++                app:layout_constraintTop_toTopOf="parent" />
++        </androidx.constraintlayout.widget.ConstraintLayout>
++    </ScrollView>
++
++
++</androidx.drawerlayout.widget.DrawerLayout>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.example.taraffac\">\r\n    <!--\r\n         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use\r\n         Google Maps Android API v2, but you must specify either coarse or fine\r\n         location permissions for the \"MyLocation\" functionality.\r\n    -->\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity android:name=\".homeEditee\"/>\r\n\r\n\r\n\r\n\r\n\r\n        <activity android:name=\".add\" />\r\n        <!--\r\n             The API key for Google Maps-based APIs is defined as a string resource.\r\n             (See the file \"res/values/google_maps_api.xml\").\r\n             Note that the API key is linked to the encryption key used to sign the APK.\r\n             You need a different API key for each encryption key, including the release key that is used to\r\n             sign the APK for publishing.\r\n             You can define the keys for the debug and release targets in src/debug/ and src/release/.\r\n        -->\r\n        <meta-data\r\n            android:name=\"com.google.android.geo.API_KEY\"\r\n            android:value=\"@string/google_maps_key\" />\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n\r\n        <activity\r\n            android:name=\".map\"\r\n            android:label=\"@string/title_activity_map\" />\r\n        <activity android:name=\".edit_speed_bump_msg\" />\r\n        <activity android:name=\".edit_profile\" />\r\n        <activity android:name=\".profile\"/>\r\n\r\n\r\n        <activity android:name=\".view_spped_bump_msg\" />\r\n        <activity android:name=\".report_msg\" />\r\n        <activity android:name=\".report\" />\r\n        <activity android:name=\".edit_speed_bump\" />\r\n        <activity android:name=\".notify\" />\r\n        <activity android:name=\".delete_msg\" />\r\n        <activity android:name=\".delete\" />\r\n\r\n\r\n        <activity android:name=\".register\" />\r\n\r\n\r\n\r\n        <activity android:name=\".login\" />\r\n\r\n        <activity android:name=\".MainActivity\">\r\n        <intent-filter>\r\n            <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n            <category android:name=\"android.intent.category.LAUNCHER\" />\r\n        </intent-filter>\r\n        </activity>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/src/main/AndroidManifest.xml	(date 1606309231308)
+@@ -9,6 +9,7 @@
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+     <uses-permission android:name="android.permission.INTERNET" />
++
+     <application
+         android:allowBackup="true"
+         android:icon="@mipmap/ic_launcher"
+@@ -16,13 +17,17 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme">
+-        <activity android:name=".homeEditee"/>
+-
+-
+-
+-
+-
+-        <activity android:name=".add" />
++        <activity android:name=".MainActivity2">
++        <intent-filter>
++            <action android:name="android.intent.action.MAIN" />
++
++            <category android:name="android.intent.category.LAUNCHER" />
++        </intent-filter>
++        </activity>
++        <activity android:name=".homeEditee" />
++        <activity android:name=".add"/>
++
++
+         <!--
+              The API key for Google Maps-based APIs is defined as a string resource.
+              (See the file "res/values/google_maps_api.xml").
+@@ -43,9 +48,7 @@
+             android:label="@string/title_activity_map" />
+         <activity android:name=".edit_speed_bump_msg" />
+         <activity android:name=".edit_profile" />
+-        <activity android:name=".profile"/>
+-
+-
++        <activity android:name=".profile" />
+         <activity android:name=".view_spped_bump_msg" />
+         <activity android:name=".report_msg" />
+         <activity android:name=".report" />
+@@ -53,29 +56,11 @@
+         <activity android:name=".notify" />
+         <activity android:name=".delete_msg" />
+         <activity android:name=".delete" />
+-
+-
+         <activity android:name=".register" />
+ 
+-
+-
+         <activity android:name=".login" />
+ 
+-        <activity android:name=".MainActivity">
+-        <intent-filter>
+-            <action android:name="android.intent.action.MAIN" />
+-
+-            <category android:name="android.intent.category.LAUNCHER" />
+-        </intent-filter>
+-        </activity>
+-
+-
+-
+-
+-
+-
+-
+-
++        <activity android:name=".MainActivity" />
+     </application>
+ 
+ </manifest>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\napply plugin: 'com.google.gms.google-services'\r\n\r\n\r\nandroid {\r\n    compileSdkVersion 30\r\n    buildToolsVersion \"30.0.1\"\r\n\r\n    defaultConfig {\r\n        applicationId \"com.example.taraffac\"\r\n        minSdkVersion 16\r\n        targetSdkVersion 30\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        multiDexEnabled true\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: \"libs\", include: [\"*.jar\"])\r\n    implementation 'androidx.appcompat:appcompat:1.2.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'\r\n    implementation 'com.google.android.material:material:1.2.1'\r\n    implementation 'com.google.firebase:firebase-analytics:17.5.0'\r\n    //implementation 'com.google.firebase:firebase-auth:16.0.5'\r\n\r\n    implementation 'com.google.firebase:firebase-messaging:20.2.4'\r\n    implementation 'com.google.firebase:firebase-auth:19.4.0'\r\n    implementation 'com.google.firebase:firebase-firestore:21.6.0'\r\n    implementation 'com.google.android.gms:play-services-maps:17.0.0'\r\n    implementation 'com.google.android.gms:play-services-location:17.0.0'\r\n    //noinspection GradleCompatible\r\n    implementation \"com.android.support:support-compat:28.0.0\"\r\n\r\n    implementation 'com.google.firebase:firebase-storage:19.2.0'\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test.ext:junit:1.1.2'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'\r\n    implementation 'com.google.firebase:firebase-database:19.4.0'\r\n    implementation 'com.squareup.picasso:picasso:2.71828'\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/build.gradle	(date 1606257802528)
+@@ -45,6 +45,9 @@
+ 
+     implementation 'com.google.firebase:firebase-storage:19.2.0'
+     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
++    implementation files('libs/activation.jar')
++    implementation files('libs/additionnal.jar')
++    implementation files('libs/mail.jar')
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+Index: app/src/main/java/com/example/taraffac/delete.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taraffac;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.DisplayMetrics;\r\nimport android.view.Gravity;\r\nimport android.view.View;\r\nimport android.view.WindowManager;\r\nimport android.widget.Button;\r\n\r\npublic class delete extends AppCompatActivity {\r\n    Button btn_close_de;\r\n    Button btn_agree_de;\r\n    Button btn_disagree_de;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_delete);\r\n\r\n        btn_agree_de = findViewById(R.id.btn_agree_de);\r\n        btn_agree_de.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent i = new Intent(getApplicationContext(), delete_msg.class);\r\n                startActivity(i);\r\n            }\r\n        });\r\n\r\n        btn_close_de = findViewById(R.id.btn_close_de);\r\n        btn_close_de.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n        btn_disagree_de = findViewById(R.id.btn_disagree_de);\r\n        btn_disagree_de.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n        DisplayMetrics dm = new DisplayMetrics();\r\n        getWindowManager().getDefaultDisplay().getMetrics(dm);\r\n\r\n        int width = dm.widthPixels;\r\n        int height = dm.heightPixels;\r\n\r\n        getWindow().setLayout((int)(width*.8), (int)(height*.7));\r\n\r\n        WindowManager.LayoutParams params = getWindow().getAttributes();\r\n        params.gravity = Gravity.CENTER;\r\n        params.x = 0;\r\n        params.y = -20;\r\n\r\n        getWindow().setAttributes(params);\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taraffac/delete.java	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/src/main/java/com/example/taraffac/delete.java	(date 1606136784960)
+@@ -1,64 +1,120 @@
+ package com.example.taraffac;
+ 
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.ActionBarDrawerToggle;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.appcompat.widget.Toolbar;
++import androidx.core.view.GravityCompat;
++import androidx.drawerlayout.widget.DrawerLayout;
+ 
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.util.DisplayMetrics;
+ import android.view.Gravity;
++import android.view.Menu;
++import android.view.MenuItem;
+ import android.view.View;
+ import android.view.WindowManager;
+ import android.widget.Button;
+ 
+-public class delete extends AppCompatActivity {
+-    Button btn_close_de;
+-    Button btn_agree_de;
+-    Button btn_disagree_de;
++import com.google.android.material.navigation.NavigationView;
++
++public class delete extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
++   //// Button btn_close_de;
++   //// Button btn_agree_de;
++   // Button btn_disagree_de;
++    DrawerLayout drawerLayout;
++    NavigationView navigationView;
++   Toolbar toolbar;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_delete);
++        drawerLayout=findViewById(R.id.drawer_layout);
++        navigationView=findViewById(R.id.nav_view);
++      //  toolbar=findViewById(R.id.toolbar);
++        // Tool Bar
++        //setSupportActionBar(toolbar);
++
++
++        navigationView.bringToFront();
++        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navi_o,R.string.navi_c);
++        drawerLayout.addDrawerListener(toggle);
++        toggle.syncState();
++        navigationView.setNavigationItemSelectedListener(this);
++        navigationView.setCheckedItem(R.id.nav_home);
++
++      //  btn_agree_de = findViewById(R.id.btn_agree_de);
++     //   btn_agree_de.setOnClickListener(new View.OnClickListener() {
++        //    @Override
++         //   public void onClick(View v) {
++            //    Intent i = new Intent(getApplicationContext(), delete_msg.class);
++             //   startActivity(i);
++          //  }
++      //  });
++
++      //  btn_close_de = findViewById(R.id.btn_close_de);
++      //  btn_close_de.setOnClickListener(new View.OnClickListener() {
++        //    @Override
++        //    public void onClick(View v) {
++         //       finish();
++         //   }
++      //  });
+ 
+-        btn_agree_de = findViewById(R.id.btn_agree_de);
+-        btn_agree_de.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Intent i = new Intent(getApplicationContext(), delete_msg.class);
+-                startActivity(i);
+-            }
+-        });
++       // btn_disagree_de = findViewById(R.id.btn_disagree_de);
++       // btn_disagree_de.setOnClickListener(new View.OnClickListener() {
++          //  @Override
++          //  public void onClick(View v) {
++           //     finish();
++          //  }
++       // });
++
++       // DisplayMetrics dm = new DisplayMetrics();
++       // getWindowManager().getDefaultDisplay().getMetrics(dm);
++
++      //  int width = dm.widthPixels;
++      //  int height = dm.heightPixels;
++
++       // getWindow().setLayout((int)(width*.8), (int)(height*.7));
++
++      //  WindowManager.LayoutParams params = getWindow().getAttributes();
++      //  params.gravity = Gravity.CENTER;
++      //  params.x = 0;
++      //  params.y = -20;
++
++      //  getWindow().setAttributes(params);
++
++    }
++
++    @Override
++    public void onBackPressed() {
++        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
++
++            drawerLayout.closeDrawer(GravityCompat.START);
++        }
++        else {
++            super.onBackPressed();
++        }
+ 
+-        btn_close_de = findViewById(R.id.btn_close_de);
+-        btn_close_de.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                finish();
+-            }
+-        });
+-
+-        btn_disagree_de = findViewById(R.id.btn_disagree_de);
+-        btn_disagree_de.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                finish();
+-            }
+-        });
+-
+-        DisplayMetrics dm = new DisplayMetrics();
+-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+-
+-        int width = dm.widthPixels;
+-        int height = dm.heightPixels;
+-
+-        getWindow().setLayout((int)(width*.8), (int)(height*.7));
+-
+-        WindowManager.LayoutParams params = getWindow().getAttributes();
+-        params.gravity = Gravity.CENTER;
+-        params.x = 0;
+-        params.y = -20;
+-
+-        getWindow().setAttributes(params);
+-
++    }
++
++
++    @Override
++    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
++               switch (item.getItemId()){
++                   case R.id.nav_home:
++                       break;
++                   case R.id.nav_profile:
++                       Intent intent= new Intent(delete.this,report.class);
++                       startActivity(intent);
++                       break;
++                   case R.id.nav_logout:
++                           intent = new Intent(delete.this, register.class);
++                           startActivity(intent);
++                           break;
++               }
++               drawerLayout.closeDrawer(GravityCompat.START);
++        return true;
+     }
+ }
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\r\n    <string name=\"app_name\" translatable=\"false\">Taraffac</string>\r\n    <string name=\"REGISTER_main\" translatable=\"false\">REGISTER</string>\r\n    <string name=\"LOG_IN_main\" translatable=\"false\">LOG IN</string>\r\n    <string name=\"desc\">Image</string>\r\n    <string name=\"desc_back\">Image</string>\r\n    <string name=\"tatil_login\">LOG IN </string>\r\n    <string name=\"email_login\">Email: </string>\r\n    <string name=\"pass_login\">Password:</string>\r\n    <string name=\"butt_login\">LOG IN </string>\r\n    <string name=\"star_login\">* </string>\r\n    <string name=\"star1_login\">*</string>\r\n    <string name=\"hint_login\">Email</string>\r\n    <string name=\"hint1_login\">Password</string>\r\n    <string name=\"name_register\">Name:</string>\r\n    <string name=\"email_register\">Email:</string>\r\n    <string name=\"Password_register\">Password:</string>\r\n    <string name=\"Confirm_Password_register\">Confirm Password:</string>\r\n    <string name=\"butt_register\"> REGISTER </string>\r\n    <string name=\"hint_register\">User Name</string>\r\n    <string name=\"hint1_register\">Email</string>\r\n    <string name=\"hint2_register\">Password</string>\r\n    <string name=\"hint3_register\">Confirm_Password</string>\r\n    <string name=\"tatil_register\">REGISTER </string>\r\n    <string name=\"star1_register\"> *</string>\r\n    <string name=\"star2_register\">*</string>\r\n    <string name=\"star3_register\">*</string>\r\n    <string name=\"star4_register\">*</string>\r\n    <string name=\"desc_register\">Image</string>\r\n    <string name=\"profile\">Profile</string>\r\n    <string name=\"deactivate\">Deactivated</string>\r\n    <string name=\"activate\">Activated</string>\r\n    <string name=\"log_out\">Log out</string>\r\n    <string name=\"type\">Type:</string>\r\n    <string name=\"size\">Size:</string>\r\n    <string name=\"save\">Save</string>\r\n    <string name=\"cushion_type\">Cushion</string>\r\n    <string name=\"table_type\">Table</string>\r\n    <string name=\"add_speed_bump\">Add speed bump</string>\r\n    <string name=\"small\">Small</string>\r\n    <string name=\"midium\">Midium</string>\r\n    <string name=\"hump_type\">Hump</string>\r\n    <string name=\"large\">Large</string>\r\n    <string name=\"hump_image\">Image</string>\r\n    <string name=\"cushion_image\">Image</string>\r\n    <string name=\"table_image\">Image</string>\r\n    <string name=\"disagree\">Disagree</string>\r\n    <string name=\"agree\">Agree</string>\r\n    <string name=\"x\">X</string>\r\n    <string name=\"delete_speedbump\">Delete SpeedBump :</string>\r\n    <string name=\"are_you_sure_you_want_to_delete_this_speedbump\">Are you sure you want to delete this speed bump ?</string>\r\n    <string name=\"x1\">x</string>\r\n    <string name=\"deleting_was_successful\">Deleting was successful</string>\r\n    <string name=\"speed_bump_information\">speed bump information</string>\r\n    <string name=\"edit\">Edit</string>\r\n    <string name=\"report\">Report</string>\r\n    <string name=\"edit_speed_bump\">Edit speed bump</string>\r\n    <string name=\"cancel\">Cancel</string>\r\n\r\n    <string name=\"hump\">Hump</string>\r\n    <string name=\"table\">Table</string>\r\n    <string name=\"cushion\">Cushion</string>\r\n\r\n    <string name=\"editing\">The editing was successful</string>\r\n    <string name=\"report_main\">Report</string>\r\n    <string name=\"damaged_bump\">damaged bump</string>\r\n    <string name=\"other\">other</string>\r\n    <string name=\"violating_the_location\">Violating the location</string>\r\n    <string name=\"violating_the_standard\">Violating the standard</string>\r\n    <string name=\"report_speedbump\">Report speed bump :</string>\r\n    <string name=\"why_do_you_want_to_report_this_speedbump\">Why do you want to report this speed bump ?</string>\r\n    <string name=\"the_report_was_sent_successfully\">The report was sent successfully</string>\r\n    <string name=\"profile_img\">Image</string>\r\n    <string name=\"name_profile\">Name:</string>\r\n    <string name=\"email_profile\">Email:</string>\r\n    <string name=\"adding_type\">Adding type:</string>\r\n    <string name=\"delete_acc\">Delete Account</string>\r\n    <string name=\"edit_profile\">Edit</string>\r\n    <string name=\"name_pro\">Your Name </string>\r\n    <string name=\"email_pro\">Your Email </string>\r\n    <string name=\"adding_pro\">Voice command</string>\r\n\r\n\r\n    <string name=\"hint_name_edit\">Name</string>\r\n    <string name=\"hint_email_edit\">Email</string>\r\n    <string name=\"voice\">Voice command</string>\r\n    <string name=\"display\">Display option</string>\r\n    <string name=\"Editing_was_successful\">Editing was successful</string>\r\n    <string name=\"Speed_bump_information\">Speed bump information</string>\r\n\r\n    <string name=\"add\"> Add</string>\r\n    <string name=\"title_activity_map\">Map</string>\r\n    <string name=\"ForgotPassword\">Forgot Password?</string>\r\n    <string name=\"_000_0_miles_hour\">000.0 miles/hour</string>\r\n    <string name=\"notify\">Notify</string>\r\n    <string name=\"delete\">Delete</string>\r\n    <string name=\"type1Home\">Type1</string>\r\n    <string name=\"size1Home\">Size1</string>\r\n    <string name=\"editebumpHome\">editeBump</string>\r\n    <string name=\"reportbumpHOme\">ReportBump</string>\r\n    <string name=\"show\">show</string>\r\n    <string name=\"deleteEdit\">Delete</string>\r\n    <string name=\"userType\" />\r\n    <string name=\"taraffac\">Taraffac</string>\r\n    <string name=\"navi_o\">Open navigation drawer</string>\r\n    <string name=\"navi_c\">Close navigation drawer</string>\r\n\r\n\r\n\r\n\r\n\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/src/main/res/values/strings.xml	(date 1606254735707)
+@@ -106,7 +106,4 @@
+     <string name="navi_c">Close navigation drawer</string>
+ 
+ 
+-
+-
+-
+ </resources>
+\ No newline at end of file
+Index: app/src/main/java/com/example/taraffac/login.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.taraffac;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.RequiresApi;\r\nimport androidx.appcompat.app.AlertDialog;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\n\r\nimport java.util.Objects;\r\n\r\npublic class login extends AppCompatActivity { // start class\r\n    ImageView return_main1;\r\n    Button go_login_to_register;\r\n\r\n    EditText LEmail,LPass;\r\n    FirebaseAuth fAuth;\r\n    TextView forgotTextLink;\r\n   // EditText pas,usr;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {  //onCreate\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login);\r\n\r\n        return_main1= findViewById(R.id.image_back);\r\n        go_login_to_register=findViewById(R.id.butt_login);\r\n\r\n        LEmail = findViewById(R.id.email_login);\r\n        LPass = findViewById(R.id.password_login);\r\n        fAuth = FirebaseAuth.getInstance();\r\n        forgotTextLink = findViewById(R.id.ForgotPassword);\r\n\r\n\r\n        go_login_to_register.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n\r\n                final String Email = LEmail.getText().toString().trim();\r\n                String Pass = LPass.getText().toString().trim();\r\n\r\n                if(TextUtils.isEmpty(Email)){\r\n                    LEmail.setError(\"Email is Required\");\r\n                    return;\r\n                }\r\n                if(TextUtils.isEmpty(Pass)){\r\n                    LPass.setError(\"Password is Required\");\r\n                    return;\r\n                }\r\n                if(Pass.length() < 6){\r\n                    LPass.setError(\"Password Must be 6 Characters\");\r\n                    return;\r\n                }\r\n\r\n                // authenticate the user\r\n\r\n                fAuth.signInWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {\r\n                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<AuthResult> task) {\r\n                      if(task.isSuccessful()){\r\n                          Toast.makeText(login.this, \" Logged in Successfully\"  , Toast.LENGTH_SHORT).show();\r\n                          Intent go_home11 = new Intent(getApplicationContext(),map.class);\r\n                          startActivity(go_home11);\r\n                      }else {\r\n                          Toast.makeText(login.this, \" Error \" + Objects.requireNonNull(task.getException()).getMessage() , Toast.LENGTH_SHORT).show();\r\n                      }\r\n                    }\r\n                });\r\n\r\n            }\r\n        });\r\n\r\n    //    usr = (EditText) findViewById(R.id.email_login);\r\n     //   pas = (EditText) findViewById(R.id.password_login);\r\n\r\n        // forgot password\r\n        forgotTextLink.setOnClickListener(new View.OnClickListener() {// start setOnClickListener\r\n            @Override\r\n            public void onClick(View view) {// start  onclick 1\r\n                final EditText resetMail = new EditText(view.getContext());\r\n                AlertDialog.Builder PasswordResetDialog = new AlertDialog.Builder(view.getContext());\r\n                PasswordResetDialog.setTitle(\"Reset Password ? \");\r\n                PasswordResetDialog.setMessage(\" Enter your Email To Received Reset Link.\");\r\n                PasswordResetDialog.setView(resetMail);\r\n                PasswordResetDialog.setPositiveButton(\"YES\", new DialogInterface.OnClickListener() {// start DialogInterface\r\n                    @Override\r\n                    public void onClick(DialogInterface dialog , int which ) {// start onclick 2\r\n                       //extract the email and send reset link\r\n                        String  mail= resetMail.getText().toString();\r\n                        fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {//start sendPasswordResetEmail\r\n                            @Override\r\n                            public void onSuccess(Void aVoid) {\r\n                                Toast.makeText(login.this, \" Reset Link Sent To Your Email\", Toast.LENGTH_SHORT).show();\r\n\r\n                            }\r\n                        }).addOnFailureListener(new OnFailureListener() {\r\n                            @Override\r\n                            public void onFailure(@NonNull Exception e) {\r\n                                Toast.makeText(login.this, \"Error ! Reset Link is Not Sent \" + e.getMessage(), Toast.LENGTH_SHORT).show();\r\n                            }\r\n                        });// end sendPasswordResetEmail\r\n\r\n\r\n\r\n\r\n                    }// end onclick 2\r\n                });// end DialogInterface\r\n\r\n                PasswordResetDialog.setNegativeButton(\"NO\", new DialogInterface.OnClickListener() {//start setNegativeButton\r\n                    @Override\r\n                    public void onClick(DialogInterface dialog, int which) {//start onClick3\r\n                             // close the dialog\r\n                    }//end onClick3\r\n                });// end setNegativeButton\r\n                PasswordResetDialog.create().show();\r\n            }// end onclick 1\r\n\r\n        });///setOnClickListener\r\n\r\n        } // end onCreate\r\n\r\n    public void return_main(View view) { //start return_main\r\n        onBackPressed();\r\n\r\n    }// end return_main\r\n\r\n    public void go_to_home(View view) { // start go_to_home\r\n        Intent go_home = new Intent(this,map.class);\r\n        startActivity(go_home);\r\n\r\n\r\n      //  String user = usr.getText().toString();\r\n      //  String pass = pas.getText().toString();\r\n\r\n    }//end go_to_home\r\n\r\n}// end class
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/taraffac/login.java	(revision 67d882e5893291e11df7fbc802b3923005d2f879)
++++ app/src/main/java/com/example/taraffac/login.java	(date 1606257303132)
+@@ -78,7 +78,7 @@
+                     public void onComplete(@NonNull Task<AuthResult> task) {
+                       if(task.isSuccessful()){
+                           Toast.makeText(login.this, " Logged in Successfully"  , Toast.LENGTH_SHORT).show();
+-                          Intent go_home11 = new Intent(getApplicationContext(),map.class);
++                          Intent go_home11 = new Intent(getApplicationContext(),MainActivity2.class);
+                           startActivity(go_home11);
+                       }else {
+                           Toast.makeText(login.this, " Error " + Objects.requireNonNull(task.getException()).getMessage() , Toast.LENGTH_SHORT).show();
