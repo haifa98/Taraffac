@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,20 +31,22 @@ import java.util.Objects;
 
 public class login extends AppCompatActivity { // start class
     ImageView return_main1;
-    Button go_login_to_register;
+    Button go_login_to_register,forgotTextLink,go_register;
 
-    EditText LEmail,LPass;
+   // EditText LEmail,LPass;
     FirebaseAuth fAuth;
-    TextView forgotTextLink;
+   // TextView forgotTextLink;
    // EditText pas,usr;
+    TextInputLayout LEmail,LPass;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {  //onCreate
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);/////
         setContentView(R.layout.activity_login);
 
-        return_main1= findViewById(R.id.image_back);
+       // return_main1= findViewById(R.id.image_back);
         go_login_to_register=findViewById(R.id.butt_login);
 
         LEmail = findViewById(R.id.email_login);
@@ -49,13 +54,15 @@ public class login extends AppCompatActivity { // start class
         fAuth = FirebaseAuth.getInstance();
         forgotTextLink = findViewById(R.id.ForgotPassword);
 
+        go_register= findViewById(R.id.butt_register);
+
 
         go_login_to_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final String Email = LEmail.getText().toString().trim();
-                String Pass = LPass.getText().toString().trim();
+                final String Email = String.valueOf(LEmail.getEditText().getText());//getText().toString().trim()
+                String Pass = String.valueOf(LPass.getEditText().getText());//getText().toString().trim()  .getEditText().getText().toString().trim();
 
                 if(TextUtils.isEmpty(Email)){
                     LEmail.setError("Email is Required");
@@ -137,6 +144,11 @@ public class login extends AppCompatActivity { // start class
         });///setOnClickListener
 
         } // end onCreate
+
+    public void go_to_register(View view) {
+        Intent go_register1= new Intent(this,register.class);
+        startActivity(go_register1);
+    }
 
     public void return_main(View view) { //start return_main
         onBackPressed();

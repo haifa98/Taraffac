@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -45,7 +46,8 @@ public class edit_profile extends AppCompatActivity {
     FirebaseFirestore fStore;
     FirebaseUser user;
  RadioButton  Radiodisplay, RadioVoice , RadioType;
-     EditText ProfileEditFullName , ProfileEditEmail;
+     //TextView itFullName , ProfileEditEmail;
+    TextInputLayout ProfileEditFullName , ProfileEditEmail;
     RadioGroup RadioGroupTypeUpdate;
 
     public String voiceType ="Voice command";
@@ -67,6 +69,7 @@ public class edit_profile extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
         fStore= FirebaseFirestore.getInstance();
+       // itFullName = findViewById(R.id.username_profile);
 
         // edit profile
         Intent data = getIntent();
@@ -75,8 +78,8 @@ public class edit_profile extends AppCompatActivity {
         String  type = data.getStringExtra("addingType");
         Log.d(TAG, "onCreate: " + fullName + " " + email + type);
 
-        ProfileEditFullName.setText(fullName);
-        ProfileEditEmail.setText(email);
+        ProfileEditFullName.getEditText().setText(fullName);
+        ProfileEditEmail.getEditText().setText(email);
 
         if (type.equals(voiceType) ){
             RadioVoice.setChecked(true);
@@ -113,19 +116,20 @@ public class edit_profile extends AppCompatActivity {
             public void onClick(View v) { // start onclick
                 final String TypeText;
                 TypeText=checkType();
-                if (ProfileEditFullName.getText().toString().isEmpty() || ProfileEditEmail.getText().toString().isEmpty()|| TypeText.isEmpty()) {
+                if (String.valueOf(ProfileEditFullName.getEditText().getText()).isEmpty() || String.valueOf(ProfileEditEmail.getEditText().getText()).isEmpty()|| TypeText.isEmpty()) {//ProfileEditFullName.getText().toString()   ProfileEditEmail.getText().toString()
                     Toast.makeText(edit_profile.this, "one or many fields are empty", Toast.LENGTH_SHORT).show();
                     return;//user
                 }
 
-                user.updateEmail(ProfileEditEmail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() { // start OnSuccessListener
+                user.updateEmail(String.valueOf(ProfileEditEmail.getEditText().getText())).addOnSuccessListener(new OnSuccessListener<Void>() { // start OnSuccessListener
                     @Override
                     public void onSuccess(Void aVoid) {
                         DocumentReference docRef = fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
                        // DocumentReference docRef = fStore.collection("SpeedBump").document(SpeedBump(MIJKeFHd1ikAjpOvBsY1));
                         Map<String , Object> edited = new HashMap<>();
-                       edited.put("email",ProfileEditEmail.getText().toString());
-                        edited.put("Name",ProfileEditFullName.getText().toString());
+                       edited.put("email",String.valueOf(ProfileEditEmail.getEditText().getText()));
+                       // edited.put("Name",itFullName.getText().toString());
+                        edited.put("Name",String.valueOf(ProfileEditFullName.getEditText().getText()));
                         edited.put("addingType",TypeText);
                         ////
                         ////

@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -44,7 +45,7 @@ public class profile extends AppCompatActivity {
     Button log;
     Button del;
     ImageView imageProfil1;
-    TextView fullName , Email, type;
+    TextInputLayout fullName , Email, type;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference  storageReference;
@@ -59,9 +60,9 @@ public class profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         edit = findViewById(R.id.edit_profile);
-        log = findViewById(R.id.but_log_out5);
+       // log = findViewById(R.id.but_log_out5);
         del = findViewById(R.id.delete_profile);
-        imageProfil1= findViewById(R.id.imageProfil1);
+        imageProfil1= findViewById(R.id.user_image);
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         firebaseUser = fAuth.getCurrentUser();
@@ -80,9 +81,12 @@ public class profile extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
                 assert documentSnapshot != null;
-                Email.setText(documentSnapshot.getString("email"));
-                fullName.setText(documentSnapshot.getString("Name"));
-                type.setText(documentSnapshot.getString("addingType"));
+                Email.getEditText().setText(documentSnapshot.getString("email"));
+                fullName.getEditText().setText(documentSnapshot.getString("Name"));
+                type.getEditText().setText(documentSnapshot.getString("addingType"));//setText(documentSnapshot.getString("addingType"));// type.setEditText(String.valueOf(documentSnapshot.getString("addingType"));
+               // type.setText(String.valueOf(documentSnapshot.getString("addingType"));
+
+
             }
         });//end method
         //
@@ -93,9 +97,9 @@ public class profile extends AppCompatActivity {
                 //  Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 // startActivityForResult(openGalleryIntent, 1000 );
                 Intent i = new Intent(v.getContext(),edit_profile.class);
-                i.putExtra("fullName",fullName.getText().toString());
-                i.putExtra("email",Email.getText().toString());
-                i.putExtra("addingType",type.getText().toString());
+                i.putExtra("fullName",String.valueOf(fullName.getEditText().getText()));//String.valueOf(LEmail.getEditText().getText())   fullName.getText().toString()
+                i.putExtra("email",String.valueOf(Email.getEditText().getText()));//Email.getText().toString()
+                i.putExtra("addingType",String.valueOf(type.getEditText().getText()));//type.getText().toString()
 
 
                 startActivity(i);

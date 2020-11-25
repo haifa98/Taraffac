@@ -56,6 +56,7 @@
     <string name="report">Report</string>
     <string name="edit_speed_bump">Edit speed bump</string>
     <string name="cancel">Cancel</string>
+    <string name="hint_Username">Username</string>
 
     <string name="hump">Hump</string>
     <string name="table">Table</string>
@@ -75,7 +76,6 @@
     <string name="email_profile">Email:</string>
     <string name="adding_type">Adding type:</string>
     <string name="delete_acc">Delete Account</string>
-    <string name="edit_profile">Edit</string>
     <string name="name_pro">Your Name </string>
     <string name="email_pro">Your Email </string>
     <string name="adding_pro">Voice command</string>
@@ -101,12 +101,49 @@
     <string name="show">show</string>
     <string name="deleteEdit">Delete</string>
     <string name="userType" />
+    <string name="hello_there_welcome_back">Hello there, Welcome Back</string>
+    <string name="sign_in_to_continue">Sign In to continue</string>
+    <string name="usrname">Usrname</string>
+    <string name="username_login">Username</string>
+    <string name="password_login">Password</string>
+    <string name="logo_image">logo_image</string>
+    <string name="forget_password_login">Forget Password ?</string>
+    <string name="new_user_sign_up_login">New User? Sign UP</string>
+    <string name="login_go">Go</string>
+    <string name="go_login">Go</string>
+    <string name="welcome_register">Welcome</string>
+    <string name="signup_to_start_register">SignUp to start</string>
+    <string name="full_name_register">Full name</string>
+    <string name="register_register">Register</string>
+    <string name="already_hav_an_account_login">Already hav an account ? LogIn</string>
+    <string name="confirm_password_re">Confirm Password</string>
+    <string name="your_name_profile">Your name</string>
+    <string name="something_profile">something</string>
+    <string name="profilre_39">39</string>
+    <string name="full_name_profile">Full Name</string>
+    <string name="your_email_profilee">Your Email</string>
+    <string name="profille_email">Email</string>
+    <string name="namee_profile">Name</string>
+    <string name="adding_type_profile">Adding Type</string>
+    <string name="voice_command_profile">Voice Command</string>
+    <string name="display_option_profile">Display Option</string>
+    <string name="edit_profile">Edit</string>
+    <string name="delete_profile_profile">Delete Profile</string>
+    <string name="your_name_profille">Your name</string>
+    <string name="image_user_profile">image_user_profile</string>
+    <string name="edittt_profile">Edit</string>
     <string name="taraffac">Taraffac</string>
     <string name="navi_o">Open navigation drawer</string>
     <string name="navi_c">Close navigation drawer</string>
-
-
-
+    <string name="email_in_register">Email</string>
+    <string name="edit_profile_profile">Edit Profile</string>
+    <string name="adding_type_in_profile">Adding type</string>
+    <string name="email_in_ligin">Email</string>
+    <string name="have_account_login_login">Have Account ? LOGIN</string>
+    <string name="have_account_login_2">Have Account ? LOGIN</string>
+    <string name="edit_profile_edit">Edit Profile</string>
+    <string name="user_profile_P">User Profile</string>
+    <string name="name_reg">Name</string>
 
 
 </resources>

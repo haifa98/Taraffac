@@ -1,11 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".edit_profile">
+    tools:context=".edit_profile"
+    android:orientation="vertical">
 
+<!--the upper screen the image and the name of interface-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:padding="20dp"
+        android:background="#7A9CDED1">
+
+        <ImageView
+            android:id="@+id/imageProfilEdit"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="0dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/image_user_profile"
+            android:src="@drawable/profile"
+
+            />
+        <TextView
+            android:id="@+id/username_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_profile_edit"
+            android:textSize="20sp"
+            android:fontFamily="@font/bungee"
+            android:layout_toRightOf="@+id/imageProfilEdit"
+            android:layout_centerVertical="true"
+            android:includeFontPadding="false"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/imageProfilEdit"
+            android:layout_marginStart="10dp" />
+
+    </RelativeLayout>
+    <!-- the information part in the middle with the two button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="424dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:boxStrokeWidth="2dp"
+            android:hint="@string/namee_profile"
+            app:boxBackgroundColor="#00000000">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_baseline_person_outline_24"
+                android:drawableLeft="@drawable/ic_baseline_person_outline_24"
+                android:drawablePadding="10dp"
+                android:inputType="text"
+                android:text="@string/your_name_profille" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:boxStrokeWidth="2dp"
+            android:hint="@string/profille_email"
+            app:boxBackgroundColor="#00000000">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_outline_email_24"
+                android:drawableLeft="@drawable/ic_outline_email_24"
+                android:drawablePadding="10dp"
+                android:inputType="text"
+                android:text="@string/your_email_profilee" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/adding_pro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/adding_type_profile"
+            app:boxStrokeWidth="2dp"
+            android:paddingBottom="10dp"
+            app:boxBackgroundColor="#00000000">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_baseline_check_circle_outline_24"
+                android:drawableLeft="@drawable/ic_baseline_check_circle_outline_24"
+                android:drawablePadding="0dp"
+                android:paddingBottom="20dp"
+                android:text="@string/adding_type_in_profile"/>
+            <RadioGroup
+                android:id="@+id/update_Adding_type"
+                android:layout_width="351dp"
+                android:layout_height="61dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="-28dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.666"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.77"
+                android:paddingLeft="0dp"
+                android:paddingRight="2dp"
+                android:paddingStart="40dp"
+                android:paddingEnd="2dp">
+
+                <RadioButton
+                    android:id="@+id/voiceEdit"
+                    android:layout_width="160dp"
+                    android:layout_height="28dp"
+                    android:text="@string/voice"
+                    android:padding="2dp"/>
+                <RadioButton
+                    android:id="@+id/displayEdit"
+                    android:layout_width="160dp"
+                    android:layout_height="28dp"
+                    android:text="@string/display"
+                    android:padding="2dp"/>
+
+
+            </RadioGroup>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+            <Button
+                android:id="@+id/save_profile"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="#7A9CDED1"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/save"
+                android:textSize="20sp"
+                android:textColor="#5C5A5A" />
+        </RelativeLayout>
+
+    </LinearLayout>
+<!--
     <TextView
         android:id="@+id/textView39"
         android:layout_width="408dp"
@@ -53,7 +204,7 @@
         app:layout_constraintVertical_bias="0.023" />
 
     <ImageView
-        android:id="@+id/imageProfilEdit"
+        android:id="@+id/imageProfilEditt"
         android:layout_width="177dp"
         android:layout_height="148dp"
         android:contentDescription="@string/profile_img"
@@ -79,7 +230,7 @@
         app:layout_constraintVertical_bias="0.417" />
 
     <EditText
-        android:id="@+id/name_edit"
+        android:id="@+id/name_edit2"
         android:layout_width="267dp"
         android:layout_height="37dp"
         android:background="#f3f3f3"
@@ -108,7 +259,7 @@
         app:layout_constraintVertical_bias="0.545" />
 
     <EditText
-        android:id="@+id/email_edit"
+        android:id="@+id/email_edit2"
         android:layout_width="267dp"
         android:layout_height="37dp"
         android:background="#f3f3f3"
@@ -139,7 +290,7 @@
         app:layout_constraintVertical_bias="0.673" />
 
     <Button
-        android:id="@+id/save_profile"
+        android:id="@+id/save_profile2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/style_button"
@@ -154,7 +305,7 @@
         app:layout_constraintVertical_bias="0.906" />
 
     <RadioGroup
-        android:id="@+id/update_Adding_type"
+        android:id="@+id/update_Adding_type2"
         android:layout_width="321dp"
         android:layout_height="61dp"
         android:orientation="horizontal"
@@ -166,7 +317,7 @@
         app:layout_constraintVertical_bias="0.77">
 
         <RadioButton
-            android:id="@+id/voiceEdit"
+            android:id="@+id/voiceEdit2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
@@ -180,7 +331,7 @@
             app:layout_constraintVertical_bias="0.666" />
 
         <RadioButton
-            android:id="@+id/displayEdit"
+            android:id="@+id/displayEdit2"
             android:layout_width="157dp"
             android:layout_height="wrap_content"
             android:text="@string/display"
@@ -191,6 +342,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.756" />
-    </RadioGroup>
+    </RadioGroup>-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

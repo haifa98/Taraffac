@@ -10,14 +10,12 @@
     android:orientation="vertical"
     android:background="#fff"
     android:padding="20dp">
-    <!--- jj-->
 
     <ImageView
         android:id="@+id/logo_image"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:contentDescription="@string/logo_image"
-        android:padding="0dp"
         android:src="@drawable/taraffac" />
 
     <TextView
@@ -40,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -61,7 +59,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/email_in_register">
+            android:hint="Email">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +99,7 @@
             android:layout_marginTop="5dp"
             android:background="#000"
             android:text="@string/register_register"
-            android:textColor="#000" />
+            android:textColor="#5C5A5A" />
         <Button
             android:id="@+id/butt_login_register"
             android:layout_width="match_parent"
@@ -110,6 +108,7 @@
             android:text="@string/have_account_login_2"
             android:gravity="right"
             android:onClick="go_to_login"
+            android:elevation="0dp"
             tools:ignore="RtlHardcoded"
             android:layout_margin="5dp"
             android:textColor="#000"/>
