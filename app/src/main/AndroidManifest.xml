@@ -43,19 +43,21 @@
         <activity android:name=".profile" />
         <activity android:name=".view_spped_bump_msg" />
         <activity android:name=".report_msg" />
-        <activity android:name=".report">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".report"/>
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+
         <activity android:name=".edit_speed_bump" />
         <activity android:name=".notify" />
         <activity android:name=".delete_msg" />
         <activity android:name=".delete" />
         <activity android:name=".register" />
-        <activity android:name=".login"></activity>
+        <activity android:name=".login">
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".MainActivity" />
     </application>
 
