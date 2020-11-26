@@ -31,6 +31,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
@@ -40,13 +44,14 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // animation
         topAnim= (Animation)AnimationUtils.loadAnimation(this,R.anim.top_animation);
-        //image.setAnimation(topAnim);
        bottomAnim=(Animation) AnimationUtils.loadAnimation(this,R.anim.bottom_animation);
         //Hooks
-        //logo.setAnimation(bottomAnim);
+        logo.setAnimation(bottomAnim);
+        image.setAnimation(topAnim);
 
 
-       // logo.setAnimation(bottomAnim);
+
+        // logo.setAnimation(bottomAnim);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -59,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        super.onCreate(savedInstanceState);
       //  setContentView(R.layout.activity_main);
        //// go_register= findViewById(R.id.butt_register);
        // go_login= findViewById(R.id.butt_login);

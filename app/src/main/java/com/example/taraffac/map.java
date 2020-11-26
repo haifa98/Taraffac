@@ -2,7 +2,6 @@ package com.example.taraffac;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,29 +11,28 @@ import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,20 +45,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.google.firebase.storage.StorageReference;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -68,10 +64,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import dagger.Module;
-
 //speedometer imports
 
+@RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -95,6 +90,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double not_long;
     String sub;
     SpeedBump bump;
+    ////
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    StorageReference storageReference;
+    FirebaseUser  firebaseUser;
+    public String voiceType ="Voice command";
+
+    /////
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -115,6 +118,11 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
         listen = findViewById(R.id.listen);
+        //
+        storageReference = FirebaseStorage.getInstance().getReference();
+        fAuth = FirebaseAuth.getInstance();
+        firebaseUser = fAuth.getCurrentUser();
+        //
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -179,6 +187,25 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
 //Start
         handler.postDelayed(runnable, 1000);
+        ////////////////////////////////////////////////////////////////
+       // Check Adding Type
+
+      /*  final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
+                assert documentSnapshot != null;
+               String CheckAddingType= documentSnapshot.getString("addingType");
+                if (CheckAddingType.equals(voiceType) ){
+                   ;
+                }else{
+                   }
+
+            }
+        });
+
+       */
+        /////////////////////////////////////////////////////////////
 
     }// end on create
 
@@ -197,7 +224,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             editor.commit();
         }// end if else
     }
-
+/////
     ////////// not working
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public String getFirebaseUser() {
@@ -218,7 +245,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
         return adding[0];
-    }
+    }///////
 
     @Override // set the map
     public void onMapReady(GoogleMap googleMap) {
