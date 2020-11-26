@@ -78,7 +78,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button profile;
     Button log;
     Button add;
-    Button notify;////////////////////////////////////////
+    Button notify;
     ToggleButton active;
     Button listen;
     FusedLocationProviderClient client;
@@ -94,7 +94,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double not_lat;
     double not_long;
     String sub;
-
+    SpeedBump bump;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -112,7 +112,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
         add = (Button) findViewById(R.id.add_bump2);
-        notify = (Button) findViewById(R.id.showNotificationBtn);///////////////////////////////////////
+        notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
         listen = findViewById(R.id.listen);
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
@@ -124,7 +124,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
-        ////////////
 
 
         // get state value from activities
@@ -134,7 +133,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
         SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
         active.setChecked(sharedPrefs.getBoolean("active", state));
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -430,7 +429,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         });
     }  */
 
-    public void go_to_edit(DialogInterface.OnClickListener view) {
+   /* public void go_to_edit(DialogInterface.OnClickListener view) {
         Intent go_register = new Intent(this, edit_speed_bump.class);
         startActivity(go_register);
     }
@@ -439,7 +438,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         Intent go_register = new Intent(this, report.class);
         startActivity(go_register);
     }
-
+    */
     @Override
     public void onLocationChanged(@NonNull Location location) {
         //   if (checkButton()) {
@@ -536,7 +535,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
 
                     for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
-                        SpeedBump bump = bumpSnapshot.getValue(SpeedBump.class);
+                        bump = bumpSnapshot.getValue(SpeedBump.class);
                         bumps.add(bump);
 
                         double bump_lat_not = bump.getLatitude();
@@ -587,6 +586,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         // Write your code here to execute after dialog
                         Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(getApplicationContext(), report.class);
+                        i.putExtra("latitude",bump.getLatitude());
+                        i.putExtra("longitude",bump.getLongitude());
+
                         startActivity(i);
                     }});
 // Showing Alert Dialog

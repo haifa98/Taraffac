@@ -76,6 +76,7 @@
         android:paddingTop="2dp">
 
         <RadioGroup
+            android:id="@+id/report_reason"
             android:layout_width="match_parent"
             android:layout_height="196dp"
             android:gravity="center"
@@ -83,7 +84,7 @@
             android:paddingTop="2dp">
 
             <RadioButton
-                android:id="@+id/radioButton5"
+                android:id="@+id/rd1"
                 android:layout_width="395dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"
@@ -94,13 +95,14 @@
 
                 android:elevation="8dp"
                 android:gravity="center"
+                android:onClick="checkReason"
                 android:text="@string/violating_the_standard"
                 android:textColor="@drawable/text_color"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <RadioButton
-                android:id="@+id/radioButton4"
+                android:id="@+id/rd2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"
@@ -109,6 +111,7 @@
                 android:elevation="4dp"
 
                 android:gravity="center"
+                android:onClick="checkReason"
                 android:text="@string/violating_the_location"
                 android:textColor="@drawable/text_color"
                 android:textSize="14sp"
@@ -116,7 +119,7 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/rd3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"
@@ -124,15 +127,16 @@
                 android:button="@color/colorAccent"
                 android:elevation="4dp"
                 android:gravity="center"
+                android:onClick="checkReason"
                 android:text="@string/damaged_bump"
                 android:textColor="@drawable/text_color"
-                android:textSize="14sp"
 
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <RadioButton
-                android:id="@+id/radioButton3"
+                android:id="@+id/rd4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="7dp"
@@ -141,6 +145,7 @@
                 android:elevation="4dp"
                 android:gravity="center"
 
+                android:onClick="checkReason"
                 android:text="@string/other"
                 android:textColor="@drawable/text_color"
                 android:textSize="14sp"
@@ -150,6 +155,11 @@
 
         </RadioGroup>
 
+        <Button
+            android:id="@+id/reportbtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Send" />
 
     </LinearLayout>
 

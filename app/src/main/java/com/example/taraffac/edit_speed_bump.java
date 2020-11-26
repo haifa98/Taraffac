@@ -51,7 +51,7 @@ public class edit_speed_bump extends AppCompatActivity {
 
         // show the retrieve data
         TypeValue= getIntent().getExtras().getString("type");
-       SizeValue =getIntent().getExtras().getString("size");
+        SizeValue =getIntent().getExtras().getString("size");
 
         if (TypeValue.equals(Cushion) ) {
 
@@ -79,12 +79,12 @@ public class edit_speed_bump extends AppCompatActivity {
         });
 
     }// end method  ;
+
     public String checkType(){
         int radioID = RadioGroupTypeUpdate.getCheckedRadioButtonId();
         RadioType = findViewById(radioID);
         String CheckType = (String) RadioType.getText();
         return CheckType ;
-
     }
 
     public String checkSize(){
@@ -92,12 +92,12 @@ public class edit_speed_bump extends AppCompatActivity {
         RadioSize = findViewById(radioID);
         String CheckSize = (String) RadioSize.getText();
         return CheckSize ;
-
     }
+
     public void Update_Bump(View view) {// Update Speed Bump
         String TypeText,SizeText;
         TypeText=checkType();
-       SizeText=checkSize();
+        SizeText=checkSize();
 
         if(!TypeText.isEmpty() & !SizeText.isEmpty() ) {
 
