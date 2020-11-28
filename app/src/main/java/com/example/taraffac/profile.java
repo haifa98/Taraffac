@@ -83,7 +83,8 @@ public class profile extends AppCompatActivity {
                 assert documentSnapshot != null;
                 Email.getEditText().setText(documentSnapshot.getString("email"));
                 fullName.getEditText().setText(documentSnapshot.getString("Name"));
-                type.getEditText().setText(documentSnapshot.getString("addingType"));//setText(documentSnapshot.getString("addingType"));// type.setEditText(String.valueOf(documentSnapshot.getString("addingType"));
+                type.getEditText().setText(documentSnapshot.getString("addingType"));
+                //setText(documentSnapshot.getString("addingType"));// type.setEditText(String.valueOf(documentSnapshot.getString("addingType"));
                // type.setText(String.valueOf(documentSnapshot.getString("addingType"));
 
 
@@ -152,6 +153,7 @@ public class profile extends AppCompatActivity {
 
     public void return_main(View view) {
         onBackPressed();
+
     }
 
 

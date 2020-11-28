@@ -34,8 +34,7 @@ public class edit_speed_bump extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_speed_bump);
-        profile = (Button)findViewById(R.id.but_Ppofile4);
-        log = (Button)findViewById(R.id.but_log_out4);
+
         But_Update_bump= findViewById(R.id.update_edite_bump);
         But_Delete_bump= findViewById(R.id.update_delete_bump);
         RadioType1=findViewById(R.id.update_cushion2);
@@ -125,27 +124,15 @@ public class edit_speed_bump extends AppCompatActivity {
     }// Update Speed Bump
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public void go_to_profile(View v){
-        Intent profile = new Intent(this,profile.class);
-        startActivity(profile);
+    public void back_map2(View view) {
+        Intent go_map1= new Intent(this,map.class);
+        startActivity(go_map1);
     }
-    public void log_out(View v){
-        Intent log = new Intent(this,login.class);
-        startActivity(log);
+
+
+    public void back_ntofiy(View view) {
+        onBackPressed();
+
     }
 
 

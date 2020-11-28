@@ -122,6 +122,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         firebaseUser = fAuth.getCurrentUser();
+        fStore =FirebaseFirestore.getInstance();
         //
         ref = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
         client = LocationServices.getFusedLocationProviderClient(this);
@@ -613,8 +614,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         // Write your code here to execute after dialog
                         Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(getApplicationContext(), report.class);
-                        i.putExtra("latitude",bump.getLatitude());
-                        i.putExtra("longitude",bump.getLongitude());
+                        i.putExtra("SpeedBump",bump.getLatitude());
+                        i.putExtra("SpeedBump",bump.getLongitude());
 
                         startActivity(i);
                     }});

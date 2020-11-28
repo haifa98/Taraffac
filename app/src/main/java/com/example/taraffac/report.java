@@ -3,17 +3,21 @@ package com.example.taraffac;
 import android.app.Activity;
 //import android.content.Intent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,13 +36,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 
 public class report extends Activity {
+    AutoCompleteTextView autoCompleteTextView;
     private Button button;
     RadioButton rd1,rd2,rd3,rd4,rd_reason;
     RadioGroup radioGroup_reason;
     DatabaseReference sb;
     String coord;
-    Intent data = getIntent();
+   // Intent data = getIntent();
     double lat, longitude;
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +54,30 @@ public class report extends Activity {
         rd2= findViewById(R.id.rd2);
         rd3= findViewById(R.id.rd3);
         rd4= findViewById(R.id.rd4);
+       final SpeedBump bump= getIntent().getParcelableExtra("bump");
 
         radioGroup_reason= findViewById(R.id.report_reason);
+        //interface dropdon list
+        autoCompleteTextView=findViewById(R.id.autoCompleteText);
+        String [] option= {"Egypt" , "England" , "France" , "aa" ,"bb" , "tt" , "bv" , "dz", "cc" , "ty" , "pp"};
+        ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.option_item, option);
+        //to make default value
+        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString() , false);
+        autoCompleteTextView.setAdapter(arrayAdapter);
+
+
+        /////////////////////
 
         //sb = FirebaseDatabase.getInstance().getReference().child("SpeedBump");
+       // TypeValue= getIntent().getExtras().getString("type");
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lat = Double.parseDouble(data.getStringExtra("latitude"));
-                longitude = Double.parseDouble(data.getStringExtra("longitude"));
+                lat = Double.parseDouble(getIntent().getStringExtra("latitude"));
+                longitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
+               // lat= bump.latitude;
+               // longitude= bump.longitude;
 
                 coord = ""+lat+ ","+longitude;
 
@@ -83,20 +103,6 @@ public class report extends Activity {
             }
         });*/
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-
-        getWindow().setLayout((int)(width*.8), (int)(height*.7));
-
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.gravity = Gravity.CENTER;
-        params.x = 0;
-        params.y = -20;
-
-        getWindow().setAttributes(params);
 
     }
 

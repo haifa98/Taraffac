@@ -21,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,6 +51,7 @@ public class add extends AppCompatActivity {
     DatabaseReference dataBymp;
     String sub;
     String userType;
+    Button back_map1;
 
     static final String TAG = "TTS";
     TextToSpeech mTts;
@@ -60,13 +62,14 @@ public class add extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        profile = (Button)findViewById(R.id.but_Ppofile3);
-        log = (Button)findViewById(R.id.but_log_out3);
+        //profile = (Button)findViewById(R.id.but_Ppofile3);
+       // log = (Button)findViewById(R.id.but_log_out3);
         add = (Button)findViewById(R.id.add_save);
         save = (Button)findViewById(R.id.add_save);
         cancel= (Button)findViewById(R.id.add_cancel);
         type = (RadioGroup) findViewById(R.id.add_type);
         size = (RadioGroup) findViewById(R.id.add_size);
+
 // get latlng from map class
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -207,14 +210,7 @@ private void getSpeechInput() {
         if(size!=null){ s = (String) size1.getText();}
         return s ; }
 
-    public void go_to_profile(View v){
-        Intent profile = new Intent(this,profile.class);
-        startActivity(profile);
-    }
-    public void log_out(View v){
-        Intent log = new Intent(this,login.class);
-        startActivity(log);
-    }
+
 
     public void save(){
         String type2 = checkType();
@@ -263,4 +259,8 @@ if(type2 != null & size2 != null  &  longitude > 0 & latitude > 0 ) {
             startActivity(log);
 
         }
+    public void back_map1(View view) {
+        Intent go_map1= new Intent(this,map.class);
+        startActivity(go_map1);
+    }
 }

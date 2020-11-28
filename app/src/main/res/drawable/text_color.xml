@@ -4,6 +4,6 @@
     android:color="@color/cardview_light_background"/>
     <item android:state_checked="false"
 
-        android:color="@color/cardview_dark_background"/>
+        android:color="#100808"/>
 
 </selector>
