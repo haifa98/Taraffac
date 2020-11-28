@@ -11,12 +11,12 @@ public class SpeedBump {
 
     }
 
-    public SpeedBump( double latitude, double longitude, String type, String size) {
+    public SpeedBump( double latitude, double longitude, String type, String size,int deleteOption ) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.type = type;
         this.size = size;
-        this.deleteOption = 0;
+        this.deleteOption = deleteOption;
     }
 
     public void setLatitude(double latitude) {

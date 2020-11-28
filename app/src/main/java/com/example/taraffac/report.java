@@ -74,6 +74,7 @@ public class report extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 lat = Double.parseDouble(getIntent().getStringExtra("latitude"));
                 longitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
                // lat= bump.latitude;

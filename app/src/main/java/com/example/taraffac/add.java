@@ -84,8 +84,9 @@ public class add extends AppCompatActivity {
                 save();
             }
         });
-//if(userType=="Voice command"){
-read(); }
+        Toast.makeText(this, userType, Toast.LENGTH_SHORT).show();
+if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
+    }
 
 
 // this method convert text to speech
@@ -148,7 +149,7 @@ public void read(){
 
     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
         @Override
-        public void run() {getSpeechInput(); }}, 9000); //  1000 = 1 sec
+        public void run() {getSpeechInput(); }}, 11000); //  1000 = 1 sec
     }
 
 // speech to text
@@ -179,14 +180,26 @@ private void getSpeechInput() {
 
                     break;} }}
    // this method check radio buttons
-    public void testtype(String[] x){
-        for (String n: x){
-        if (n.equals("cushion")) { ((RadioButton)type.getChildAt(0)).setChecked(true);}
-        if (n.equals("table")) { ((RadioButton)type.getChildAt(1)).setChecked(true);}
-        if (n.equals("hump")) {((RadioButton)type.getChildAt(2)).setChecked(true);}
-        if (n.equals("small")) { size.check(R.id.add_small);}
-         if (n.equals("medium")) { size.check(R.id.add_mid);}
-         if (n.equals("large")) { size.check(R.id.add_large);} }}
+   public void testtype(String[] x){
+       for (String n: x) {
+           if (n.equals("cushion")) {
+               ((RadioButton) type.getChildAt(0)).setChecked(true);
+           }
+           if (n.equals("table")) {
+               ((RadioButton) type.getChildAt(1)).setChecked(true);
+           }
+           if (n.equals("hump")) {
+               ((RadioButton) type.getChildAt(2)).setChecked(true);
+           }
+           if (n.equals("small")) {
+               ((RadioButton) size.getChildAt(0)).setChecked(true);
+           }
+           if (n.equals("medium")) {
+               ((RadioButton) size.getChildAt(1)).setChecked(true);
+           }
+           if (n.equals("large")) {
+               ((RadioButton) size.getChildAt(2)).setChecked(true);
+           }}}
 
 // cancel add and go to homepage
     public void go_map(View v){
@@ -207,7 +220,7 @@ private void getSpeechInput() {
         String s =null ;
         int radioID = size.getCheckedRadioButtonId();
         size1 = findViewById(radioID);
-        if(size!=null){ s = (String) size1.getText();}
+        if(size1!=null){ s = (String) size1.getText();}
         return s ; }
 
 
@@ -216,32 +229,28 @@ private void getSpeechInput() {
         String type2 = checkType();
         String size2 = checkSize();
 
-if(type2 != null & size2 != null  &  longitude > 0 & latitude > 0 ) {
+        if(type2 != null & size2 != null  &  latitude > 0 & longitude > 0 ) {
 
-    //saveInDB(type2,size2);
-}else {
-    if (type2 == null) {
-        Toast.makeText(this, "Please check the type ", Toast.LENGTH_SHORT).show();
-    } else if (size2 == null) {
-        Toast.makeText(this, "Please check the size ", Toast.LENGTH_SHORT).show();
-    } else {
-        Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
-        t.setGravity(Gravity.TOP, 0, 90);
-        t.show();
+            saveInDB(type2,size2);
+        }else {
+            if (type2 == null ||size2 == null) {
+                Toast.makeText(this, "There is missing value  ", Toast.LENGTH_SHORT).show(); }
+
+            if(latitude==0 || longitude == 0) {
+                Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
+                t.setGravity(Gravity.TOP, 0, 90);
+                t.show();
+            }
+        }
     }
-}
-}
 
 
         public void saveInDB(String type, String size){
             String id = dataBymp.push().getKey();
 
-            // change format to dd.ddd
-            double newlat = Double.parseDouble(new DecimalFormat("00.000").format(latitude));
 
-            double newlng = Double.parseDouble(new DecimalFormat("00.000").format(longitude));
 
-            SpeedBump bump = new SpeedBump ( newlat, newlng, type, size);
+            SpeedBump bump = new SpeedBump ( latitude, longitude, type, size,0);
             // create sub child for bump - replace '.' with '-' because '.' is not allowed id firebase
 
             String sub1 = new DecimalFormat("00.00").format(latitude);

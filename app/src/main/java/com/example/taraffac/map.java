@@ -75,7 +75,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button add;
     Button notify;
     ToggleButton active;
-    Button listen;
+
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
@@ -90,6 +90,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double not_long;
     String sub;
     SpeedBump bump;
+    String CheckAddingType;
     ////
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -117,7 +118,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         add = (Button) findViewById(R.id.add_bump2);
         notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
-        listen = findViewById(R.id.listen);
+
         //
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
@@ -168,21 +169,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
 
-        listen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (active.isChecked()) {
-                    getSpeechInput();
-                }
-            }
-        });
+
 
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 if(active.isChecked()){ Notify();}
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 5000);
             }
         };
 
@@ -191,12 +185,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         ////////////////////////////////////////////////////////////////
        // Check Adding Type
 
-      /*  final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
+        final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
                 assert documentSnapshot != null;
-               String CheckAddingType= documentSnapshot.getString("addingType");
+                CheckAddingType= documentSnapshot.getString("addingType");
+                Toast.makeText(map.this, CheckAddingType, Toast.LENGTH_SHORT).show();
                 if (CheckAddingType.equals(voiceType) ){
                    ;
                 }else{
@@ -204,8 +199,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
             }
         });
-
-       */
+        
         /////////////////////////////////////////////////////////////
 
     }// end on create
@@ -226,27 +220,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }// end if else
     }
 /////
-    ////////// not working
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String getFirebaseUser() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        final String uid = user.getUid();
-        final String[] adding = new String[1];
-        refV = FirebaseDatabase.getInstance().getReference();
 
-        refV.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                adding[0] = (String) snapshot.child(uid).child("addingType").getValue();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        return adding[0];
-    }///////
 
     @Override // set the map
     public void onMapReady(GoogleMap googleMap) {
@@ -381,7 +355,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
-                intent.putExtra("userType", addingType);
+                intent.putExtra("userType", CheckAddingType);
                 startActivity(intent);
             }
         });
@@ -575,11 +549,12 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         String bump_info = " type : " + bump_type + " size : " + bump_size;
 // set height & width - apply style
 
-                        double x;
-                        x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
-                        if(x<1.1){
+                        double  x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
+                        if(x<0.150){
                             // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
-                            Alertt(bump_info); }
+
+                        Alertt( bump_lat_not , bump_long_not, bump_type,  bump_size);
+                        }
 
                     }
                 }
@@ -592,13 +567,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     }
 
-    private void Alertt(String info) {
+    private void Alertt(final double lat, final double lon, String type, String size) {
 
         AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
 // Setting Dialog Title
         alertDialog2.setTitle("Speed bump info");
 // Setting Dialog Message
-        alertDialog2.setMessage(info);
+        alertDialog2.setMessage("Type: "+type+"Size: "+size);
 // Setting Positive "Yes" Btn
         alertDialog2.setPositiveButton("Edit",
                 new DialogInterface.OnClickListener() {
@@ -612,36 +587,37 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog
-                        Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+
                         Intent i = new Intent(getApplicationContext(), report.class);
-                        i.putExtra("SpeedBump",bump.getLatitude());
-                        i.putExtra("SpeedBump",bump.getLongitude());
+                        i.putExtra("latitude",lat);
+                        i.putExtra("longitude",lon);
 
                         startActivity(i);
                     }});
 // Showing Alert Dialog
         alertDialog2.show(); }
 
-    /** calculates the distance between two locations in MILES */
     // lat long 2 is user
-    private double distance(double lat1, double lng1, double lat2, double lng2) {
+    //calculate the distance between user location and bump location
+    private double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
 
-        double earthRadius = 6371; // in miles, change to 6371 for kilometer output
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
 
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLng = Math.toRadians(lng2-lng1);
-
-        double sindLat = Math.sin(dLat / 2);
-        double sindLng = Math.sin(dLng / 2);
-
-        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
-                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-        double dist = earthRadius * c;
-
-        return dist; // output distance, in MILES
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 
 }

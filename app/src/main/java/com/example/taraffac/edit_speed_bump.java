@@ -104,7 +104,7 @@ public class edit_speed_bump extends AppCompatActivity {
 
             String id = dataBympUpdate.push().getKey();
 
-            SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText);
+            SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,0);
             dataBympUpdate.setValue(bump);
 
             Toast t = Toast.makeText(this, " The Update was successful", Toast.LENGTH_SHORT);
