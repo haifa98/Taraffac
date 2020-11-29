@@ -3,17 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
+    android:background="#7A9CDED1"
     android:gravity="bottom"
     android:padding="20dp">
+
     <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:src="@drawable/logo"
-        android:contentDescription="TODO" />
+        android:layout_width="91dp"
+        android:layout_height="70dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/logo" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="92dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bangers"
         android:text="TARAFFAC"

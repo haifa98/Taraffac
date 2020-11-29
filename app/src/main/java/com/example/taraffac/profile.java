@@ -122,7 +122,7 @@ public class profile extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                if (task.isSuccessful()){
                                    Toast.makeText(profile.this, "Account Deleted" , Toast.LENGTH_LONG).show();
-                                   Intent intent= new Intent(profile.this,MainActivity.class);
+                                   Intent intent= new Intent(profile.this,login.class);
                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                    startActivity(intent);

@@ -139,12 +139,12 @@ public class edit_profile extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Toast.makeText(edit_profile.this, "profile Updated", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(getApplicationContext(),profile.class) );
+                                startActivity(new Intent(getApplicationContext(),map.class) );
                                 finish();
                             }
                         });
 
-                        Toast.makeText(edit_profile.this, " Email Is Changed", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(edit_profile.this, " Email Is Changed", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

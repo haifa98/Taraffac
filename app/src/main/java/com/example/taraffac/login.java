@@ -150,10 +150,10 @@ public class login extends AppCompatActivity { // start class
         startActivity(go_register1);
     }
 
-    public void return_main(View view) { //start return_main
-        onBackPressed();
+   // public void return_main(View view) { //start return_main
+      //  onBackPressed();
 
-    }// end return_main
+    //}// end return_main
 
     public void go_to_home(View view) { // start go_to_home
         Intent go_home = new Intent(this,map.class);

@@ -15,12 +15,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -28,8 +30,11 @@ import com.google.firebase.storage.StorageReference;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -67,7 +72,13 @@ import java.util.Objects;
 //speedometer imports
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback {
+public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
+    ////////////Interface_Menu ///////////
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    ////////////Interface_Menu ///////////
+
+
 
     private GoogleMap mMap;
     Button profile;
@@ -118,6 +129,20 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         add = (Button) findViewById(R.id.add_bump2);
         notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
+        ////////////Interface_Menu ///////////
+        //---------HOOKS-----------------
+        drawerLayout=findViewById(R.id.drawer_layout);
+        navigationView=findViewById(R.id.nav_view);
+        //     navigation Drawer menu
+        navigationView.bringToFront();
+       // ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar, R.string.navi_o, R.string.navi_c);
+       // drawerLayout.addDrawerListener(toggle);
+       // toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_home);
+        //     navigation Drawer menu
+
+
 
         //
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -203,6 +228,20 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         /////////////////////////////////////////////////////////////
 
     }// end on create
+    //     navigation Drawer menu
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    //     navigation Drawer menu
 
 
     // check if it is activate or deactivate
@@ -619,5 +658,25 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+    //     navigation Drawer menu
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                break;
+            case R.id.nav_profile:
+                Intent intent = new Intent(map.this, profile.class);
+                // startActivities(intent);
+                startActivity(intent);
+                break;
+            case R.id.nav_logout:
+                intent = new Intent(map.this, login.class);
+                startActivity(intent);
+                break;
+        }
+                drawerLayout.closeDrawer(GravityCompat.START);
 
+        return true;
+    }
+    //     navigation Drawer menu
 }
