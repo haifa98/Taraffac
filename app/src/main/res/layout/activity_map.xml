@@ -15,80 +15,78 @@
         android:id="@+id/nav_view"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
-        android:layout_gravity="start"/>
+        android:layout_gravity="start">
+
+
+        <Button
+            android:id="@+id/showNotificationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="2dp"
+            android:layout_marginStart="75dp"
+            android:layout_marginLeft="75dp"
+            android:layout_marginTop="628dp"
+            android:layout_marginEnd="248dp"
+            android:layout_marginRight="248dp"
+            android:layout_marginBottom="55dp"
+            android:background="@drawable/style_button"
+            android:text="@string/notify"
+            android:textColor="#100808"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.937"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.941"
+            tools:textSize="18sp"
+            tools:textStyle="bold" />
+
+
+    </com.google.android.material.navigation.NavigationView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".map" />
 
-    <Button
-        android:id="@+id/showNotificationBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="75dp"
-        android:layout_marginLeft="75dp"
-        android:layout_marginTop="628dp"
-        android:layout_marginEnd="248dp"
-        android:layout_marginRight="248dp"
-        android:layout_marginBottom="55dp"
-        android:background="@drawable/style_button"
-        android:text="@string/notify"
-        android:textColor="#100808"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.941"
-        tools:textSize="18sp"
-        tools:textStyle="bold" />
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".map" />
+        <Button
+            android:id="@+id/add_bump2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="284dp"
+            android:layout_marginLeft="284dp"
+            android:layout_marginTop="539dp"
+            android:layout_marginEnd="39dp"
+            android:layout_marginRight="39dp"
+            android:layout_marginBottom="120dp"
+            android:background="@drawable/style_button"
+            android:text="@string/add"
+            android:textColor="#100808"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.937"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.941"
+            tools:textSize="18sp"
+            tools:textStyle="bold" />
 
-    <Button
-        android:id="@+id/add_bump2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="272dp"
-        android:layout_marginLeft="272dp"
-        android:layout_marginTop="636dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginRight="51dp"
-        android:layout_marginBottom="47dp"
-        android:background="@drawable/style_button"
-        android:text="@string/add"
-        android:textColor="#100808"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.941"
-        tools:textSize="18sp"
-        tools:textStyle="bold" />
-
-    <Button
+        <Button
         android:id="@+id/but_logout_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -190,27 +188,27 @@
         android:layout_marginBottom="139dp"
         android:text="@string/_000_0_miles_hour" />
 
-    <ToggleButton
-        android:id="@+id/map_deactive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="147dp"
-        android:layout_marginLeft="147dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="176dp"
-        android:layout_marginRight="176dp"
-        android:layout_marginBottom="667dp"
-        android:background="@drawable/style_button"
-        android:text="@string/deactivate"
-        android:textOff="@string/deactivate"
-        android:textOn="@string/activate" />
+        <ToggleButton
+            android:id="@+id/map_deactive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="289dp"
+            android:layout_marginLeft="289dp"
+            android:layout_marginTop="224dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginRight="34dp"
+            android:layout_marginBottom="435dp"
+            android:background="@drawable/style_button"
+            android:text="@string/deactivate"
+            android:textOff="@string/deactivate"
+            android:textOn="@string/activate" />
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

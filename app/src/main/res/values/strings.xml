@@ -144,6 +144,8 @@
     <string name="edit_profile_edit">Edit Profile</string>
     <string name="user_profile_P">User Profile</string>
     <string name="name_reg">Name</string>
+    <string name="add_test_map">Add</string>
+    <string name="active_test_map">Active</string>
 
 
 </resources>

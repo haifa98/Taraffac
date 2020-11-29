@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
@@ -84,6 +85,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button profile;
     Button log;
     Button add;
+    //FloatingActionButton add;
     Button notify;
     ToggleButton active;
 
@@ -108,6 +110,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     StorageReference storageReference;
     FirebaseUser  firebaseUser;
     public String voiceType ="Voice command";
+    double f,d;
 
     /////
 
@@ -126,7 +129,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         setContentView(R.layout.activity_map);
         profile = findViewById(R.id.but_pofile_map);
         log = findViewById(R.id.but_logout_map);
-        add = (Button) findViewById(R.id.add_bump2);
+        add =  findViewById(R.id.add_bump2);
         notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
         ////////////Interface_Menu ///////////
@@ -217,10 +220,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 assert documentSnapshot != null;
                 CheckAddingType= documentSnapshot.getString("addingType");
                 Toast.makeText(map.this, CheckAddingType, Toast.LENGTH_SHORT).show();
-                if (CheckAddingType.equals(voiceType) ){
+             /*  if (CheckAddingType.equals(voiceType) ){
                    ;
                 }else{
-                   }
+                   }*/
 
             }
         });
@@ -590,9 +593,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
                         double  x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
                         if(x<0.150){
-                            // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
 
-                        Alertt( bump_lat_not , bump_long_not, bump_type,  bump_size);
+                            // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
+                            if(d!=bump_lat_not || f!=bump_long_not){
+                                Alertt( bump_lat_not , bump_long_not, bump_type,  bump_size);
+                                d=bump_lat_not;
+                                f=bump_long_not;
+                            }
                         }
 
                     }
