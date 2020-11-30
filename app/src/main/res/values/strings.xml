@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">Taraffac</string>
     <string name="REGISTER_main" translatable="false">REGISTER</string>
     <string name="LOG_IN_main" translatable="false">LOG IN</string>
+
     <string name="desc">Image</string>
     <string name="desc_back">Image</string>
     <string name="tatil_login">LOG IN </string>
@@ -136,6 +137,7 @@
     <string name="navi_o">Open navigation drawer</string>
     <string name="navi_c">Close navigation drawer</string>
     <string name="email_in_register">Email</string>
+    <string name="navi"> toolbar</string>
     <string name="edit_profile_profile">Edit Profile</string>
     <string name="adding_type_in_profile">Adding type</string>
     <string name="email_in_ligin">Email</string>

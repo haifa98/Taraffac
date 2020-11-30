@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bangers"
         android:text="TARAFFAC"
-        android:textSize="24sp" />
+        android:textSize="23sp" />
 
 
 </LinearLayout>

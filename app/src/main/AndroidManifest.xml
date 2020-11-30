@@ -38,7 +38,13 @@
 
         <activity
             android:name=".map"
-            android:label="@string/title_activity_map" />
+            android:label="@string/title_activity_map" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".edit_speed_bump_msg" />
         <activity android:name=".edit_profile" />
         <activity android:name=".profile" />
@@ -56,13 +62,7 @@
         <activity android:name=".delete_msg" />
         <activity android:name=".delete" />
         <activity android:name=".register" />
-        <activity android:name=".login">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+        <activity android:name=".login"/>
 
         <activity android:name=".MainActivity" />
 

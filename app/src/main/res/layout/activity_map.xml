@@ -7,42 +7,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".map"
+    android:layout_gravity="left"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#7A9CDED1"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/menu_24"
+        android:id="@+id/toolbar"/>
+</LinearLayout>
+
+
+
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/nav_view"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
-        android:layout_gravity="start">
-
-
-        <Button
-            android:id="@+id/showNotificationBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="2dp"
-            android:layout_marginStart="75dp"
-            android:layout_marginLeft="75dp"
-            android:layout_marginTop="628dp"
-            android:layout_marginEnd="248dp"
-            android:layout_marginRight="248dp"
-            android:layout_marginBottom="55dp"
-            android:background="@drawable/style_button"
-            android:text="@string/notify"
-            android:textColor="#100808"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.937"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.941"
-            tools:textSize="18sp"
-            tools:textStyle="bold" />
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true">
 
 
     </com.google.android.material.navigation.NavigationView>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -86,89 +89,10 @@
             tools:textSize="18sp"
             tools:textStyle="bold" />
 
-        <Button
-        android:id="@+id/but_logout_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="292dp"
-        android:layout_marginLeft="292dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
-        android:layout_marginBottom="666dp"
-        android:background="@drawable/style_button"
-        android:onClick="log_out"
-        android:text="@string/log_out"
-        android:textColor="#100808"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
-        tools:textSize="18sp"
-        tools:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView54"
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="-65dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginBottom="655dp"
-        android:background="#ABB9C5"
-        android:text=""
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.059" />
 
-    <Button
-        android:id="@+id/but_pofile_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="17dp"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="304dp"
-        android:layout_marginRight="304dp"
-        android:layout_marginBottom="667dp"
-        android:background="@drawable/style_button"
-        android:onClick="go_to_profile"
-        android:text="@string/profile"
-        android:textColor="#100808"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.026"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
-        tools:textSize="18sp"
-        tools:textStyle="bold" />
+
+
 
     <TextView
         android:id="@+id/txtCurrentSpeed"
@@ -210,5 +134,6 @@
             android:textOn="@string/activate" />
 
     </RelativeLayout>
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

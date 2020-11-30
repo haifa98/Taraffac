@@ -21,13 +21,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
+import  androidx.appcompat.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -37,8 +31,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -51,17 +44,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.DecimalFormat;
@@ -111,6 +107,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     FirebaseUser  firebaseUser;
     public String voiceType ="Voice command";
     double f,d;
+    //public Toolbar toolbar;
+    ActionBarDrawerToggle toggle;
 
     /////
 
@@ -127,23 +125,32 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        profile = findViewById(R.id.but_pofile_map);
-        log = findViewById(R.id.but_logout_map);
+      //  profile = findViewById(R.id.but_pofile_map);
+        //log = findViewById(R.id.but_logout_map);
         add =  findViewById(R.id.add_bump2);
-        notify = (Button) findViewById(R.id.showNotificationBtn);
+        //notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
         ////////////Interface_Menu ///////////
         //---------HOOKS-----------------
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
+       androidx.appcompat.widget.Toolbar toolbar= findViewById(R.id.toolbar);//    <string name="navi"> toolbar</string>
+        setSupporActionBar(toolbar);
+
+        /////////////////////// tool bar//////////////
+
+
         //     navigation Drawer menu
         navigationView.bringToFront();
-       // ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar, R.string.navi_o, R.string.navi_c);
-       // drawerLayout.addDrawerListener(toggle);
-       // toggle.syncState();
+//drawerLayout,Toolbar=toolbar, R.string.navi_o,R.string.navi_c);
+      toggle= new ActionBarDrawerToggle(this,drawerLayout,toolbar,  R.string.navi_o,R.string.navi_c);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
         //     navigation Drawer menu
+
 
 
 
@@ -171,13 +178,15 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
         SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
         active.setChecked(sharedPrefs.getBoolean("active", state));
-
+/*
         notify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Notify();
             }
         });
+
+ */
         // activate and deactivate
         active.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,6 +240,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         /////////////////////////////////////////////////////////////
 
     }// end on create
+
+    private void setSupporActionBar(Toolbar toolbar) {
+
+    }
     //     navigation Drawer menu
 
     @Override
