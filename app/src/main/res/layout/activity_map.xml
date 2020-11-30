@@ -62,76 +62,43 @@
 
         <Button
             android:id="@+id/add_bump2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_width="71dp"
+            android:layout_height="64dp"
+
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="284dp"
-            android:layout_marginLeft="284dp"
+            android:layout_marginLeft="2dp"
             android:layout_marginTop="539dp"
-            android:layout_marginEnd="39dp"
-            android:layout_marginRight="39dp"
-            android:layout_marginBottom="120dp"
-            android:background="@drawable/style_button"
-            android:text="@string/add"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="90dp"
+            android:paddingRight="30dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ic_baseline_add_24"
             android:textColor="#100808"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.937"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.941"
-            tools:textSize="18sp"
             tools:textStyle="bold" />
 
 
-
-
-
-
-    <TextView
-        android:id="@+id/txtCurrentSpeed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="147dp"
-        android:layout_marginLeft="147dp"
-        android:layout_marginTop="509dp"
-        android:layout_marginEnd="139dp"
-        android:layout_marginRight="139dp"
-        android:layout_marginBottom="139dp"
-        android:text="@string/_000_0_miles_hour" />
-
         <ToggleButton
             android:id="@+id/map_deactive"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
+            android:layout_width="71dp"
+            android:layout_height="64dp"
+
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="289dp"
-            android:layout_marginLeft="289dp"
-            android:layout_marginTop="224dp"
-            android:layout_marginEnd="34dp"
-            android:layout_marginRight="34dp"
-            android:layout_marginBottom="435dp"
+            android:layout_marginStart="284dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="500dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="90dp"
             android:background="@drawable/style_button"
+            android:drawableStart="@drawable/selector1"
+            android:drawableLeft="@drawable/selector1"
             android:text="@string/deactivate"
+            android:textColor="#1C1515"
             android:textOff="@string/deactivate"
-            android:textOn="@string/activate" />
+            android:textOn="@string/activate"
+            android:textSize="7dp" />
 
     </RelativeLayout>
 

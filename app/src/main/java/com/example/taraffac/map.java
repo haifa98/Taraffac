@@ -130,6 +130,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         add =  findViewById(R.id.add_bump2);
         //notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
+
         ////////////Interface_Menu ///////////
         //---------HOOKS-----------------
         drawerLayout=findViewById(R.id.drawer_layout);
