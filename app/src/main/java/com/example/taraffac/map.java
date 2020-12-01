@@ -109,6 +109,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double f,d;
     //public Toolbar toolbar;
     ActionBarDrawerToggle toggle;
+    String bump_key,bump_loc;
+    int deleteCount;
 
     /////
 
@@ -591,7 +593,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 List<SpeedBump> bumps = new ArrayList<>();
                 bumps.clear();
                 for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
-
+                    bump_loc=locationSnapshot.getKey();
                     for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
                         bump = bumpSnapshot.getValue(SpeedBump.class);
                         bumps.add(bump);
@@ -600,6 +602,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         double bump_long_not = bump.getLongitude();
                         String bump_type = bump.getType();
                         String bump_size = bump.getSize();
+                        deleteCount = bump.getDeleteOption();
+                        bump_key = bumpSnapshot.getKey();
 
                        // LatLng latLng = new LatLng(bump_lat, bump_long);
                         String bump_info = " type : " + bump_type + " size : " + bump_size;
@@ -607,7 +611,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
                         double  x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
                         if(x<0.150){
-
                             // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
                             if(d!=bump_lat_not || f!=bump_long_not){
                                 Alertt( bump_lat_not , bump_long_not, bump_type,  bump_size);
@@ -627,7 +630,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     }
 
-    private void Alertt(final double lat, final double lon, String type, String size) {
+    private void Alertt(final double lat, final double lon, final String type, final String size) {
 
         AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
 // Setting Dialog Title
@@ -640,6 +643,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog
                         Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
+                        i.putExtra("key",bump_key);
+                        i.putExtra("loc",bump_loc);
+                        i.putExtra("type",type);
+                        i.putExtra("size",size);
+                        i.putExtra("latitude",lat);
+                        i.putExtra("longitude",lon);
+                        i.putExtra("deleteCount",deleteCount);
                         startActivity(i);
                     }});
 // Setting Negative "NO" Btn

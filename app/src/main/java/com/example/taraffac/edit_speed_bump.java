@@ -29,6 +29,8 @@ public class edit_speed_bump extends AppCompatActivity {
     DatabaseReference dataBympUpdate;
     double latitude;
     double longitude;
+    String bump_id,bump_loc ;
+    int deleteCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +48,17 @@ public class edit_speed_bump extends AppCompatActivity {
 
         RadioGroupTypeUpdate= findViewById(R.id.update_type);
         RadioGroupSizeUpdate= findViewById(R.id.update_size);
-        dataBympUpdate = FirebaseDatabase.getInstance().getReference("SpeedBump").child("test");
+
+        dataBympUpdate = FirebaseDatabase.getInstance().getReference("SpeedBump");//.child(bump_id);
 
         // show the retrieve data
         TypeValue= getIntent().getExtras().getString("type");
         SizeValue =getIntent().getExtras().getString("size");
+        bump_id =getIntent().getExtras().getString("key");
+        bump_loc =getIntent().getExtras().getString("loc");
+        latitude =getIntent().getExtras().getDouble("latitude");
+        longitude=getIntent().getExtras().getDouble("longitude");
+        deleteCount=getIntent().getExtras().getInt("deleteCount");
 
         if (TypeValue.equals(Cushion) ) {
 
@@ -73,7 +81,17 @@ public class edit_speed_bump extends AppCompatActivity {
         But_Delete_bump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataBympUpdate.removeValue();
+                if(deleteCount>=3){
+                dataBympUpdate.child(bump_loc).child(bump_id).removeValue();
+                }else{
+                    String TypeText,SizeText;
+                    TypeText=checkType();
+                    SizeText=checkSize();
+                    deleteCount++;
+                    SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,deleteCount);
+                    dataBympUpdate.child(bump_loc).child(bump_id).setValue(bump);
+                }
+                onBackPressed();
             }
         });
 
@@ -102,10 +120,10 @@ public class edit_speed_bump extends AppCompatActivity {
 
 // add in database
 
-            String id = dataBympUpdate.push().getKey();
+           // String id = dataBympUpdate.push().getKey();
 
-            SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,0);
-            dataBympUpdate.setValue(bump);
+            SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,deleteCount);
+            dataBympUpdate.child(bump_loc).child(bump_id).setValue(bump);
 
             Toast t = Toast.makeText(this, " The Update was successful", Toast.LENGTH_SHORT);
             t.setGravity(Gravity.TOP, 0, 90);
@@ -117,10 +135,10 @@ public class edit_speed_bump extends AppCompatActivity {
 
 
         }
-        Intent log = new Intent(this,map.class);
-        startActivity(log);
+        //Intent log = new Intent(this,map.class);
+        //startActivity(log);
 
-
+        onBackPressed();
     }// Update Speed Bump
 
 

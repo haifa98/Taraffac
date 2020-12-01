@@ -50,6 +50,43 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+       <!-- <Button
+
+            android:layout_width="125dp"
+            android:layout_height="68dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="235dp"
+            android:layout_marginLeft="235dp"
+            android:layout_marginTop="96dp"
+            android:layout_marginEnd="51dp"
+            android:layout_marginRight="51dp"
+            android:layout_marginBottom="495dp"
+            android:text="@string/add_test_map"
+            android:textSize="20sp" />
+
+        <ToggleButton
+
+            android:layout_width="125dp"
+            android:layout_height="68dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="235dp"
+            android:layout_marginLeft="235dp"
+            android:layout_marginTop="196dp"
+            android:layout_marginEnd="51dp"
+            android:layout_marginRight="51dp"
+            android:layout_marginBottom="395dp"
+            android:text="@string/active_test_map"
+            android:textSize="20sp" />-->
 
 
         <fragment

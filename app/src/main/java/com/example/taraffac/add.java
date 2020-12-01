@@ -265,6 +265,7 @@ private void getSpeechInput() {
 // return to map page
             Intent log = new Intent(this,map.class);
             log.putExtra("state", true);
+            //onBackPressed();
             startActivity(log);
 
         }
