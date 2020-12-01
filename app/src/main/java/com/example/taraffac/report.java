@@ -75,14 +75,15 @@ public class report extends Activity {
             @Override
             public void onClick(View v) {
 
-                lat = Double.parseDouble(getIntent().getStringExtra("latitude"));
-                longitude = Double.parseDouble(getIntent().getStringExtra("longitude"));
+                lat = getIntent().getExtras().getDouble("latitude");//Double.parseDouble()
+                longitude = getIntent().getExtras().getDouble("longitude");//Double.parseDouble(getIntent().getStringExtra("longitude"));
                // lat= bump.latitude;
                // longitude= bump.longitude;
 
                 coord = ""+lat+ ","+longitude;
 
                 senEmail();
+                onBackPressed();
             }
         });
 
