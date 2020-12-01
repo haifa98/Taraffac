@@ -409,12 +409,17 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             public void onSuccess(Location location) {
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
+                double  x =  distance(loc_lat,loc_long,d,f);
+                if(x>0.010){
                 // send info to add class
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
                 intent.putExtra("userType", CheckAddingType);
                 startActivity(intent);
+                }else{
+                    Toast.makeText(map.this, "The bump is already exisit", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
