@@ -106,7 +106,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     StorageReference storageReference;
     FirebaseUser  firebaseUser;
     public String voiceType ="Voice command";
-    double f,d;
+    double notify_long,notify_lat,add_lat,add_long;
     //public Toolbar toolbar;
     ActionBarDrawerToggle toggle;
     String bump_key,bump_loc;
@@ -409,16 +409,18 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             public void onSuccess(Location location) {
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
-                double  x =  distance(loc_lat,loc_long,d,f);
+                double  x =  distance(loc_lat,loc_long,notify_lat,notify_long);
                 if(x>0.010){
                 // send info to add class
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
                 intent.putExtra("Longitude", loc_long);
                 intent.putExtra("userType", CheckAddingType);
+                    add_lat=loc_lat;
+                    add_long=loc_long;
                 startActivity(intent);
                 }else{
-                    Toast.makeText(map.this, "The bump is already exisit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(map.this, "The bump is already exist", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -617,11 +619,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         double  x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
                         if(x<0.150){
                             // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
-                            if(d!=bump_lat_not || f!=bump_long_not){
+                            if(add_lat!=bump_lat_not & add_long!=bump_long_not ){
+
+                             if( notify_lat!=bump_lat_not || notify_long!=bump_long_not){
                                 Alertt( bump_lat_not , bump_long_not, bump_type,  bump_size);
-                                d=bump_lat_not;
-                                f=bump_long_not;
-                            }
+                                 notify_lat=bump_lat_not;
+                                 notify_long=bump_long_not;
+                            }}
                         }
 
                     }

@@ -263,10 +263,10 @@ private void getSpeechInput() {
             t.setGravity(Gravity.TOP, 0, 90);
             t.show();
 // return to map page
-            Intent log = new Intent(this,map.class);
-            log.putExtra("state", true);
-            //onBackPressed();
-            startActivity(log);
+            //Intent log = new Intent(this,map.class);
+           // log.putExtra("state", true);
+            onBackPressed();
+            //startActivity(log);
 
         }
     public void back_map1(View view) {
