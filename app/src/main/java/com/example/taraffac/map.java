@@ -113,8 +113,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double notify_long,notify_lat,add_lat,add_long;
     //public Toolbar toolbar;
     ActionBarDrawerToggle toggle;
-    String bump_key, bump_locKey;
-    DataSnapshot bump_loc;
+    String bump_key, bump_locKey, bump_loc;
 
     int deleteCount;
 
@@ -541,10 +540,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         String sub2=  new DecimalFormat("00.00").format(not_long);
         sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
 
-        DatabaseReference zonesRef = FirebaseDatabase.getInstance().getReference("SpeSpeedBumped");
-       DatabaseReference zone1Ref = zonesRef.child(sub);
-
-
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -556,7 +551,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                     bump_locKey= locationSnapshot.getKey();
                    // bump_loc = locationSnapshot;
 
-                    if (locationSnapshot.getKey() == sub) {
+                    if (bump_locKey.equals(sub)) {
                         for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
                             bump = bumpSnapshot.getValue(SpeedBump.class);
                             bumps.add(bump);
@@ -567,9 +562,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                             String bump_size = bump.getSize();
                             deleteCount = bump.getDeleteOption();
                             bump_key = bumpSnapshot.getKey();
+                            bump_loc= locationSnapshot.getKey();
 
                             // LatLng latLng = new LatLng(bump_lat, bump_long);
-                            String bump_info = " type : " + bump_type + " size : " + bump_size;
+
 // set height & width - apply style
 
                             double x = distance(bump_lat_not, bump_long_not, not_lat, not_long);
@@ -598,7 +594,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 // Setting Dialog Title
         alertDialog2.setTitle("Speed bump info");
 // Setting Dialog Message
-        alertDialog2.setMessage("Type: "+type+"Size: "+size);
+        alertDialog2.setMessage("Type: "+type+"  Size: "+size);
 // Setting Positive "Yes" Btn
         alertDialog2.setPositiveButton("Edit",
                 new DialogInterface.OnClickListener() {
@@ -606,7 +602,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         // Write your code here to execute after dialog
                         Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
                         i.putExtra("key",bump_key);
-                        i.putExtra("loc",bump_locKey);
+                        i.putExtra("loc",bump_loc);
                         i.putExtra("type",type);
                         i.putExtra("size",size);
                         i.putExtra("latitude",lat);
