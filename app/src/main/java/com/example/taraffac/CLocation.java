@@ -4,7 +4,7 @@ import android.location.Location;
 
 public class CLocation extends Location {
 
-    private boolean bUseMetricUnits = false;
+    private boolean bUseMetricUnits = true;
 
     public CLocation(Location location) {
         this(location, true);

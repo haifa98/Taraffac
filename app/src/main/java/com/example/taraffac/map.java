@@ -249,7 +249,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         this.updateSpeed(null);
-
+/*
         CheckBox chkUseMetricUntis = (CheckBox) this.findViewById(R.id.chkMetricUnits);
         chkUseMetricUntis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -260,6 +260,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
 
+
+ */
 
     }// end on create
 
@@ -454,7 +456,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
         if(location != null)
         {
-            location.setUseMetricunits(this.useMetricUnits());
+            location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
         }
 
@@ -463,28 +465,30 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-        String strUnits = "miles/hour";
-        if(this.useMetricUnits())
-        {
-            strUnits = "meters/second";
-        }
+       // String strUnits = "miles/hour";
+       // if(this.useMetricUnits())
+      //  {
+        String strUnits = "meters/second";
+      //  }
 
         TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
         txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
     }
 
-    private boolean useMetricUnits() {
+   /* private boolean useMetricUnits() {
         // TODO Auto-generated method stub
         CheckBox chkUseMetricUnits = (CheckBox) this.findViewById(R.id.chkMetricUnits);
         return chkUseMetricUnits.isChecked();
     }
 
+
+    */
     @Override
     public void onLocationChanged(@NonNull Location location) {
         // TODO Auto-generated method stub
         if(location != null)
         {
-            CLocation myLocation = new CLocation(location, this.useMetricUnits());
+            CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation);
         }
     }
