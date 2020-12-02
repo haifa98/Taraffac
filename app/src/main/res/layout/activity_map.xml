@@ -30,6 +30,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/menu_24"
         android:id="@+id/toolbar"/>
+
+
 </LinearLayout>
 
 
@@ -87,6 +89,7 @@
             android:layout_height="64dp"
 
             android:layout_alignParentRight="true"
+
             android:layout_marginStart="284dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="500dp"
@@ -100,6 +103,44 @@
             android:textOff="@string/deactivate"
             android:textOn="@string/activate"
             android:textSize="7dp" />
+
+        <CheckBox
+            android:id="@+id/chkMetricUnits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+
+            android:layout_marginBottom="100dp"
+            android:layout_marginTop="629dp"
+            android:layout_marginRight="98dp"
+
+            android:text="Use metric units?"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            />
+
+
+        <TextView
+            android:id="@+id/txtCurrentSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+
+            android:layout_marginBottom="140dp"
+            android:layout_marginTop="629dp"
+            android:layout_marginRight="110dp"
+
+            android:text="000.0 miles/hour"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </RelativeLayout>
 

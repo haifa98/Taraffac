@@ -2,6 +2,7 @@ package com.example.taraffac;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,8 @@ import android.speech.RecognizerIntent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -62,6 +66,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -69,7 +74,7 @@ import java.util.Objects;
 //speedometer imports
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
+public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener, IBaseGpsListener {
     ////////////Interface_Menu ///////////
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -88,7 +93,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     LatLng latLng;
-    TextView txtCurrentSpeed;
     private Geocoder geocoder;
     DatabaseReference ref, refV;
     FirebaseUser user;
@@ -130,7 +134,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
       //  profile = findViewById(R.id.but_pofile_map);
         //log = findViewById(R.id.but_logout_map);
         add =  findViewById(R.id.add_bump2);
-        //notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
 
         ////////////Interface_Menu ///////////
@@ -181,15 +184,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
         SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
         active.setChecked(sharedPrefs.getBoolean("active", state));
-/*
-        notify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Notify();
-            }
-        });
 
- */
+
         // activate and deactivate
         active.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,8 +235,31 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
             }
         });
-        
-        /////////////////////////////////////////////////////////////
+        //speedometer
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        this.updateSpeed(null);
+
+        CheckBox chkUseMetricUntis = (CheckBox) this.findViewById(R.id.chkMetricUnits);
+        chkUseMetricUntis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                map.this.updateSpeed(null);
+            }
+        });
+
 
     }// end on create
 
@@ -429,91 +448,69 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         // startActivity(a);
     }
 
-    //notification code start
-  /*  public void sendMessage() {
+    //speedometer code
+    private void updateSpeed(CLocation location) {
+        // TODO Auto-generated method stub
+        float nCurrentSpeed = 0;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        } // get user location
+        if(location != null)
+        {
+            location.setUseMetricunits(this.useMetricUnits());
+            nCurrentSpeed = location.getSpeed();
+        }
 
-        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
-        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                double user_lat = location.getLatitude();
-                double user_long = location.getLongitude();
+        Formatter fmt = new Formatter(new StringBuilder());
+        fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
+        String strCurrentSpeed = fmt.toString();
+        strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-                String sub1 = new DecimalFormat("00.00").format(user_lat);
-                String sub2 = new DecimalFormat("00.00").format(user_long);
-                String userLoc1km = sub1.replace('.', '-') + "_" + sub2.replace('.', '-');
+        String strUnits = "miles/hour";
+        if(this.useMetricUnits())
+        {
+            strUnits = "meters/second";
+        }
 
-                double newlat = Double.parseDouble(new DecimalFormat("00.000").format(user_lat));
-
-                double newlng = Double.parseDouble(new DecimalFormat("00.000").format(user_long));
-
-                txtCurrentSpeed.setText(userLoc1km + newlat + newlng);
-                // checkforspeedbump(userLoc1km,newlat,newlng);
-
-            }
-        });
-
-    }  */
-
-  /*  public void checkforspeedbump(final String usercoordinates1km, final double userlat100m, final double userlong100m) {
-
-
-        FirebaseDatabase.getInstance().getReference("SpeedBump").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(usercoordinates1km)) {
-                    // run some code
-
-                    for (DataSnapshot snapshot : dataSnapshot.child(usercoordinates1km).getChildren()) {
-                        sb = snapshot.getValue(SpeedBump.class);
-
-                        if (sb.getLatitude() == userlat100m && sb.getLongitude() == userlong100m) {
-                            // Do something in response to button
-                            builder.setTitle("SLOW DOWN SPEED BUMP AHEAD");
-                            builder.setMessage("Type: " + sb.getType() + "/n" + "Size: " + sb.getSize());
-                            builder.show();
-                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //handle databaseError
-            }
-        });
-    }  */
-
-   /* public void go_to_edit(DialogInterface.OnClickListener view) {
-        Intent go_register = new Intent(this, edit_speed_bump.class);
-        startActivity(go_register);
+        TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
+        txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
     }
 
-    public void go_to_report(DialogInterface.OnClickListener view) {
-        Intent go_register = new Intent(this, report.class);
-        startActivity(go_register);
+    private boolean useMetricUnits() {
+        // TODO Auto-generated method stub
+        CheckBox chkUseMetricUnits = (CheckBox) this.findViewById(R.id.chkMetricUnits);
+        return chkUseMetricUnits.isChecked();
     }
-    */
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        //   if (checkButton()) {
-        // sendMessage();
-        //   }
+        // TODO Auto-generated method stub
+        if(location != null)
+        {
+            CLocation myLocation = new CLocation(location, this.useMetricUnits());
+            this.updateSpeed(myLocation);
+        }
     }
 
-    //speedometer code
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onGpsStatusChanged(int event) {
+
+    }
+
+    //end speedometer code
 
     ////// Voice command code
 
