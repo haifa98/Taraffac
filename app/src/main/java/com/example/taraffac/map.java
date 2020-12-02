@@ -113,7 +113,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double notify_long,notify_lat,add_lat,add_long;
     //public Toolbar toolbar;
     ActionBarDrawerToggle toggle;
-    String bump_key,bump_loc;
+    String bump_key, bump_locKey;
+    DataSnapshot bump_loc;
+
     int deleteCount;
 
     /////
@@ -206,13 +208,12 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         });
 
 
-
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 if(active.isChecked()){ Notify();}
-                handler.postDelayed(this, 5000);
+                handler.postDelayed(this, 3000);
             }
         };
 
@@ -353,7 +354,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         }
     }
-
 
     public void go_to_profile(View v) {
         Intent profile = new Intent(this, profile.class);
@@ -514,57 +514,12 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     ////// Voice command code
 
-    private void getSpeechInput() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 10);
-        } else {
-            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case 10:
-                if (resultCode == RESULT_OK && data != null) {
-                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    assert result != null;
-
-                    if (result.contains("add")) {
-                        add();
-                    }
-                    break;
-                }
-        }
-    }
 
 
     public void Notify() {
-   /*
-
-        zone1Ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<SpeedBump> bumps = new ArrayList<>();
-                bumps.clear();
-                for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
-                        SpeedBump bump = locationSnapshot.getValue(SpeedBump.class);
-                        bumps.add(bump);
-
-                        double bump_lat_not = bump.getLatitude();
-                        double bump_long_not = bump.getLongitude();
-                        String bump_type_not  = bump.getType();
-                        String bump_size_not  = bump.getSize();  */
 
         // compare
-        double[] lat = {10.001, 24.801, 10.040, 10.006, 23.007, 34.004};
-        double[] lon = {33.020, 46.702, 23.050, 56.006, 22.006, 12.005};
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -587,7 +542,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
 
         DatabaseReference zonesRef = FirebaseDatabase.getInstance().getReference("SpeSpeedBumped");
-        DatabaseReference zone1Ref = zonesRef.child(sub);
+       DatabaseReference zone1Ref = zonesRef.child(sub);
 
 
 
@@ -595,36 +550,37 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<SpeedBump> bumps = new ArrayList<>();
+
                 bumps.clear();
                 for (DataSnapshot locationSnapshot : snapshot.getChildren()) {
-                    bump_loc=locationSnapshot.getKey();
-                    for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
-                        bump = bumpSnapshot.getValue(SpeedBump.class);
-                        bumps.add(bump);
+                    bump_locKey= locationSnapshot.getKey();
+                   // bump_loc = locationSnapshot;
 
-                        double bump_lat_not = bump.getLatitude();
-                        double bump_long_not = bump.getLongitude();
-                        String bump_type = bump.getType();
-                        String bump_size = bump.getSize();
-                        deleteCount = bump.getDeleteOption();
-                        bump_key = bumpSnapshot.getKey();
+                    if (locationSnapshot.getKey() == sub) {
+                        for (DataSnapshot bumpSnapshot : locationSnapshot.getChildren()) {
+                            bump = bumpSnapshot.getValue(SpeedBump.class);
+                            bumps.add(bump);
 
-                       // LatLng latLng = new LatLng(bump_lat, bump_long);
-                        String bump_info = " type : " + bump_type + " size : " + bump_size;
+                            double bump_lat_not = bump.getLatitude();
+                            double bump_long_not = bump.getLongitude();
+                            String bump_type = bump.getType();
+                            String bump_size = bump.getSize();
+                            deleteCount = bump.getDeleteOption();
+                            bump_key = bumpSnapshot.getKey();
+
+                            // LatLng latLng = new LatLng(bump_lat, bump_long);
+                            String bump_info = " type : " + bump_type + " size : " + bump_size;
 // set height & width - apply style
 
-                        double  x =  distance(bump_lat_not,bump_long_not,not_lat,not_long);
-                        if(x<0.150){
-                            // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
-                            if(add_lat!=bump_lat_not & add_long!=bump_long_not ){
+                            double x = distance(bump_lat_not, bump_long_not, not_lat, not_long);
+                            if (x < 0.150) {
+                                // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
+                                if (add_lat != bump_lat_not & add_long != bump_long_not) {
 
-                             if( notify_lat!=bump_lat_not || notify_long!=bump_long_not){
-                                Alertt( bump_lat_not , bump_long_not, bump_type,  bump_size);
-                                 notify_lat=bump_lat_not;
-                                 notify_long=bump_long_not;
-                            }}
-                        }
-
+                                    if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
+                                        Alertt(bump_lat_not, bump_long_not, bump_type, bump_size);
+                                        notify_lat = bump_lat_not;
+                                        notify_long = bump_long_not; } } } }
                     }
                 }
             }
@@ -650,12 +606,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         // Write your code here to execute after dialog
                         Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
                         i.putExtra("key",bump_key);
-                        i.putExtra("loc",bump_loc);
+                        i.putExtra("loc",bump_locKey);
                         i.putExtra("type",type);
                         i.putExtra("size",size);
                         i.putExtra("latitude",lat);
                         i.putExtra("longitude",lon);
                         i.putExtra("deleteCount",deleteCount);
+                        i.putExtra("userType", CheckAddingType);
                         startActivity(i);
                     }});
 // Setting Negative "NO" Btn
