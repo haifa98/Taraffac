@@ -23,10 +23,6 @@
     <string name="hint2_register">Password</string>
     <string name="hint3_register">Confirm_Password</string>
     <string name="tatil_register">REGISTER </string>
-    <string name="star1_register"> *</string>
-    <string name="star2_register">*</string>
-    <string name="star3_register">*</string>
-    <string name="star4_register">*</string>
     <string name="desc_register">Image</string>
     <string name="profile">Profile</string>
     <string name="deactivate">Deactivated</string>
@@ -65,11 +61,13 @@
 
     <string name="editing">The editing was successful</string>
     <string name="report_main">Report</string>
-    <string name="damaged_bump">damaged bump</string>
-    <string name="other">other</string>
-    <string name="violating_the_location">Violating the location</string>
-    <string name="violating_the_standard">Violating the standard</string>
-    <string name="report_speedbump">Report speed bump :</string>
+    <string name="damaged_bump">The speed bump is damaged (maintenance is required) </string>
+    <string name="other">Other</string>
+    <string name="violating_the_location">The speed bump location imposes significant risk/discomfort</string>
+    <string name="violating_the_standard">The speed bump size/type imposes significant risk/discomfort</string>
+    <string name="The">The speed bump imposes unnecessary/unacceptable risk</string>
+
+    <string name="report_speedbump">Report speed bump</string>
     <string name="why_do_you_want_to_report_this_speedbump">Why do you want to report this speed bump ?</string>
     <string name="the_report_was_sent_successfully">The report was sent successfully</string>
     <string name="profile_img">Image</string>

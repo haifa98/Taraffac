@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="590dp"
+    android:layout_alignParentBottom="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:background="#ffffff"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/logout_rl"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_logout"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/logout_icon"/>
+                <TextView
+                    android:layout_below="@+id/iv_logout"
+                    android:id="@+id/tv_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="Logout"
+                    android:layout_marginTop="3dp"
+                    android:layout_centerHorizontal="true"
+                    tools:ignore="DuplicateIds" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/provile_rl"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_marginRight="30dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/profilee"
+                    android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:layout_below="@+id/iv_profile"
+                    android:id="@+id/tv_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="profile"
+                    android:layout_marginTop="3dp"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/activite_rl"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp">
+                <ImageView
+                    android:id="@+id/iv_activite"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerHorizontal="true"
+                    tools:ignore="DuplicateIds"
+                    android:src="@drawable/power_off"/>
+                <TextView
+                    android:id="@+id/tv_activite"
+                    android:layout_below="@+id/iv_activite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="Activite"
+                    android:layout_marginTop="3dp"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/hom_rl"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_Home"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/home_icone"
+                    android:layout_centerHorizontal="true"/>
+                <TextView
+                    android:id="@+id/tv_Home"
+                    android:layout_below="@+id/iv_Home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:text="Home"
+                    android:layout_marginTop="3dp"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/coordinate_layout"
+        android:layout_centerHorizontal="true">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floating_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            app:borderWidth="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:src="@drawable/addd"/>
+
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

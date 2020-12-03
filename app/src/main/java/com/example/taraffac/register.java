@@ -1,9 +1,5 @@
 package com.example.taraffac;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,9 +7,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,14 +19,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +33,7 @@ public class register extends AppCompatActivity {
     //ImageView return_main2;
     Button go_register_to_home1,return_main2,go_login;
    // EditText name,email,pass ;
-    TextInputLayout name,email,pass ;
+    TextInputLayout name,email,pass,ConformPass ;
     //long maxid =0;
    // User user;
     FirebaseAuth fAuth;
@@ -56,18 +50,7 @@ public class register extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference().child("User") ;
 
-       /* myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists() )
-                    maxid = (snapshot.getChildrenCount());
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
 
         setContentView(R.layout.activity_register);
         return_main2= findViewById(R.id.butt_login_register);
@@ -76,6 +59,7 @@ public class register extends AppCompatActivity {
         name =  findViewById(R.id.NAME);
         email = findViewById(R.id.email_register);
         pass =  findViewById(R.id.password_register);
+        ConformPass=findViewById(R.id.Confirm_password_register);
 
         go_login= findViewById(R.id.butt_login_register);
 
@@ -104,7 +88,16 @@ public class register extends AppCompatActivity {
              final String Pass = String.valueOf(pass.getEditText().getText());//.getText().toString().trim();
               //amjad
                 final String Name = String.valueOf(name.getEditText().getText());//.getText().toString().trim();
-                //final String type = Display_Option;
+                final String ConformPass1 = String.valueOf(ConformPass.getEditText().getText());//.getText().toString().trim();
+                  final   String   emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+              //  String checkPassword =
+                       // "(?=.*[0-9])" +         //at least 1 digit
+                        //"(?=.*[a-z])" +         //at least 1 lower case letter
+                       // "(?=.*[A-Z])" +         //at least 1 upper case letter
+                      //  "(?=.*[a-zA-Z])";    //any letter
+                       // "(?=.*[@#$%^&+=])" +    //at least 1 special character
+                       // "(?=S+$)" +           //no white spaces
+                       // ".{6,}" +               //at least 6 characters;
 
                 //amjad
 
@@ -112,14 +105,22 @@ public class register extends AppCompatActivity {
                   email.setError("Email is Required");
                   return;
               }
-              if(TextUtils.isEmpty(Pass)){
+                if(!Email.matches(emailPattern)){
+                    email.setError("Invalid Email");
+                    return;
+                }
+              if(TextUtils.isEmpty(Pass)) {
                   pass.setError("Password is Required");
                   return;
               }
-              if(Pass.length() < 6){
-                  pass.setError("Password Must be 6 Characters");
-                  return;
+                  if(Pass.length() < 6){
+                      pass.setError("Password Must be 6 Characters");
+                      return;
               }
+                if(!ConformPass1.matches(Pass)){
+                    ConformPass.setError("Password not matches");
+                    return;
+                }
 
               fAuth.createUserWithEmailAndPassword(Email,Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                   @RequiresApi(api = Build.VERSION_CODES.KITKAT)

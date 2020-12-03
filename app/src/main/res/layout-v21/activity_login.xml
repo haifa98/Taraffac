@@ -84,7 +84,7 @@
                 android:onClick="go_to_home"
                 android:text="@string/LOG_IN_main"
                 android:background="#000"
-                android:textColor="#5C5A5A"
+                android:textColor="#000"
                 android:layout_marginTop="5dp"/>
             <Button
                 android:id="@+id/butt_register"

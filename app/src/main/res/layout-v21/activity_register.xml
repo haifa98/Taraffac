@@ -98,8 +98,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="#000"
-            android:text="@string/register_register"
-            android:textColor="#5C5A5A" />
+            android:textColor="#000"
+            android:text="@string/register_register" />
         <Button
             android:id="@+id/butt_login_register"
             android:layout_width="match_parent"

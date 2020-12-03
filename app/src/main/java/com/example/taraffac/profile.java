@@ -63,10 +63,9 @@ public class profile extends AppCompatActivity {
 
         fullName =findViewById(R.id.name_pro);
         Email= findViewById(R.id.email_pro);
-
-
-
         fStore =FirebaseFirestore.getInstance();
+        //////////////////////
+
       //  usedId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
         //retrev data ///
         final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());

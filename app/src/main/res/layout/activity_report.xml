@@ -1,185 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".report">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="254dp">
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/report_speedbump"
+        android:textSize="20sp"
+        android:fontFamily="@font/bungee"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.013" />
 
-        <TextView
-            android:id="@+id/textView25"
-            android:layout_width="wrap_content"
-            android:layout_height="44dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="95dp"
-            android:layout_marginLeft="95dp"
-            android:layout_marginTop="29dp"
-            android:layout_marginEnd="92dp"
-            android:layout_marginRight="92dp"
-            android:layout_marginBottom="80dp"
-            android:text="@string/report_speedbump"
-            android:textColor="#100808"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.721"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.109" />
+    <Button
+        android:layout_width="38dp"
+        android:layout_height="29dp"
+        android:background="@drawable/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024"
+        tools:layout_editor_absoluteY="3dp" />
 
-        <TextView
-            android:id="@+id/textView30"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="29dp"
-            android:layout_marginLeft="29dp"
-            android:layout_marginTop="177dp"
-            android:layout_marginEnd="19dp"
-            android:layout_marginRight="19dp"
-            android:layout_marginBottom="21dp"
-            android:gravity="center|center_vertical"
-            android:text="@string/why_do_you_want_to_report_this_speedbump"
-            android:textColor="#100808"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.656"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.223" />
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center|center_vertical"
+        android:text="@string/why_do_you_want_to_report_this_speedbump"
+        android:textColor="#100808"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.122" />
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <RadioGroup
+        android:id="@+id/report_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/style_button_regester"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="2dp">
-        <com.google.android.material.textfield.TextInputLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.408"
+        tools:ignore="MissingConstraints">
+
+        <RadioButton
+            android:id="@+id/rd5"
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="90dp"
+            android:background="@drawable/radio_selector"
+            android:button="@color/colorAccent"
+            android:fontFamily="sans-serif-black"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:onClick="checkReason"
+            android:text="@string/The"
+            android:textColor="@drawable/text_color"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <RadioButton
+            android:id="@+id/rd1"
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/radio_selector"
+            android:button="@color/colorAccent"
+            android:fontFamily="sans-serif-black"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:onClick="checkReason"
+            android:text="@string/violating_the_standard"
+            android:textColor="@drawable/text_color"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <RadioButton
+            android:id="@+id/rd2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:startIconDrawable="@drawable/location"
+            android:layout_margin="7dp"
+            android:background="@drawable/radio_selector"
+            android:button="@color/colorAccent"
+            android:elevation="4dp"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center"
+            android:onClick="checkReason"
+            android:text="@string/violating_the_location"
+            android:textColor="@drawable/text_color"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <RadioButton
+            android:id="@+id/rd3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:background="@drawable/radio_selector"
+            android:button="@color/colorAccent"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:onClick="checkReason"
+            android:text="@string/damaged_bump"
+            android:textColor="@drawable/text_color"
+            android:fontFamily="sans-serif-black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <RadioButton
+            android:id="@+id/rd4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:background="@drawable/radio_selector"
+            android:button="@color/colorAccent"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:fontFamily="sans-serif-black"
+            android:onClick="checkReason"
+            android:text="@string/other"
+            android:textColor="@drawable/text_color"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="129dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="Select Location"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+            app:startIconDrawable="@drawable/location"
+            android:fontFamily="sans-serif-black"
+            android:textSize="14sp"
+            android:textColor="#595656">
+
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:inputType="none"
-                android:textColor="#000"/>
+                android:textColor="#595656"
+                android:fontFamily="sans-serif-black"
+                android:textSize="14sp"/>
 
 
         </com.google.android.material.textfield.TextInputLayout>
-
-        <RadioGroup
-            android:id="@+id/report_reason"
-            android:layout_width="match_parent"
-            android:layout_height="196dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingTop="2dp">
-
-            <RadioButton
-                android:id="@+id/rd1"
-                android:layout_width="395dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="7dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/radio_selector"
-                android:button="@color/colorAccent"
-
-                android:elevation="8dp"
-                android:gravity="center"
-                android:onClick="checkReason"
-                android:text="@string/violating_the_standard"
-                android:textColor="@drawable/text_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <RadioButton
-                android:id="@+id/rd2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="7dp"
-                android:background="@drawable/radio_selector"
-                android:button="@color/colorAccent"
-                android:elevation="4dp"
-
-                android:gravity="center"
-                android:onClick="checkReason"
-                android:text="@string/violating_the_location"
-                android:textColor="@drawable/text_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <RadioButton
-                android:id="@+id/rd3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="7dp"
-                android:background="@drawable/radio_selector"
-                android:button="@color/colorAccent"
-                android:elevation="4dp"
-                android:gravity="center"
-                android:onClick="checkReason"
-                android:text="@string/damaged_bump"
-                android:textColor="@drawable/text_color"
-
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <RadioButton
-                android:id="@+id/rd4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="7dp"
-                android:background="@drawable/radio_selector"
-                android:button="@color/colorAccent"
-                android:elevation="4dp"
-                android:gravity="center"
-
-                android:onClick="checkReason"
-                android:text="@string/other"
-                android:textColor="@drawable/text_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/reportbtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Send" />
-
     </LinearLayout>
 
+    <Button
+        android:id="@+id/reportbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="52dp"
+        android:text="Send"
+        android:textSize="20sp"
+        android:textColor="#595656"
+        android:fontFamily="sans-serif-black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
-</LinearLayout>
 
-
+</androidx.constraintlayout.widget.ConstraintLayout>

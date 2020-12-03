@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bungee"
+        android:textColor="#000"
         android:text="@string/hello_there_welcome_back"
         android:textSize="25sp" />
 
@@ -80,8 +81,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/LOG_IN_main"
-            android:background="#000"
-            android:textColor="#5C5A5A"
+            android:background="@color/colorPrimary"
+            android:textColor="#000"
             android:layout_marginTop="5dp"/>
         <Button
             android:layout_width="match_parent"

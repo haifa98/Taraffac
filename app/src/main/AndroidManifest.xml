@@ -17,9 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-         <activity android:name=".homeEditee"/>
-
         <activity android:name=".add" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -38,34 +35,21 @@
 
         <activity
             android:name=".map"
-            android:label="@string/title_activity_map" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:label="@string/title_activity_map"/>
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
-        <activity android:name=".edit_speed_bump_msg" />
         <activity android:name=".edit_profile" />
         <activity android:name=".profile" />
-        <activity android:name=".view_spped_bump_msg" />
-        <activity android:name=".report_msg" />
-        <activity android:name=".report"/>
-
-
-        
-
-
+        <activity android:name=".report" />
         <activity android:name=".edit_speed_bump" />
+        <activity android:name=".register"/> >
+        <activity android:name=".login" />
+        <activity android:name=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".notify" />
-        <activity android:name=".delete_msg" />
-        <activity android:name=".delete" />
-        <activity android:name=".register" />
-        <activity android:name=".login"/>
-
-        <activity android:name=".MainActivity" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
