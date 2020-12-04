@@ -776,7 +776,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     }
 
-
     public void onError(Exception error) {
         textView.setText(error.getMessage());
     }
