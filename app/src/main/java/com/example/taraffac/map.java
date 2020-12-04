@@ -85,18 +85,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     Button log;
     FloatingActionButton add;
     //FloatingActionButton add;
-    Button notify;
     ToggleButton active;
 
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
-    LatLng latLng;
     private Geocoder geocoder;
-    DatabaseReference ref, refV;
-    FirebaseUser user;
-    AlertDialog.Builder builder;
+    DatabaseReference ref;
+
     boolean state = false;
-    String addingType;
     double not_lat;
     double not_long;
     String sub;
@@ -107,7 +103,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     FirebaseFirestore fStore;
     StorageReference storageReference;
     FirebaseUser  firebaseUser;
-    public String voiceType ="Voice command";
     double notify_long,notify_lat,add_lat,add_long;
     //public Toolbar toolbar;
     ActionBarDrawerToggle toggle;
@@ -118,11 +113,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
     /////
 
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    SpeedBump sb;
     private static final String TAG = "MapsActivity";
-    TextView type1;
+
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
@@ -191,7 +183,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         SharedPreferences sharedPrefs = getSharedPreferences("com.example.taraffac", MODE_PRIVATE);
         active.setChecked(sharedPrefs.getBoolean("active", state));
 
-
         // activate and deactivate
         active.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,8 +190,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 isActive();
             }
         });
-
-
 // check if active for add
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,7 +206,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             @Override
             public void run() {
                 if(active.isChecked()){ Notify();}
-                handler.postDelayed(this, 3000);
+                handler.postDelayed(this, 2000);
             }
         };
 
@@ -284,7 +273,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     public void isActive() {
         if (active.isChecked()) {
             //getSpeechInput();
-            // active.setText("Activated");
             SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
             editor.putBoolean("active", true);
             editor.commit();
@@ -426,7 +414,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
                 double  x =  distance(loc_lat,loc_long,notify_lat,notify_long);
-                if(x>0.010){
+                if(x>0.020){
                 // send info to add class
                 Intent intent = new Intent(map.this, add.class);
                 intent.putExtra("Latitude", loc_lat);
@@ -540,7 +528,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         String sub2=  new DecimalFormat("00.00").format(not_long);
         sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
 
-
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -566,11 +553,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
                             // LatLng latLng = new LatLng(bump_lat, bump_long);
 
-// set height & width - apply style
-
                             double x = distance(bump_lat_not, bump_long_not, not_lat, not_long);
-                            if (x < 0.150) {
-                                // Toast.makeText(this, " near", Toast.LENGTH_SHORT).show();
+                            if (x < 0.400) {
+
                                 if (add_lat != bump_lat_not & add_long != bump_long_not) {
 
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
@@ -620,6 +605,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         Intent i = new Intent(getApplicationContext(), report.class);
                         i.putExtra("latitude",lat);
                         i.putExtra("longitude",lon);
+                        i.putExtra("userType", CheckAddingType);
 
                         startActivity(i);
                     }});

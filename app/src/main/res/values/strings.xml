@@ -25,8 +25,8 @@
     <string name="tatil_register">REGISTER </string>
     <string name="desc_register">Image</string>
     <string name="profile">Profile</string>
-    <string name="deactivate">Deactivated</string>
-    <string name="activate">Activated</string>
+    <string name="deactivate">Deactivate</string>
+    <string name="activate">Activate</string>
     <string name="log_out">Log out</string>
     <string name="type">Type:</string>
     <string name="size">Size:</string>
