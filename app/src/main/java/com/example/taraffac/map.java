@@ -32,7 +32,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,7 +47,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -86,8 +84,7 @@ import static android.widget.Toast.makeText;
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, IBaseGpsListener,RecognitionListener {
     ////////////Interface_Menu ///////////
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
+
     ////////////Interface_Menu ///////////
 
 
@@ -164,17 +161,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
 
-        ////////////Interface_Menu ///////////
-        //---------HOOKS-----------------
-
-        /////////////////////// tool bar//////////////
-
-
-        //     navigation Drawer menu
-
-//drawerLayout,Toolbar=toolbar, R.string.navi_o,R.string.navi_c);
-
-        //     navigation Drawer menu
 
 
 

@@ -41,17 +41,17 @@
 
         <activity android:name=".edit_profile" />
         <activity android:name=".profile" />
-        <activity android:name=".report" />
-        <activity android:name=".edit_speed_bump" />
-        <activity android:name=".register"/> >
-        <activity android:name=".login" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".report" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".edit_speed_bump" />
+        <activity android:name=".register"/>
+        <activity android:name=".login" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

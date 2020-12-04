@@ -96,10 +96,13 @@
 
         <Button
             android:id="@+id/butt_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="#000"
+            android:layout_width="190dp"
+            android:layout_height="46dp"
+            android:background="@drawable/style_button"
+            android:textSize="16dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginLeft="98dp"
+            android:layout_marginTop="10dp"
             android:text="@string/register_register"
             android:textColor="#000" />
         <Button

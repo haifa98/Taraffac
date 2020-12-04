@@ -65,31 +65,15 @@ public class register extends AppCompatActivity {
 
         fAuth = FirebaseAuth.getInstance();
         fStore= FirebaseFirestore.getInstance();
-
-      // if(fAuth.getCurrentUser() != null){
-         //  Intent go_home1 = new Intent(getApplicationContext(),map.class);
-         //  startActivity(go_home1);
-         //  finish();
-       // }
-
-       // user= new User();
         go_register_to_home1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              /*  user.setUsername(name.getText().toString().trim());
-                user.setEmail(email.getText().toString().trim());
-                user.setPassword(pass.getText().toString().trim());
 
-                myRef.child(String.valueOf(maxid+1)).setValue(user);
-
-               Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();*/
-
-              final String Email = String.valueOf(email.getEditText().getText());//.getText().toString().trim();
-             final String Pass = String.valueOf(pass.getEditText().getText());//.getText().toString().trim();
-              //amjad
-                final String Name = String.valueOf(name.getEditText().getText());//.getText().toString().trim();
-                final String ConformPass1 = String.valueOf(ConformPass.getEditText().getText());//.getText().toString().trim();
-                  final   String   emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+              final String Email = String.valueOf(email.getEditText().getText());
+                final String Pass = String.valueOf(pass.getEditText().getText());
+                final String Name = String.valueOf(name.getEditText().getText());
+                final String ConformPass1 = String.valueOf(ConformPass.getEditText().getText());
+                final   String   emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
               //  String checkPassword =
                        // "(?=.*[0-9])" +         //at least 1 digit
                         //"(?=.*[a-z])" +         //at least 1 lower case letter
@@ -98,8 +82,6 @@ public class register extends AppCompatActivity {
                        // "(?=.*[@#$%^&+=])" +    //at least 1 special character
                        // "(?=S+$)" +           //no white spaces
                        // ".{6,}" +               //at least 6 characters;
-
-                //amjad
 
               if(TextUtils.isEmpty(Email)){
                   email.setError("Email is Required");
@@ -128,7 +110,6 @@ public class register extends AppCompatActivity {
                   public void onComplete(@NonNull Task<AuthResult> task) {
                       if(task.isSuccessful()){
                           Toast.makeText(register.this, " User is registered"  , Toast.LENGTH_SHORT).show();
-                          //aamjad
                           userID = fAuth.getCurrentUser().getUid();
                           DocumentReference documentReferenc = fStore.collection("users").document(userID);
                           Map<String , Object> user = new HashMap<>();
@@ -144,7 +125,6 @@ public class register extends AppCompatActivity {
                                   Log.d(TAG, "onSuccess: user Profile is created for "+ userID);
                               }
                           });
-                          //amjad
 
                          Intent go_home1 = new Intent(getApplicationContext(),map.class);
                          startActivity(go_home1);
@@ -154,8 +134,7 @@ public class register extends AppCompatActivity {
                       }
                   }
               });
-                /*Intent go_home1 = new Intent(getApplicationContext(),view_speed_bump.class);
-                startActivity(go_home1);*/
+
             }
         });
 
@@ -164,9 +143,6 @@ public class register extends AppCompatActivity {
     public void go_to_login(View view) {
         Intent go_login= new Intent(this,login.class);
         startActivity(go_login);
-    }
-    public void return_main2(View view) {
-        onBackPressed();
     }
 
 }

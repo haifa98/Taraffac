@@ -66,7 +66,6 @@ public class profile extends AppCompatActivity {
         fStore =FirebaseFirestore.getInstance();
         //////////////////////
 
-      //  usedId = Objects.requireNonNull(fAuth.getCurrentUser()).getUid();
         //retrev data ///
         final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -76,8 +75,6 @@ public class profile extends AppCompatActivity {
                 Email.getEditText().setText(documentSnapshot.getString("email"));
                 fullName.getEditText().setText(documentSnapshot.getString("Name"));
                 type.getEditText().setText(documentSnapshot.getString("addingType"));
-                //setText(documentSnapshot.getString("addingType"));// type.setEditText(String.valueOf(documentSnapshot.getString("addingType"));
-               // type.setText(String.valueOf(documentSnapshot.getString("addingType"));
 
 
             }
@@ -87,12 +84,10 @@ public class profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // open Gallery
-                //  Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                // startActivityForResult(openGalleryIntent, 1000 );
                 Intent i = new Intent(v.getContext(),edit_profile.class);
-                i.putExtra("fullName",String.valueOf(fullName.getEditText().getText()));//String.valueOf(LEmail.getEditText().getText())   fullName.getText().toString()
-                i.putExtra("email",String.valueOf(Email.getEditText().getText()));//Email.getText().toString()
-                i.putExtra("addingType",String.valueOf(type.getEditText().getText()));//type.getText().toString()
+                i.putExtra("fullName",String.valueOf(fullName.getEditText().getText()));
+                i.putExtra("email",String.valueOf(Email.getEditText().getText()));
+                i.putExtra("addingType",String.valueOf(type.getEditText().getText()));
 
 
                 startActivity(i);
@@ -100,7 +95,7 @@ public class profile extends AppCompatActivity {
         });//End setOnClickListener
         //
 
-        // start delet Account
+        // start delete Account
         del.setOnClickListener(new View.OnClickListener() { // start setOnClickListener
             @Override
             public void onClick(View v) {// start onClick
@@ -143,16 +138,7 @@ public class profile extends AppCompatActivity {
 
     }//end Oncrate
 
-    public void return_main(View view) {
-        onBackPressed();
 
-    }
-
-
-    public void log_out(View v){
-        Intent log = new Intent(this,login.class);
-        startActivity(log);
-    }
 
 
     public void back_profile1(View view) {

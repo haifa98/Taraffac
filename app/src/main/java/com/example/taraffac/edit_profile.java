@@ -66,7 +66,6 @@ public class edit_profile extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
         fStore= FirebaseFirestore.getInstance();
-       // itFullName = findViewById(R.id.username_profile);
 
         // edit profile
         Intent data = getIntent();
@@ -85,7 +84,7 @@ public class edit_profile extends AppCompatActivity {
 
         ///////////////////////////// method ProfileImage////////////////////////////////
        // start set ProfileImage
-       // هنا اتوقع تغيير الصوره اتاكد منه شوي
+       // Change ProfileImage
         StorageReference profileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
 
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -122,15 +121,10 @@ public class edit_profile extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         DocumentReference docRef = fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
-                       // DocumentReference docRef = fStore.collection("SpeedBump").document(SpeedBump(MIJKeFHd1ikAjpOvBsY1));
                         Map<String , Object> edited = new HashMap<>();
                        edited.put("email",String.valueOf(ProfileEditEmail.getEditText().getText()));
-                       // edited.put("Name",itFullName.getText().toString());
                         edited.put("Name",String.valueOf(ProfileEditFullName.getEditText().getText()));
                         edited.put("addingType",TypeText);
-                        ////
-                        ////
-                        ///
 
                         docRef.update(edited).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -141,7 +135,6 @@ public class edit_profile extends AppCompatActivity {
                             }
                         });
 
-                       // Toast.makeText(edit_profile.this, " Email Is Changed", Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -157,7 +150,7 @@ public class edit_profile extends AppCompatActivity {
         // end edit profile
 
     }// end onCreate
-// updata adding type in profile
+// Update adding type in profile
     public String checkType(){
         int radioID = RadioGroupTypeUpdate.getCheckedRadioButtonId();
         RadioType = findViewById(radioID);
@@ -176,23 +169,20 @@ public class edit_profile extends AppCompatActivity {
         if(requestCode == 1000){
             if(resultCode == Activity.RESULT_OK){
                 Uri imageUri = Objects.requireNonNull(data).getData();
-                // imageprofil.setImageURI(imageUri);
                 uploadImageToFirebase(imageUri);
             }
         }
     }// end method
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void uploadImageToFirebase(Uri imageUri) {// start method
-        // uplood image to firebase storage
+        // upload image to firebase storage
         final StorageReference fileRef = storageReference.child("user/" + Objects.requireNonNull(fAuth.getCurrentUser()).getUid()  +"/ Profile.jpg");
         fileRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // Toast.makeText(edit_profile.this, " Image Uploaded", Toast.LENGTH_SHORT).show();
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        //ImageView imageProfilEdit = null;
                         Picasso.get().load(uri).into(imageprofil);
 
                     }

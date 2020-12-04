@@ -1,10 +1,5 @@
 package com.example.taraffac;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -15,14 +10,17 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,11 +30,7 @@ import java.util.Objects;
 public class login extends AppCompatActivity { // start class
     ImageView return_main1;
     Button go_login_to_register,forgotTextLink,go_register;
-
-   // EditText LEmail,LPass;
     FirebaseAuth fAuth;
-   // TextView forgotTextLink;
-   // EditText pas,usr;
     TextInputLayout LEmail,LPass;
 
 
@@ -45,8 +39,6 @@ public class login extends AppCompatActivity { // start class
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);/////
         setContentView(R.layout.activity_login);
-
-       // return_main1= findViewById(R.id.image_back);
         go_login_to_register=findViewById(R.id.butt_login);
 
         LEmail = findViewById(R.id.email_login);
@@ -61,8 +53,8 @@ public class login extends AppCompatActivity { // start class
             @Override
             public void onClick(View view) {
 
-                final String Email = String.valueOf(LEmail.getEditText().getText());//getText().toString().trim()
-                String Pass = String.valueOf(LPass.getEditText().getText());//getText().toString().trim()  .getEditText().getText().toString().trim();
+                final String Email = String.valueOf(LEmail.getEditText().getText());
+                String Pass = String.valueOf(LPass.getEditText().getText());
 
                 if(TextUtils.isEmpty(Email)){
                     LEmail.setError("Email is Required");
@@ -96,8 +88,6 @@ public class login extends AppCompatActivity { // start class
             }
         });
 
-    //    usr = (EditText) findViewById(R.id.email_login);
-     //   pas = (EditText) findViewById(R.id.password_login);
 
         // forgot password
         forgotTextLink.setOnClickListener(new View.OnClickListener() {// start setOnClickListener
@@ -150,18 +140,11 @@ public class login extends AppCompatActivity { // start class
         startActivity(go_register1);
     }
 
-   // public void return_main(View view) { //start return_main
-      //  onBackPressed();
-
-    //}// end return_main
 
     public void go_to_home(View view) { // start go_to_home
         Intent go_home = new Intent(this,map.class);
         startActivity(go_home);
 
-
-      //  String user = usr.getText().toString();
-      //  String pass = pas.getText().toString();
 
     }//end go_to_home
 

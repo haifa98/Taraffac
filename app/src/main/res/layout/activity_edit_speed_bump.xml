@@ -8,16 +8,17 @@
     tools:context=".edit_speed_bump">
 
     <Button
-        android:layout_width="38dp"
-        android:layout_height="29dp"
+        android:layout_width="32dp"
+        android:layout_height="23dp"
         android:background="@drawable/back"
         android:onClick="back_ntofiy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024" />
+        app:layout_constraintVertical_bias="0.039" />
+
 
     <Button
         android:id="@+id/btn_close_edit"
@@ -28,11 +29,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.959"
+        app:layout_constraintHorizontal_bias="0.956"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024" />
-
+        app:layout_constraintVertical_bias="0.04" />
 
     <TextView
         android:id="@+id/textView44"
@@ -54,7 +54,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.041"
-        tools:textSize="24sp" />
+        tools:textSize="20sp" />
+
 
     <TextView
         android:id="@+id/textView42"
@@ -75,8 +76,7 @@
         app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.181" />
-
+        app:layout_constraintVertical_bias="0.211" />
 
     <TextView
         android:id="@+id/textView43"
@@ -97,39 +97,37 @@
         app:layout_constraintHorizontal_bias="0.078"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.561" />
+        app:layout_constraintVertical_bias="0.542" />
 
     <Button
         android:id="@+id/update_edite_bump"
-
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="100dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/save"
-        android:textSize="20sp"
-        android:textColor="#595656"
+        android:layout_width="134dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="108dp"
+        android:background="@drawable/style_button"
         android:fontFamily="sans-serif-black"
+        android:text="@string/save"
+        android:textColor="#595656"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.817"
+        app:layout_constraintHorizontal_bias="0.776"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/update_delete_bump"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginBottom="100dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/deleteEdit"
-        android:textSize="20sp"
-        android:textColor="#595656"
+        android:layout_width="134dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginBottom="108dp"
+        android:background="@drawable/style_button"
         android:fontFamily="sans-serif-black"
+        android:text="@string/deleteEdit"
+        android:textColor="#595656"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-       />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView11"
@@ -181,10 +179,10 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.728"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.461">
+        app:layout_constraintVertical_bias="0.451">
 
         <RadioButton
             android:id="@+id/update_cushion2"
@@ -195,13 +193,13 @@
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
             android:elevation="4dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:padding="4dp"
             android:text="@string/cushion_type"
             android:textAlignment="center"
             android:textColor="@drawable/text_color"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.832"
@@ -219,14 +217,14 @@
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
             android:elevation="4dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:padding="4dp"
-            android:text="@string/table_type"
 
+            android:text="@string/table_type"
             android:textAlignment="center"
             android:textColor="@drawable/text_color"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.832"
@@ -243,15 +241,15 @@
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
             android:elevation="4dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
-            android:text="@string/hump_type"
 
+            android:text="@string/hump_type"
             android:textAlignment="center"
             android:textColor="@drawable/text_color"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.832"
@@ -272,25 +270,25 @@
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.696">
+        app:layout_constraintVertical_bias="0.684">
 
         <RadioButton
             android:id="@+id/update_small"
             android:layout_width="62dp"
             android:layout_height="wrap_content"
 
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="49dp"
 
             android:layout_marginRight="1dp"
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
-            android:text="@string/small"
 
+            android:text="@string/small"
             android:textAlignment="center"
             android:textColor="@drawable/text_color"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.832"
@@ -307,12 +305,12 @@
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
             android:elevation="4dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="@string/midium"
             android:textAlignment="center"
             android:textColor="@drawable/text_color"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.832"
@@ -330,12 +328,12 @@
             android:button="@color/colorAccent"
             android:elevation="4dp"
 
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:text="@string/large"
             android:textAlignment="center"
             android:textColor="@drawable/text_color"
             android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.832"

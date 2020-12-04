@@ -78,11 +78,14 @@
             android:textColor="#000"
             tools:targetApi="lollipop" />
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="190dp"
+            android:layout_height="46dp"
             android:text="@string/LOG_IN_main"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/style_button"
             android:textColor="#000"
+          android:textSize="16dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginLeft="106dp"
             android:layout_marginTop="5dp"/>
         <Button
             android:layout_width="match_parent"

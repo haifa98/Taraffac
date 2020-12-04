@@ -1,8 +1,5 @@
 package com.example.taraffac;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
@@ -18,6 +15,9 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -149,8 +149,6 @@ public void delete(){
 
 // add in database
 
-           // String id = dataBympUpdate.push().getKey();
-
             SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,deleteCount);
             dataBympUpdate.child(bump_loc).child(bump_id).setValue(bump);
 
@@ -164,8 +162,7 @@ public void delete(){
 
 
         }
-        //Intent log = new Intent(this,map.class);
-        //startActivity(log);
+
 
         onBackPressed();
     }// Update Speed Bump

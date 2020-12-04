@@ -28,8 +28,8 @@
     <string name="deactivate">Deactivate</string>
     <string name="activate">Activate</string>
     <string name="log_out">Log out</string>
-    <string name="type">Type:</string>
-    <string name="size">Size:</string>
+    <string name="type">Type </string>
+    <string name="size">Size </string>
     <string name="save">Save</string>
     <string name="cushion_type">Cushion</string>
     <string name="table_type">Table</string>
@@ -127,7 +127,7 @@
     <string name="voice_command_profile">Voice Command</string>
     <string name="display_option_profile">Display Option</string>
     <string name="edit_profile">Edit</string>
-    <string name="delete_profile_profile">Delete Profile</string>
+    <string name="delete_profile_profile">Delete </string>
     <string name="your_name_profille">Your name</string>
     <string name="image_user_profile">image_user_profile</string>
     <string name="edittt_profile">Edit</string>

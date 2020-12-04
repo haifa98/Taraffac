@@ -32,11 +32,10 @@
         android:background="@drawable/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024"
-        tools:layout_editor_absoluteY="3dp" />
+        app:layout_constraintVertical_bias="0.041" />
 
     <TextView
         android:id="@+id/textView30"
@@ -52,7 +51,7 @@
         android:text="@string/why_do_you_want_to_report_this_speedbump"
         android:textColor="#100808"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="sans-serif-black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"
@@ -201,15 +200,18 @@
 
     <Button
         android:id="@+id/reportbtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="134dp"
+        android:layout_height="46dp"
         android:layout_marginBottom="52dp"
-        android:text="Send"
-        android:textSize="20sp"
-        android:textColor="#595656"
+        android:background="@drawable/style_button"
         android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text="Send"
+        android:textColor="#595656"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
