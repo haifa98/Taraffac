@@ -36,7 +36,7 @@ public class edit_speed_bump extends AppCompatActivity {
     public String Table="Table";
     public String Small="Small";
 
-    public String Midium="Midium";
+    public String Midium="Medium";
     DatabaseReference dataBympUpdate;
     double latitude;
     double longitude;

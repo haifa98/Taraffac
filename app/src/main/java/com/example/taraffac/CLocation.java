@@ -63,7 +63,7 @@ public class CLocation extends Location {
     @Override
     public float getSpeed() {
         // TODO Auto-generated method stub
-        float nSpeed = super.getSpeed() * 3.6f;
+        float nSpeed = ((super.getSpeed() *3600)/1000);
         if(!this.getUseMetricUnits())
         {
             //Convert meters/second to miles/hour
