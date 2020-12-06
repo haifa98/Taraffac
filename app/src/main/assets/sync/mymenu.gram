@@ -1,5 +1,0 @@
-#JSGF V1.0;
-grammar mymenu;
-public <smart> = (good morning | add | edit | report | table | hump | cushion | small | medium | large  );
-
-
