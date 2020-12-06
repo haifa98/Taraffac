@@ -52,9 +52,6 @@ public class add extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-
-        //profile = (Button)findViewById(R.id.but_Ppofile3);
-       // log = (Button)findViewById(R.id.but_log_out3);
         add = (Button)findViewById(R.id.add_save);
         save = (Button)findViewById(R.id.add_save);
         cancel= (Button)findViewById(R.id.add_cancel);

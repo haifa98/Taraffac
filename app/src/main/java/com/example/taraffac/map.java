@@ -71,18 +71,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import edu.cmu.pocketsphinx.Assets;
-import edu.cmu.pocketsphinx.Hypothesis;
-import edu.cmu.pocketsphinx.RecognitionListener;
-import edu.cmu.pocketsphinx.SpeechRecognizer;
-import edu.cmu.pocketsphinx.SpeechRecognizerSetup;
+
 
 import static android.widget.Toast.makeText;
 
 //speedometer imports
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, IBaseGpsListener,RecognitionListener {
+public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, IBaseGpsListener {
     ////////////Interface_Menu ///////////
 
     ////////////Interface_Menu ///////////
@@ -121,14 +117,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     int deleteCount;
     RelativeLayout logout_rl,provile_rl;
 
-    /////
-    private static final String KWS_SEARCH = "wakeup";
-    private static final String MENU_SEARCH = "menu";
-    /* Keyword we are looking for to activate recognition */
-    private static final String KEYPHRASE = "open";
-    private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
-    /* Recognition object */
-    private SpeechRecognizer recognizer;
 
     private static final String TAG = "MapsActivity";
 
@@ -234,9 +222,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(CheckAddingType.toLowerCase().contains("Voice".toLowerCase()) && active.isChecked() ){ runRecognizerSetup(); }
+                if(CheckAddingType.toLowerCase().contains("Voice".toLowerCase()) && active.isChecked() ){ //
+                    // Voice command
+                    }
             }}, 3000); //  1000 = 1 sec
-        runRecognizerSetup();
         //speedometer
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -652,129 +641,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
 
     // Voice command
-
-    private void runRecognizerSetup() {
-        // Recognizer initialization is a time-consuming and it involves IO,
-        // so we execute it in async task
-        new AsyncTask<Void, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Void... params) {
-                try {
-                    Assets assets = new Assets(map.this);
-                    File assetDir = assets.syncAssets();
-                    setupRecognizer(assetDir);
-                } catch (IOException e) {
-                    return e;
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Exception result) {
-                if (result != null) {
-                    textView.setText("Failed to init recognizer " + result);
-                } else {
-                    switchSearch(KWS_SEARCH);
-                }
-            }
-        }.execute();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (recognizer != null) {
-            recognizer.cancel();
-            recognizer.shutdown();
-        }
-    }
-
-    /**
-     * In partial result we get quick updates about current hypothesis. In
-     * keyword spotting mode we can react here, in other modes we need to wait
-     * for final result in onResult.
-     */
-
-    public void onPartialResult(Hypothesis hypothesis) {
-        if (hypothesis == null)
-            return;
-
-        String text = hypothesis.getHypstr();
-        if (text.equals(KEYPHRASE))
-            switchSearch(MENU_SEARCH);
-        else if (text.equals("add"))
-            add();
-        else if (text.equals("Good morning"))
-            makeText(this, "Good morning", Toast.LENGTH_SHORT).show();
-
-        else
-            textView.setText(text);
-    }
-
-    /**
-     * This callback is called when we stop the recognizer.
-     */
-
-    public void onResult(Hypothesis hypothesis) {
-        textView.setText("");
-        if (hypothesis != null) {
-            String text = hypothesis.getHypstr();
-            makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    public void onBeginningOfSpeech() {
-    }
-
-    /**
-     * We stop recognizer here to get a final result
-     */
-
-    public void onEndOfSpeech() {
-        if (!recognizer.getSearchName().equals(KWS_SEARCH))
-            switchSearch(KWS_SEARCH);
-    }
-
-    private void switchSearch(String searchName) {
-        recognizer.stop();
-        if (searchName.equals(KWS_SEARCH))
-            recognizer.startListening(searchName);
-        else
-            recognizer.startListening(searchName, 10000);
-    }
-
-    private void setupRecognizer(File assetsDir) throws IOException {
-        // The recognizer can be configured to perform multiple searches
-        // of different kind and switch between them
-
-        recognizer = SpeechRecognizerSetup.defaultSetup()
-                .setAcousticModel(new File(assetsDir, "en-us-ptm"))
-                .setDictionary(new File(assetsDir, "cmudict-en-us.dict"))
-                // Disable this line if you don't want recognizer to save raw
-                // audio files to app's storage
-                //.setRawLogDir(assetsDir)
-                .getRecognizer();
-        recognizer.addListener((RecognitionListener) this);
-        // Create keyword-activation search.
-        recognizer.addKeyphraseSearch(KWS_SEARCH, KEYPHRASE);
-        // Create your custom grammar-based search
-        File menuGrammar = new File(assetsDir, "mymenu.gram");
-        recognizer.addGrammarSearch(MENU_SEARCH, menuGrammar);
-
-    }
-
-    public void onError(Exception error) {
-        textView.setText(error.getMessage());
-    }
-
-
-    public void onTimeout() {
-        switchSearch(KWS_SEARCH);
-    }
-
-
-
 
 
 }

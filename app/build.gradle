@@ -26,9 +26,6 @@ android {
         }
     }
 }
-ant.importBuild 'assets.xml'
-preBuild.dependsOn(list, checksum)
-clean.dependsOn(clean_assets)
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -58,7 +55,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.firebase:firebase-database:19.4.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    compile project(':pocketsphinx-android-5prealpha-release')
 
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
