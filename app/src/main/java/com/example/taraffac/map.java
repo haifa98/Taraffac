@@ -101,7 +101,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     SupportMapFragment mapFragment;
     private Geocoder geocoder;
     DatabaseReference ref;
-
+    float nCurrentSpeed;
     boolean state = false;
     double not_lat;
     double not_long;
@@ -446,7 +446,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     //speedometer code
     private void updateSpeed(CLocation location) {
         // TODO Auto-generated method stub
-        float nCurrentSpeed = 0;
+        nCurrentSpeed = 0;
 
         if(location != null)
         {
@@ -462,7 +462,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
        // String strUnits = "miles/hour";
        // if(this.useMetricUnits())
       //  {
-        String strUnits = "meters/second";
+        String strUnits = "km/h";
       //  }
 
         TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
@@ -569,9 +569,11 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                                 if (add_lat != bump_lat_not & add_long != bump_long_not) {
 
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
+                                        Float f2 = 10.00f;
+                                        if(Float.compare(nCurrentSpeed, f2) < 0){
                                         Alertt(bump_lat_not, bump_long_not, bump_type, bump_size);
                                         notify_lat = bump_lat_not;
-                                        notify_long = bump_long_not; } } } }
+                                        notify_long = bump_long_not; } } } }}
                     }
                 }
             }
