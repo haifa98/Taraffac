@@ -1,8 +1,15 @@
 package com.example.taraffac;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,9 +22,13 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Locale;
+
 public class report extends Activity {
     AutoCompleteTextView autoCompleteTextView;
-    private Button button;
+    private Button button , returm_map;
     RadioButton rd1,rd2,rd3,rd4,rd_reason,rd5;
     RadioGroup radioGroup_reason;
     String coord;
@@ -39,12 +50,18 @@ public class report extends Activity {
     public String LocationEmail;
     double lat, longitude;
     public String selection;
+    String userType;
+    static final String TAG = "TTS";
+
+    TextToSpeech mTts;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         button = findViewById(R.id.reportbtn);
+        returm_map = findViewById(R.id.returnMap);
         rd1= findViewById(R.id.rd1);
         rd2= findViewById(R.id.rd2);
         rd3= findViewById(R.id.rd3);
@@ -52,13 +69,12 @@ public class report extends Activity {
         rd5=findViewById(R.id.rd5);
         autoCompleteTextView=findViewById(R.id.autoCompleteText);
         radioGroup_reason= findViewById(R.id.report_reason);
-       final SpeedBump bump= getIntent().getParcelableExtra("bump");
         //interface drop down list
         // Create array Contains the locations in the drop down list
         String [] option= {"Riyadh","Makkah","Almadinah","Eastern Region","Asir" ,"Alqassim" , "Jeddah" , "Albaha" , "Jazan" ,"Tabuk" , "Hail" , "Alahsa" , "Altaif", "Najran" , "Northern Border"};
         ArrayAdapter arrayAdapter = new ArrayAdapter(this,R.layout.option_item, option);
         //To make default value in the drop down list
-        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString() , false);
+        autoCompleteTextView.setText(arrayAdapter.getItem(0).toString() , true);
         // view Contains the locations in the drop down list
         autoCompleteTextView.setAdapter(arrayAdapter);
 
@@ -68,11 +84,17 @@ public class report extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 //Store the Item in a AutoCompleteTextView filled
                 selection = (String) parent.getItemAtPosition(position);
-                // Check the item and send email
-                if(selection.isEmpty()){
-                    Toast.makeText(getApplicationContext(), "Select The Location", Toast.LENGTH_SHORT).show();
+                // retrieve values from map
+                Bundle extras = getIntent().getExtras();
+                if (extras != null) {
+                    userType = extras.getString("userType");
 
-                } else if (selection.equals(Alriyadh)) {
+                }
+           //     userType = getIntent().getExtras().getString("userType");
+                Toast.makeText(report.this, userType, Toast.LENGTH_SHORT).show();
+
+                // Check the item and send email
+                if (selection.equals(Alriyadh)) {
                     LocationEmail = "mgoodh.18@gmail.com";
                 }else if(selection.equals(Makkah)) {
                     LocationEmail = "amjad.nasser.al@gmail.com";
@@ -111,37 +133,61 @@ public class report extends Activity {
 
         });//end method
 
-
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                lat = getIntent().getExtras().getDouble("latitude");
-                longitude = getIntent().getExtras().getDouble("longitude");
-
-
-                coord = ""+lat+ ","+longitude;
-
-                senEmail();
-                onBackPressed();
-
+                Execute(); }});
+       // Toast to =  Toast.makeText(this, " The Report Was Sent Successfully"  , Toast.LENGTH_SHORT);
+        returm_map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                back_map3();
             }
         });
-       // Toast to =  Toast.makeText(this, " The Report Was Sent Successfully"  , Toast.LENGTH_SHORT);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void run() {
+                if (userType!= null) {
+                if(userType.equals("Voice command")){ read(); } }
 
+                 }}, 3000); //  1000 = 1 sec
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            read();
+        }
+    }
+
+    public void Execute(){
+        lat = getIntent().getExtras().getDouble("latitude");
+        longitude = getIntent().getExtras().getDouble("longitude");
+        coord = ""+lat+ ","+longitude;
+        senEmail();
+        Toast.makeText(this, " The Report Was Sent Successfully", Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 
       // Send Email  to JavaMailAPI class
     private void senEmail() {
+        String mReason;
+        if(rd_reason== null){
+            mReason = (String) rd4.getText();}
+        else {
+            mReason = (String) rd_reason.getText(); }
         String mEmail = LocationEmail;
         String mSubject = "Complaint about speed bump";
-        String mReason = (String) rd_reason.getText();
-        String mContent= "We are sending this e-mail to report the speed bump located at this coordinates "+coord +"\n"+"and the reason for reporting is the following:  "+mReason+"\n"+"Thank you.";
 
+
+
+        String mContent= "We are sending this e-mail to report the speed bump located at this coordinates "+coord +"\n"+"and the reason for reporting is the following:  "+mReason+"\n"+"Thank you.";
+// "amjad.nasser.al@gmail.com"
+        if(mEmail == null ){
+            JavaMailAPI javaMailAPI = new JavaMailAPI(this, "amjad.nasser.al@gmail.com",mSubject ,mContent );
+
+            javaMailAPI.execute();
+        }else {
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, mEmail,mSubject ,mContent );
 
-        javaMailAPI.execute();
+        javaMailAPI.execute();}
     }
 
     public void checkReason(View view) {
@@ -149,11 +195,133 @@ public class report extends Activity {
         rd_reason = findViewById(radioID);
     }
 
-
-    public void show_report(View v){
-        Toast to =  Toast.makeText(this, " The Report Was Sent Successfully"  , Toast.LENGTH_SHORT);
-        to.setGravity(Gravity.TOP,0, 90);
-        to.show();
+    public void back_map3(){
+        onBackPressed();
+      //  Intent go_map1= new Intent(this,map.class);
+    //   startActivity(go_map1);
     }
+
+
+    // this method convert text to speech
+    void speak(String s){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.v(TAG, "Speak new API");
+            Bundle bundle = new Bundle();
+            bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
+            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, bundle, null);
+        } else {
+            Log.v(TAG, "Speak old API");
+            HashMap<String, String> param = new HashMap<>();
+            param.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_MUSIC));
+            mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Don't forget to shutdown tts!
+        if (mTts != null) {
+            Log.v(TAG,"onDestroy: shutdown TTS");
+            mTts.stop();
+            mTts.shutdown();
+        }
+    }
+
+    // the result from user voice become as array list and this method split the values for each element in arraylist
+    public static String[] spliteArray(ArrayList<String> array) {
+        String[] tmp= new String[20];
+        for(String line : array) {
+            tmp = line.split("\\s+"); //split on one or more spaces
+        }
+        return tmp;
+    }
+
+    // this is the main method for voice command
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void read(){
+
+        final String emailid1;
+        emailid1 =  "select the reason by number   " ;
+               // "and if your  city is not riyadh please choose your city ";
+
+        mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = mTts.setLanguage(Locale.US);
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Toast.makeText(getApplicationContext(), "This language is not supported", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Log.v("TTS","onInit succeeded");
+                        speak(emailid1); }
+                } else { Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show(); }}
+        });
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {getSpeechInput(); }}, 6000); //  1000 = 1 sec
+    }
+
+    // speech to text
+    private void getSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 10);
+        } else {
+            Toast.makeText(this, "Your Device Don't Support Speech Input", Toast.LENGTH_SHORT).show();
+        }
+    }
+    // this function get the result from the above function
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 10:
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    assert result != null;
+                    String[] newA = spliteArray(result);
+                    testtype(newA);
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                        @Override
+                        public void run() {
+                            Execute();
+                        }}, 3000); //  1000 = 1 sec
+
+
+                    break;} }}
+    // this method check radio buttons
+    public void testtype(String[] x){
+        for (String n: x) {
+            if (n.equals("5")) {
+              //  ((RadioButton) radioGroup_reason.getChildAt(5)).setChecked(true);
+                rd5.setChecked(true);
+            }
+            if (n.equals("1")) {
+                rd1.setChecked(true);
+              //  ((RadioButton) radioGroup_reason.getChildAt(0)).setChecked(true);
+            }
+            if (n.equals("2")) {
+                rd2.setChecked(true);
+              //  ((RadioButton) radioGroup_reason.getChildAt(1)).setChecked(true);
+            }
+            if (n.equals("3")) {
+                rd3.setChecked(true);
+             //   ((RadioButton) radioGroup_reason.getChildAt(2)).setChecked(true);
+            }
+            if (n.equals("4")) {
+                rd4.setChecked(true);
+               // ((RadioButton) radioGroup_reason.getChildAt(3)).setChecked(true);
+            }
+            }}
+
 
 }

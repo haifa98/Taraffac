@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/return_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".report">
@@ -16,9 +17,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="@font/bungee"
         android:text="@string/report_speedbump"
         android:textSize="20sp"
-        android:fontFamily="@font/bungee"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -27,15 +28,17 @@
         app:layout_constraintVertical_bias="0.013" />
 
     <Button
-        android:layout_width="38dp"
-        android:layout_height="29dp"
+        android:id="@+id/returnMap"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
         android:background="@drawable/back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.042"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.041" />
+        app:layout_constraintVertical_bias="0.042"
+        tools:onClick="back_map3" />
 
     <TextView
         android:id="@+id/textView30"
@@ -47,11 +50,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:fontFamily="sans-serif-black"
         android:gravity="center|center_vertical"
         android:text="@string/why_do_you_want_to_report_this_speedbump"
         android:textColor="#100808"
         android:textSize="18sp"
-        android:fontFamily="sans-serif-black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"
@@ -82,8 +85,8 @@
             android:layout_marginBottom="90dp"
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
-            android:fontFamily="sans-serif-black"
             android:elevation="8dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:onClick="checkReason"
             android:text="@string/The"
@@ -100,8 +103,8 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
-            android:fontFamily="sans-serif-black"
             android:elevation="8dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:onClick="checkReason"
             android:text="@string/violating_the_standard"
@@ -134,11 +137,11 @@
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
             android:elevation="4dp"
+            android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:onClick="checkReason"
             android:text="@string/damaged_bump"
             android:textColor="@drawable/text_color"
-            android:fontFamily="sans-serif-black"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -151,8 +154,8 @@
             android:background="@drawable/radio_selector"
             android:button="@color/colorAccent"
             android:elevation="4dp"
-            android:gravity="center"
             android:fontFamily="sans-serif-black"
+            android:gravity="center"
             android:onClick="checkReason"
             android:text="@string/other"
             android:textColor="@drawable/text_color"
@@ -178,21 +181,21 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Select Location"
-            app:startIconDrawable="@drawable/location"
             android:fontFamily="sans-serif-black"
+            android:hint="Select Location"
+            android:textColor="#595656"
             android:textSize="14sp"
-            android:textColor="#595656">
+            app:startIconDrawable="@drawable/location">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
+                android:fontFamily="sans-serif-black"
                 android:inputType="none"
                 android:textColor="#595656"
-                android:fontFamily="sans-serif-black"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
 
         </com.google.android.material.textfield.TextInputLayout>

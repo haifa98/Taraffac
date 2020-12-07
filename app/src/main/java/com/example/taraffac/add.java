@@ -28,8 +28,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class add extends AppCompatActivity {
-    Button profile;
-    Button log;
+
     Button add;
     Button save;
     Button cancel;
@@ -42,7 +41,6 @@ public class add extends AppCompatActivity {
     DatabaseReference dataBymp;
     String sub;
     String userType;
-    Button back_map1;
     static final String TAG = "TTS";
     TextToSpeech mTts;
 

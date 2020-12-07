@@ -27,8 +27,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class edit_speed_bump extends AppCompatActivity {
-    Button profile;
-    Button log, But_Update_bump, But_Delete_bump;
+    Button  But_Update_bump, But_Delete_bump;
     String TypeValue,SizeValue;
     RadioButton RadioType1, RadioType2,RadioType3,RadioSize1,RadioSize2,RadioSize3, RadioType,RadioSize;
     RadioGroup RadioGroupTypeUpdate,RadioGroupSizeUpdate;
