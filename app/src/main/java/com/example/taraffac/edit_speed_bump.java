@@ -129,6 +129,7 @@ public class edit_speed_bump extends AppCompatActivity {
 public void delete(){
         if(deleteCount>=3){
     dataBympUpdate.child(bump_loc).child(bump_id).removeValue();
+            Toast.makeText(this, " The speed bump was deleted successfully ", Toast.LENGTH_SHORT).show();
 }else{
     String TypeText,SizeText;
     TypeText=checkType();
@@ -136,6 +137,7 @@ public void delete(){
     deleteCount++;
     SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,deleteCount);
     dataBympUpdate.child(bump_loc).child(bump_id).setValue(bump);
+            Toast.makeText(this, " The speed bump will be deleted soon", Toast.LENGTH_SHORT).show();
 }
     onBackPressed();
     }
