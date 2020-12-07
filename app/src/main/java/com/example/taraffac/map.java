@@ -90,15 +90,12 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
 
     private GoogleMap mMap;
-    Button profile;
-    Button log;
     FloatingActionButton add;
     //FloatingActionButton add;
     ToggleButton active;
     TextView textView;
 
     FusedLocationProviderClient client;
-    SupportMapFragment mapFragment;
     private Geocoder geocoder;
     DatabaseReference ref;
     float nCurrentSpeed;
@@ -115,7 +112,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     FirebaseUser  firebaseUser;
     double notify_long,notify_lat,add_lat,add_long;
     //public Toolbar toolbar;
-    ActionBarDrawerToggle toggle;
     String bump_key, bump_locKey, bump_loc;
 
     int deleteCount;
@@ -126,21 +122,23 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private String LOG_TAG = "VoiceRecognitionActivity";
 
     private static final String TAG = "MapsActivity";
-
+String Vvv = "Voice command";
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     private void resetSpeechRecognizer() {
 
-        if(speech != null)
-            speech.destroy();
-        speech = SpeechRecognizer.createSpeechRecognizer(this);
-        Log.i(LOG_TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
-        if(SpeechRecognizer.isRecognitionAvailable(this))
-            speech.setRecognitionListener(this);
-        else
-            finish();
-    }
+
+    if (speech != null)
+        speech.destroy();
+        if(active.isChecked()) {
+    speech = SpeechRecognizer.createSpeechRecognizer(this);
+    Log.i(LOG_TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
+    if (SpeechRecognizer.isRecognitionAvailable(this))
+        speech.setRecognitionListener(this);
+    else
+        finish();
+} }
 
     private void setRecogniserIntent() {
 
@@ -161,7 +159,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
       //  profile = findViewById(R.id.but_pofile_map);
         //log = findViewById(R.id.but_logout_map);
         add = (FloatingActionButton) findViewById(R.id.add_bump2);
-        //notify = (Button) findViewById(R.id.showNotificationBtn);
         active = findViewById(R.id.map_deactive);
         textView = findViewById(R.id.textView_map);
         logout_rl=findViewById(R.id.logout_rl);
@@ -241,11 +238,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
                 assert documentSnapshot != null;
                 CheckAddingType= documentSnapshot.getString("addingType");
-             //   Toast.makeText(map.this, CheckAddingType, Toast.LENGTH_SHORT).show();
+              Toast.makeText(map.this, CheckAddingType, Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
         //speedometer
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -273,7 +268,8 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         });
 
  */
-        //
+
+        // Voice command
 
         // check for permission
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -281,38 +277,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
             return;
         }
-        // start speech recogniser
-        resetSpeechRecognizer();
-
-        setRecogniserIntent();
-        speech.startListening(recognizerIntent);
-        // Voice command
-
-
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(CheckAddingType.toLowerCase().contains("Voice".toLowerCase()) && active.isChecked() ){ //
-
-
-                }
-            }}, 3000); //  1000 = 1 sec
-
-
 
 
     }// end on create
-
-    private void setSupporActionBar(Toolbar toolbar) {
-
-    }
-    //     navigation Drawer menu
-
-
-
-    //     navigation Drawer menu
-
 
     // check if it is activate or deactivate
     public void isActive() {
@@ -321,7 +288,15 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
             editor.putBoolean("active", true);
             editor.commit();
+if(CheckAddingType.equals("Voice command")) {
+            resetSpeechRecognizer();
+
+            setRecogniserIntent();
+
+            speech.startListening(recognizerIntent); }
+
         } else {
+
             SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
             editor.putBoolean("active", false);
             editor.commit();
@@ -395,20 +370,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
             }
         }
-
-
-    }
-
-    public void go_to_profile(View v) {
-        Intent profile = new Intent(this, profile.class);
-        startActivity(profile);
-    }
-
-    public void log_out(View v) {
-        FirebaseAuth.getInstance().signOut();// R add it
-        Intent log = new Intent(this, login.class);
-        startActivity(log);
-        finish();// R add it
     }
 
     // show markers on bumps
@@ -441,15 +402,9 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                         //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
                         MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
 // create marker for bumps
-                        mMap.addMarker(marker);
-                    }
-                }
-            }
-
+                        mMap.addMarker(marker); } } }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+            public void onCancelled(@NonNull DatabaseError error) { }});
     }
 
 
@@ -532,29 +487,19 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         if(location != null)
         {
             CLocation myLocation = new CLocation(location, true);
-            this.updateSpeed(myLocation);
-        }
-    }
+            this.updateSpeed(myLocation); } }
 
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+    public void onProviderDisabled(String provider) { }
 
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
+    public void onProviderEnabled(String provider) { }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
     @Override
-    public void onGpsStatusChanged(int event) {
-
-    }
+    public void onGpsStatusChanged(int event) { }
 
     //end speedometer code
 
@@ -565,7 +510,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     public void Notify() {
 
         // compare
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -622,17 +566,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                                         if(Float.compare(nCurrentSpeed, f2) < 0){
                                         Alertt(bump_lat_not, bump_long_not, bump_type, bump_size);
                                         notify_lat = bump_lat_not;
-                                        notify_long = bump_long_not; } } } }}
-                    }
-                }
-            }
+                                        notify_long = bump_long_not; } } } }} } } }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-
-    }
+            public void onCancelled(@NonNull DatabaseError error) { }}); }
 
     private void Alertt(final double lat, final double lon, final String type, final String size) {
 
@@ -700,15 +637,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     // Voice command
 
 
-
-
     @Override
     public void onResume() {
-        Log.i(LOG_TAG, "resume");
-        super.onResume();
-        resetSpeechRecognizer();
-        speech.startListening(recognizerIntent);
-    }
+            Log.i(LOG_TAG, "resume");
+            super.onResume();
+            resetSpeechRecognizer();
+            if(recognizerIntent!= null ){
+            speech.startListening(recognizerIntent);  }
+         }
 
     @Override
     protected void onPause() {
@@ -749,8 +685,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     @Override
     public void onResults(Bundle results) {
         Log.i(LOG_TAG, "onResults");
-        ArrayList<String> matches = results
-                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = "";
         for (String result : matches)
             text += result + "\n";
