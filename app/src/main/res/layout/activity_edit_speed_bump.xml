@@ -103,7 +103,11 @@
         android:id="@+id/update_edite_bump"
         android:layout_width="134dp"
         android:layout_height="46dp"
+        android:layout_marginTop="119dp"
         android:layout_marginBottom="108dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="8dp"
+
         android:background="@drawable/style_button"
         android:fontFamily="sans-serif-black"
         android:text="@string/save"
@@ -112,22 +116,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.776"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/update_size" />
 
     <Button
         android:id="@+id/update_delete_bump"
         android:layout_width="134dp"
         android:layout_height="46dp"
         android:layout_marginStart="56dp"
-        android:layout_marginLeft="56dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="119dp"
         android:layout_marginBottom="108dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/style_button"
         android:fontFamily="sans-serif-black"
         android:text="@string/deleteEdit"
         android:textColor="#595656"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/update_edite_bump"
+        app:layout_constraintHorizontal_bias="0.138"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/update_size"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView11"

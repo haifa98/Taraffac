@@ -273,9 +273,7 @@
                 android:id="@+id/delete_profile"
                 android:layout_width="134dp"
                 android:layout_height="46dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="88dp"
+                android:layout_marginLeft="50dp"
                 android:background="@drawable/style_button"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
@@ -283,22 +281,33 @@
                 android:textColor="#5C5A5A"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.873"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.263" />
 
             <Button
                 android:id="@+id/edit_profile"
                 android:layout_width="134dp"
                 android:layout_height="46dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="50dp"
                 android:layout_toEndOf="@id/delete_profile"
                 android:layout_toRightOf="@id/delete_profile"
                 android:background="@drawable/style_button"
                 android:fontFamily="sans-serif-black"
+
                 android:gravity="center"
-                android:textSize="20dp"
                 android:text="@string/edittt_profile"
                 android:textColor="#5C5A5A"
-                tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="26dp" />
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/delete_profile"
+                app:layout_constraintHorizontal_bias="0.081"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.263" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

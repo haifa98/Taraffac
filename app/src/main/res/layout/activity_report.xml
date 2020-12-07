@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".report">
 
+    <Button
+        android:id="@+id/returnMap"
+        android:layout_width="46dp"
+        android:layout_height="39dp"
+        android:background="@drawable/close"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
     <TextView
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
@@ -26,19 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.013" />
-
-    <Button
-        android:id="@+id/returnMap"
-        android:layout_width="30dp"
-        android:layout_height="20dp"
-        android:background="@drawable/back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.042"
-        tools:onClick="back_map3" />
 
     <TextView
         android:id="@+id/textView30"
