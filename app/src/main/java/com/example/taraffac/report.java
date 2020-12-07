@@ -130,9 +130,6 @@ public class report extends Activity {
         });
        // Toast to =  Toast.makeText(this, " The Report Was Sent Successfully"  , Toast.LENGTH_SHORT);
 
-
-
-
     }
 
       // Send Email  to JavaMailAPI class

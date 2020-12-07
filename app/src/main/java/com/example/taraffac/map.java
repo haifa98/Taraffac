@@ -83,15 +83,9 @@ import static android.widget.Toast.makeText;
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, IBaseGpsListener, RecognitionListener {
-    ////////////Interface_Menu ///////////
-
-    ////////////Interface_Menu ///////////
-
-
 
     private GoogleMap mMap;
     FloatingActionButton add;
-    //FloatingActionButton add;
     ToggleButton active;
     TextView textView;
 
@@ -113,7 +107,10 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     double notify_long,notify_lat,add_lat,add_long;
     //public Toolbar toolbar;
     String bump_key, bump_locKey, bump_loc;
-
+    double bump_lat_not, bump_long_not ;
+    String bump_type , bump_size ;
+    double x;
+    Float f2;
     int deleteCount;
     RelativeLayout logout_rl,provile_rl;
     private static final int PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
@@ -122,16 +119,14 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private String LOG_TAG = "VoiceRecognitionActivity";
 
     private static final String TAG = "MapsActivity";
-String Vvv = "Voice command";
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
     private void resetSpeechRecognizer() {
 
-
     if (speech != null)
         speech.destroy();
-        if(active.isChecked()) {
+    if(active.isChecked() ) { // this check ensure the SR will stop when the system not active
     speech = SpeechRecognizer.createSpeechRecognizer(this);
     Log.i(LOG_TAG, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this));
     if (SpeechRecognizer.isRecognitionAvailable(this))
@@ -143,40 +138,33 @@ String Vvv = "Voice command";
     private void setRecogniserIntent() {
 
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
-                "en");
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
-    }
+        /*
+        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Now...");
+            startActivityForResult(intent, REQUEST_CODE);
 
+         */
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-      //  profile = findViewById(R.id.but_pofile_map);
-        //log = findViewById(R.id.but_logout_map);
+
         add = (FloatingActionButton) findViewById(R.id.add_bump2);
         active = findViewById(R.id.map_deactive);
         textView = findViewById(R.id.textView_map);
         logout_rl=findViewById(R.id.logout_rl);
         provile_rl=findViewById(R.id.provile_rl);
-        provile_rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(map.this, profile.class));
-            }
-        });
-        logout_rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(map.this, login.class));
-            }
-        });
+        provile_rl.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { startActivity(new Intent(map.this, profile.class)); }});
+        logout_rl.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { startActivity(new Intent(map.this, login.class)); }});
 
-        //
         storageReference = FirebaseStorage.getInstance().getReference();
         fAuth = FirebaseAuth.getInstance();
         firebaseUser = fAuth.getCurrentUser();
@@ -191,7 +179,6 @@ String Vvv = "Voice command";
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps();
-
 
         // get state value from activities
         Bundle extras = getIntent().getExtras();
@@ -220,18 +207,11 @@ String Vvv = "Voice command";
 
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if(active.isChecked()){ Notify();}
-                handler.postDelayed(this, 2000);
-            }
-        };
-
+            @Override public void run() { if(active.isChecked()){ Notify();}handler.postDelayed(this, 2000); }};
 //Start
         handler.postDelayed(runnable, 1000);
-        ////////////////////////////////////////////////////////////////
-       // Check Adding Type
 
+       // Check Adding Type
         final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
@@ -266,10 +246,7 @@ String Vvv = "Voice command";
                 map.this.updateSpeed(null);
             }
         });
-
  */
-
-        // Voice command
 
         // check for permission
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -277,7 +254,19 @@ String Vvv = "Voice command";
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
             return;
         }
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (CheckAddingType!= null) {
+                    if (CheckAddingType.equals("Voice command") && active.isChecked()) {
+                        resetSpeechRecognizer();
 
+                        setRecogniserIntent();
+
+                        speech.startListening(recognizerIntent);
+                    }
+
+                } }}, 3000); //  1000 = 1 sec
 
     }// end on create
 
@@ -503,13 +492,10 @@ if(CheckAddingType.equals("Voice command")) {
 
     //end speedometer code
 
-    ////// Voice command code
-
-
 
     public void Notify() {
 
-        // compare
+        // check for location
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -523,14 +509,14 @@ if(CheckAddingType.equals("Voice command")) {
         Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onSuccess(Location location) {
+            public void onSuccess(Location location) { // get location
                 not_lat = location.getLatitude();
                 not_long = location.getLongitude();}});
-
+//
         String sub1 = new DecimalFormat("00.00").format(not_lat);
         String sub2=  new DecimalFormat("00.00").format(not_long);
         sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
-
+// get bumps info for comapre and notify
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -546,23 +532,20 @@ if(CheckAddingType.equals("Voice command")) {
                             bump = bumpSnapshot.getValue(SpeedBump.class);
                             bumps.add(bump);
 
-                            double bump_lat_not = bump.getLatitude();
-                            double bump_long_not = bump.getLongitude();
-                            String bump_type = bump.getType();
-                            String bump_size = bump.getSize();
+                            bump_lat_not = bump.getLatitude();
+                            bump_long_not = bump.getLongitude();
+                            bump_type = bump.getType();
+                            bump_size = bump.getSize();
                             deleteCount = bump.getDeleteOption();
                             bump_key = bumpSnapshot.getKey();
                             bump_loc= locationSnapshot.getKey();
-
-                            // LatLng latLng = new LatLng(bump_lat, bump_long);
-
-                            double x = distance(bump_lat_not, bump_long_not, not_lat, not_long);
-                            if (x < 0.400) {
-
+                            // x is the distance between the bump and user location
+                            x = distance(bump_lat_not, bump_long_not, not_lat, not_long);
+                            if (x < 0.300) {
                                 if (add_lat != bump_lat_not & add_long != bump_long_not) {
 
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
-                                        Float f2 = 10.00f;
+                                        f2 = 10.00f;
                                         if(Float.compare(nCurrentSpeed, f2) < 0){
                                         Alertt(bump_lat_not, bump_long_not, bump_type, bump_size);
                                         notify_lat = bump_lat_not;
@@ -574,44 +557,41 @@ if(CheckAddingType.equals("Voice command")) {
     private void Alertt(final double lat, final double lon, final String type, final String size) {
 
         AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
-// Setting Dialog Title
         alertDialog2.setTitle("Speed bump info");
-// Setting Dialog Message
         alertDialog2.setMessage("Type: "+type+"  Size: "+size);
-// Setting Positive "Yes" Btn
         alertDialog2.setPositiveButton("Edit",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog
-                        Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
-                        i.putExtra("key",bump_key);
-                        i.putExtra("loc",bump_loc);
-                        i.putExtra("type",type);
-                        i.putExtra("size",size);
-                        i.putExtra("latitude",lat);
-                        i.putExtra("longitude",lon);
-                        i.putExtra("deleteCount",deleteCount);
-                        i.putExtra("userType", CheckAddingType);
-                        startActivity(i);
-                    }});
-// Setting Negative "NO" Btn
+                        edit(); }});
+
         alertDialog2.setNegativeButton("Report",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog
-
-                        Intent i = new Intent(getApplicationContext(), report.class);
-                        i.putExtra("latitude",lat);
-                        i.putExtra("longitude",lon);
-                        i.putExtra("userType", CheckAddingType);
-
-                        startActivity(i);
-                    }});
-// Showing Alert Dialog
+                        report(); }});
         alertDialog2.show(); }
 
-    // lat long 2 is user
-    //calculate the distance between user location and bump location
+public void edit(){
+    Intent i = new Intent(getApplicationContext(), edit_speed_bump.class);
+    i.putExtra("key",bump_key);
+    i.putExtra("loc",bump_loc);
+    i.putExtra("type",bump_type);
+    i.putExtra("size",bump_size);
+    i.putExtra("latitude",bump_lat_not);
+    i.putExtra("longitude",bump_long_not);
+    i.putExtra("deleteCount",deleteCount);
+    i.putExtra("userType", CheckAddingType);
+    startActivity(i);
+}
+public void report(){
+    Intent i = new Intent(getApplicationContext(), report.class);
+    i.putExtra("latitude",bump_lat_not);
+    i.putExtra("longitude",bump_long_not);
+    i.putExtra("userType", CheckAddingType);
+
+    startActivity(i);
+
+    }
+    //calculate the distance between user location and bump location - // lat long 2 is user
     private double distance(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1))
@@ -634,9 +614,7 @@ if(CheckAddingType.equals("Voice command")) {
     }
 
 
-    // Voice command
-
-
+    // speech recognition codes
     @Override
     public void onResume() {
             Log.i(LOG_TAG, "resume");
@@ -687,9 +665,17 @@ if(CheckAddingType.equals("Voice command")) {
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = "";
-        for (String result : matches)
+        for (String result : matches) {
             text += result + "\n";
-
+            if(result.equals("at") || result.equals("add")){
+                add();
+            }
+            if(result.equals("edit") && Float.compare(nCurrentSpeed, f2) < 0 &&x < 0.300 ){
+                edit();
+            }
+            if(result.equals("report") && Float.compare(nCurrentSpeed, f2) < 0 &&x < 0.300 ){
+                report(); }
+        }
         textView.setText(text);
         speech.startListening(recognizerIntent);
     }
@@ -722,8 +708,6 @@ if(CheckAddingType.equals("Voice command")) {
 
     @Override
     public void onRmsChanged(float rmsdB) {
-        //Log.i(LOG_TAG, "onRmsChanged: " + rmsdB);
-     //   progressBar.setProgress((int) rmsdB);
     }
 
     public String getErrorText(int errorCode) {
@@ -762,7 +746,5 @@ if(CheckAddingType.equals("Voice command")) {
         }
         return message;
     }
-
-
 
 }

@@ -66,13 +66,15 @@ public class add extends AppCompatActivity {
              longitude = extras.getDouble("Longitude");
         }
         dataBymp = FirebaseDatabase.getInstance().getReference("SpeedBump");
+        ((RadioButton) type.getChildAt(0)).setChecked(true);
+        ((RadioButton) size.getChildAt(1)).setChecked(true);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 save();
             }
         });
-        Toast.makeText(this, userType, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, userType, Toast.LENGTH_SHORT).show();
 if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
     }
 
@@ -171,13 +173,13 @@ private void getSpeechInput() {
    public void testtype(String[] x){
        for (String n: x) {
            if (n.equals("cushion")) {
-               ((RadioButton) type.getChildAt(0)).setChecked(true);
+               ((RadioButton) type.getChildAt(2)).setChecked(true);
            }
            if (n.equals("table")) {
                ((RadioButton) type.getChildAt(1)).setChecked(true);
            }
            if (n.equals("hump")) {
-               ((RadioButton) type.getChildAt(2)).setChecked(true);
+               ((RadioButton) type.getChildAt(0)).setChecked(true);
            }
            if (n.equals("small")) {
                ((RadioButton) size.getChildAt(0)).setChecked(true);
@@ -212,38 +214,27 @@ private void getSpeechInput() {
         return s ; }
 
 
-
     public void save(){
         String type2 = checkType();
         String size2 = checkSize();
 
         if(type2 != null & size2 != null  &  latitude > 0 & longitude > 0 ) {
-
             saveInDB(type2,size2);
         }else {
-            if (type2 == null ||size2 == null) {
-                Toast.makeText(this, "There is missing value  ", Toast.LENGTH_SHORT).show(); }
-
             if(latitude==0 || longitude == 0) {
                 Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
                 t.setGravity(Gravity.TOP, 0, 90);
-                t.show();
-            }
-        }
+                t.show(); } }
     }
-
 
         public void saveInDB(String type, String size){
             String id = dataBymp.push().getKey();
 
-
-
             SpeedBump bump = new SpeedBump ( latitude, longitude, type, size,0);
-            // create sub child for bump - replace '.' with '-' because '.' is not allowed id firebase
+            // create sub child for bump - replace '.' with '-' because '.' is not allowed in id firebase
 
             String sub1 = new DecimalFormat("00.00").format(latitude);
             String sub2=  new DecimalFormat("00.00").format(longitude);
-
             sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
             dataBymp.child(sub).child(id).setValue(bump);
 
@@ -251,14 +242,11 @@ private void getSpeechInput() {
             t.setGravity(Gravity.TOP, 0, 90);
             t.show();
 // return to map page
-            //Intent log = new Intent(this,map.class);
-           // log.putExtra("state", true);
             onBackPressed();
             //startActivity(log);
 
         }
     public void back_map1(View view) {
-        Intent go_map1= new Intent(this,map.class);
-        startActivity(go_map1);
+        onBackPressed();
     }
 }

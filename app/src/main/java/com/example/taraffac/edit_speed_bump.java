@@ -240,7 +240,7 @@ public void delete(){
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
-            public void run() {getSpeechInput(); }}, 10000); //  1000 = 1 sec
+            public void run() {getSpeechInput(); }}, 7000); //  1000 = 1 sec
     }
 
     // speech to text
