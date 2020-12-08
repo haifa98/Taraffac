@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -510,6 +511,10 @@ if(CheckAddingType.equals("Voice command")) {
     private void Alertt(final String type, final String size) {
 // show alert dialog
         AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
+        Vibrator vibrator;
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(500);
+
         alertDialog2.setTitle("Speed bump info");
         alertDialog2.setMessage("Type: "+type+"  Size: "+size);
         alertDialog2.setPositiveButton("Edit",
