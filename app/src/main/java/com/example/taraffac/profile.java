@@ -139,11 +139,8 @@ public class profile extends AppCompatActivity {
     }//end Oncrate
 
 
-
-
     public void back_profile1(View view) {
-        Intent go_map2= new Intent(this,map.class);
-        startActivity(go_map2);
+        onBackPressed();
     }
 }
 

@@ -111,7 +111,7 @@ public static String[] spliteArray(ArrayList<String> array) {
     return tmp;
 }
 
-// this is the main methon for voice command
+// this is the main method for voice command
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public void read(){
 
@@ -134,7 +134,7 @@ public void read(){
             } else { Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show(); }}
     });
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+// start speech recognition after 11 sec
     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
         @Override
         public void run() {getSpeechInput(); }}, 11000); //  1000 = 1 sec
@@ -168,12 +168,12 @@ private void getSpeechInput() {
                         save();
                     }
                     assert result != null;
-                    String[] newA = spliteArray(result);
-                    testtype(newA);
-                    save();
+                    String[] newA = spliteArray(result); // split each sentence to words
+                    testtype(newA);// send words to this function
+                    save(); // save in DB
 
                     break;} }}
-   // this method check radio buttons
+   // this method check radio buttons by user voice command
    public void testtype(String[] x){
        for (String n: x) {
            if (n.equals("cushion")) {
@@ -219,10 +219,11 @@ private void getSpeechInput() {
 
 
     public void save(){
+        // get type and size values
         String type2 = checkType();
         String size2 = checkSize();
 
-        if(type2 != null & size2 != null  &  latitude > 0 & longitude > 0 ) {
+        if( latitude > 0 && longitude > 0 ) {
             saveInDB(type2,size2);
         }else {
             if(latitude==0 || longitude == 0) {
@@ -247,7 +248,6 @@ private void getSpeechInput() {
             t.show();
 // return to map page
             onBackPressed();
-            //startActivity(log);
 
         }
     public void back_map1(View view) {

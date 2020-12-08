@@ -87,8 +87,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     private GoogleMap mMap;
     FloatingActionButton add;
     ToggleButton active;
-    TextView textView;
-
     FusedLocationProviderClient client;
     private Geocoder geocoder;
     DatabaseReference ref;
@@ -99,13 +97,11 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     String sub;
     SpeedBump bump;
     String CheckAddingType;
-    ////
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     StorageReference storageReference;
     FirebaseUser  firebaseUser;
     double notify_long,notify_lat,add_lat,add_long;
-    //public Toolbar toolbar;
     String bump_key, bump_locKey, bump_loc;
     double bump_lat_not, bump_long_not ;
     String bump_type , bump_size ;
@@ -159,7 +155,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
 
         add = (FloatingActionButton) findViewById(R.id.add_bump2);
         active = findViewById(R.id.map_deactive);
-        textView = findViewById(R.id.textView_map);
         logout_rl=findViewById(R.id.logout_rl);
         provile_rl=findViewById(R.id.provile_rl);
         provile_rl.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View v) { startActivity(new Intent(map.this, profile.class)); }});
@@ -238,25 +233,21 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         });
  */
 
-        // check for permission
+        // check for audio permission
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSIONS_REQUEST_RECORD_AUDIO);
             return;
         }
+        // when the user open the system and the system is activated - this code will start the speech recognition after 3 sec
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (CheckAddingType!= null) {
                     if (CheckAddingType.equals("Voice command") && active.isChecked()) {
                         resetSpeechRecognizer();
-
                         setRecogniserIntent();
-
-                        speech.startListening(recognizerIntent);
-                    }
-
-                } }}, 3000); //  1000 = 1 sec
+                        speech.startListening(recognizerIntent); } } }}, 3000); //  1000 = 1 sec
 
     }// end on create
 
@@ -267,15 +258,13 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
             editor.putBoolean("active", true);
             editor.commit();
+    // when the user open the system and the system is deactivated - this code will start the speech recognition if the user activate the system
 if(CheckAddingType.equals("Voice command")) {
             resetSpeechRecognizer();
-
             setRecogniserIntent();
-
             speech.startListening(recognizerIntent); }
 
         } else {
-
             SharedPreferences.Editor editor = getSharedPreferences("com.example.taraffac", MODE_PRIVATE).edit();
             editor.putBoolean("active", false);
             editor.commit();
@@ -297,36 +286,27 @@ if(CheckAddingType.equals("Voice command")) {
                 //We can show user a dialog why this permission is necessary
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-            }
-        }
-    }
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE); } } }
 
     // set the user location
     private void enableUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-    }
+            return; }
+        mMap.setMyLocationEnabled(true); }
 
     // zoom on user location
     private void zoomToUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+            return; }
         Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+            }}); }
 
-            }
-        });
-    }
-
-    @Override // check if user allow GPS service
+    @Override // check if user allow GPS service and allow speech recognition
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -337,18 +317,12 @@ if(CheckAddingType.equals("Voice command")) {
             } else {
                 Toast.makeText(map.this, "Permission Denied!", Toast
                         .LENGTH_SHORT).show();
-                finish();
-            }
-        }
+                finish(); } }
 
         if (requestCode == ACCESS_LOCATION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableUserLocation();
-                zoomToUserLocation();
-            } else {
-
-            }
-        }
+                zoomToUserLocation(); } else { } }
     }
 
     // show markers on bumps
@@ -371,20 +345,18 @@ if(CheckAddingType.equals("Voice command")) {
 
                         LatLng latLng = new LatLng(bump_lat, bump_long);
                         String bump_info = " type : " + bump_type + " size : " + bump_size;
-// set height & width - apply style
+                 // set height & width - apply style
                         int height = 130;
                         int width = 130;
                         Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.pin);
                         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
                         BitmapDescriptor smallMarkerIcon = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
-                        //   BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.pin);
                         MarkerOptions marker = new MarkerOptions().position(latLng).title("Bump info").snippet(bump_info).icon(smallMarkerIcon);
-// create marker for bumps
+                  // create marker for bumps in the map
                         mMap.addMarker(marker); } } }
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }});
-    }
+            public void onCancelled(@NonNull DatabaseError error) { }}); }
 
 
     // add new speed bump
@@ -407,6 +379,7 @@ if(CheckAddingType.equals("Voice command")) {
                 double loc_lat = location.getLatitude();
                 double loc_long = location.getLongitude();
                 double  x =  distance(loc_lat,loc_long,notify_lat,notify_long);
+                // check if there is a bump within 20m on location - if there is one already exist it will not add
                 if(x>0.020){
                 // send info to add class
                 Intent intent = new Intent(map.this, add.class);
@@ -416,15 +389,7 @@ if(CheckAddingType.equals("Voice command")) {
                     add_lat=loc_lat;
                     add_long=loc_long;
                 startActivity(intent);
-                }else{
-                    Toast.makeText(map.this, "The bump is already exist", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        //Intent a = new Intent(this, add.class);
-        // startActivity(a);
-    }
+                }else{ Toast.makeText(map.this, "The bump is already exist", Toast.LENGTH_SHORT).show(); } }}); }
 
     //speedometer code
     private void updateSpeed(CLocation location) {
@@ -458,14 +423,12 @@ if(CheckAddingType.equals("Voice command")) {
         return chkUseMetricUnits.isChecked();
     }
 
-
     */
     @Override
     public void onLocationChanged(@NonNull Location location) {
         // TODO Auto-generated method stub
         if(location != null)
-        {
-            CLocation myLocation = new CLocation(location, true);
+        { CLocation myLocation = new CLocation(location, true);
             this.updateSpeed(myLocation); } }
 
     @Override
@@ -495,7 +458,7 @@ if(CheckAddingType.equals("Voice command")) {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
-        }
+        }//get user location
         Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
@@ -506,7 +469,7 @@ if(CheckAddingType.equals("Voice command")) {
         String sub1 = new DecimalFormat("00.00").format(not_lat);
         String sub2=  new DecimalFormat("00.00").format(not_long);
         sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
-// get bumps info for comapre and notify
+// get bumps info for compare bumps
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -535,8 +498,8 @@ if(CheckAddingType.equals("Voice command")) {
                                 if (add_lat != bump_lat_not & add_long != bump_long_not) {
 
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
-                                        f2 = 10.00f;
-                                        if(Float.compare(nCurrentSpeed, f2) < 0){
+                                        f2 = 10.00f; //
+                                        if(Float.compare(nCurrentSpeed, f2) > 0){// if the user speed less than 10k/h will not notify
                                         Alertt(bump_type, bump_size);
                                         notify_lat = bump_lat_not;
                                         notify_long = bump_long_not; } } } }} } } }
@@ -545,7 +508,7 @@ if(CheckAddingType.equals("Voice command")) {
             public void onCancelled(@NonNull DatabaseError error) { }}); }
 
     private void Alertt(final String type, final String size) {
-
+// show alert dialog
         AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
         alertDialog2.setTitle("Speed bump info");
         alertDialog2.setMessage("Type: "+type+"  Size: "+size);
@@ -634,8 +597,7 @@ public void report(){
     @Override
     public void onBeginningOfSpeech() {
         Log.i(LOG_TAG, "onBeginningOfSpeech");
-      //  progressBar.setIndeterminate(false);
-     //   progressBar.setMax(10);
+
     }
 
     @Override
@@ -646,35 +608,30 @@ public void report(){
     @Override
     public void onEndOfSpeech() {
         Log.i(LOG_TAG, "onEndOfSpeech");
-       // progressBar.setIndeterminate(true);
         speech.stopListening();
     }
-
+// this method will get the voice input
     @Override
     public void onResults(Bundle results) {
         Log.i(LOG_TAG, "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = "";
         for (String result : matches) {
-            text += result + "\n";
             if(result.equals("at") || result.equals("add")){
                 add();
             }
-            if(result.equals("edit") && Float.compare(nCurrentSpeed, f2) < 0 &&x < 0.300 ){
+            if(result.equals("edit") && Float.compare(nCurrentSpeed, f2) < 0 &&x < 0.300 && notify_lat > 0){
                 edit();
             }
-            if(result.equals("report") && Float.compare(nCurrentSpeed, f2) < 0 &&x < 0.300 ){
+            if(result.equals("report") && Float.compare(nCurrentSpeed, f2) < 0 && x < 0.300 && notify_lat > 0){
                 report(); }
         }
-        textView.setText(text);
         speech.startListening(recognizerIntent);
     }
-
+// this method get the error if it happen
     @Override
     public void onError(int errorCode) {
         String errorMessage = getErrorText(errorCode);
         Log.i(LOG_TAG, "FAILED " + errorMessage);
-       // returnedError.setText(errorMessage);
 
         // rest voice recogniser
         resetSpeechRecognizer();
