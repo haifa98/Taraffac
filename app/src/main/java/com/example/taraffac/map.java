@@ -547,14 +547,14 @@ if(CheckAddingType.equals("Voice command")) {
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
                                         f2 = 10.00f;
                                         if(Float.compare(nCurrentSpeed, f2) < 0){
-                                        Alertt(bump_lat_not, bump_long_not, bump_type, bump_size);
+                                        Alertt(bump_type, bump_size);
                                         notify_lat = bump_lat_not;
                                         notify_long = bump_long_not; } } } }} } } }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }}); }
 
-    private void Alertt(final double lat, final double lon, final String type, final String size) {
+    private void Alertt(final String type, final String size) {
 
         AlertDialog.Builder alertDialog2 = new AlertDialog.Builder(map.this);
         alertDialog2.setTitle("Speed bump info");

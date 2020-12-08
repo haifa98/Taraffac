@@ -219,7 +219,7 @@ public void delete(){
 
         final String emailid1;
         emailid1 =  "if you want to edit select the type and size   " +
-                "Or if you want to delete say Delete ?";
+                "Or if you want to delete say Delete ?" + " or is you want to cancel say cancel";
 
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -258,17 +258,30 @@ public void delete(){
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            onBackPressed();
+            Toast t = Toast.makeText(this, " The Update was failed", Toast.LENGTH_SHORT);
+            t.setGravity(Gravity.TOP, 0, 90);
+            t.show();
+        }
 
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (result == null) {
+                        Intent go_map1= new Intent(this,map.class);
+                        startActivity(go_map1);
+                    }
                     assert result != null;
                     String[] newA = spliteArray(result);
-                    state1= testtype(newA);
-                    if (state1.equals("delete")){
+                    state1 = testtype(newA);
+                    if (state1.equals("delete")) {
                         delete();
-                    } else {
+                    }else if (state1.equals("cancel")){
+                        Intent go_map1= new Intent(this,map.class);
+                        startActivity(go_map1);
+                }else {
                     Update_Bump(); }
 
                     break;} }}
@@ -276,29 +289,38 @@ public void delete(){
 
     // this method check radio buttons
     public String testtype(String[] x){
-        String state ="edit";
+        String state =null;
+
         for (String n: x) {
             if (n.equals("cushion")) {
                 ((RadioButton) RadioGroupTypeUpdate.getChildAt(0)).setChecked(true);
-
+                state ="edit";
             }
             if (n.equals("table")) {
                 ((RadioButton) RadioGroupTypeUpdate.getChildAt(1)).setChecked(true);
+                state ="edit";
             }
             if (n.equals("hump")) {
                 ((RadioButton) RadioGroupTypeUpdate.getChildAt(2)).setChecked(true);
+                state ="edit";
             }
             if (n.equals("small")) {
                 ((RadioButton) RadioGroupSizeUpdate.getChildAt(0)).setChecked(true);
+                state ="edit";
             }
             if (n.equals("medium")) {
                 ((RadioButton) RadioGroupSizeUpdate.getChildAt(1)).setChecked(true);
+                state ="edit";
             }
             if (n.equals("large")) {
                 ((RadioButton) RadioGroupSizeUpdate.getChildAt(2)).setChecked(true);
+                state ="edit";
             }
         if (n.equals("delete")){
             state="delete";
+        }
+        if (n.equals("cancel")){
+            state="cancel";
         }
         }
 
