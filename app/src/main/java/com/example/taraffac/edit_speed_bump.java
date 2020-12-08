@@ -274,6 +274,9 @@ public void delete(){
                     if (result == null) {
                         Intent go_map1= new Intent(this,map.class);
                         startActivity(go_map1);
+                        Toast t = Toast.makeText(this, " The Update was failed", Toast.LENGTH_SHORT);
+                        t.setGravity(Gravity.TOP, 0, 90);
+                        t.show();
                     }
                     assert result != null;
                     String[] newA = spliteArray(result);

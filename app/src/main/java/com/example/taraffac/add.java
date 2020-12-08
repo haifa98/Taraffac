@@ -156,11 +156,17 @@ private void getSpeechInput() {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            save();
+        }
 
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (result == null) {
+                        save();
+                    }
                     assert result != null;
                     String[] newA = spliteArray(result);
                     testtype(newA);

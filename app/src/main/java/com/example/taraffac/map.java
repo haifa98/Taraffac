@@ -196,14 +196,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             }
         });
 // check if active for add
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (active.isChecked()) {
-                    add();
-                }
-            }
-        });
+        add.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) { if (active.isChecked()) { add(); } }});
 
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -217,10 +210,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {//start method
                 assert documentSnapshot != null;
-                CheckAddingType= documentSnapshot.getString("addingType");
-              Toast.makeText(map.this, CheckAddingType, Toast.LENGTH_SHORT).show();
-            }
-        });
+                CheckAddingType= documentSnapshot.getString("addingType"); }});
 
         //speedometer
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

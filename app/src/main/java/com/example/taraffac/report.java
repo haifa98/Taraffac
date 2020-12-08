@@ -272,22 +272,34 @@ public class report extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(data==null){
+            back_map3();
+        }
 
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (result == null) {
+                        back_map3();
+                    }
                     assert result != null;
                     String[] newA = spliteArray(result);
-                    testtype(newA);
-                            Execute();
-
-
+                    String a = testtype(newA);
+                    if(a.equals("cancel")){
+                        back_map3();
+                    }else {
+                    Execute(); }
 
                     break;} }}
     // this method check radio buttons
-    public void testtype(String[] x){
+    public String testtype(String[] x){
+        String state = null;
         for (String n: x) {
+            if (n.equals("cancel")) {
+                state="cancel";
+
+            }
             if (n.equals("1")) {
               //  ((RadioButton) radioGroup_reason.getChildAt(5)).setChecked(true);
                 rd5.setChecked(true);
@@ -329,6 +341,8 @@ public class report extends Activity {
                 LocationEmail = "mgoodh.18@gmail.com ";
             }else if(n.equals(Tabuk)){
                 LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals("city")){
+                LocationEmail = "haifa98125@gmail.com";
             }else if(n.equals(Hail)) {
                 LocationEmail = "mgoodh.18@gmail.com";
             }else if(n.equals(Alahsa)) {
@@ -341,7 +355,8 @@ public class report extends Activity {
             } else {
                 LocationEmail = "amjad.nasser.al@gmail.com"; }
 
-            }}
+            }
+    return state;}
 
 
 }

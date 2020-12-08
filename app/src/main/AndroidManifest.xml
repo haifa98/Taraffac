@@ -37,17 +37,18 @@
 
         <activity
             android:name=".map"
-            android:label="@string/title_activity_map">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            android:label="@string/title_activity_map"/>
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
 
         <activity android:name=".edit_profile" />
         <activity android:name=".profile" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".edit_speed_bump" />
         <activity android:name=".register"/>
