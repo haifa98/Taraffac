@@ -69,6 +69,9 @@ public class report extends Activity {
         rd5=findViewById(R.id.rd5);
         autoCompleteTextView=findViewById(R.id.autoCompleteText);
         radioGroup_reason= findViewById(R.id.report_reason);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            userType = extras.getString("userType"); }
         //interface drop down list
         // Create array Contains the locations in the drop down list
         String [] option= {"Riyadh","Makkah","Almadinah","Eastern Region","Asir" ,"Alqassim" , "Jeddah" , "Albaha" , "Jazan" ,"Tabuk" , "Hail" , "Alahsa" , "Altaif", "Najran" , "Northern Border"};
@@ -77,7 +80,6 @@ public class report extends Activity {
         autoCompleteTextView.setText(arrayAdapter.getItem(0).toString() , true);
         // view Contains the locations in the drop down list
         autoCompleteTextView.setAdapter(arrayAdapter);
-
         //  find the  item in a AutoCompleteTextView filled with Array and stored in variable
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener(){//start method
             @Override
@@ -85,11 +87,7 @@ public class report extends Activity {
                 //Store the Item in a AutoCompleteTextView filled
                 selection = (String) parent.getItemAtPosition(position);
                 // retrieve values from map
-                Bundle extras = getIntent().getExtras();
-                if (extras != null) {
-                    userType = extras.getString("userType");
 
-                }
            //     userType = getIntent().getExtras().getString("userType");
                 Toast.makeText(report.this, userType, Toast.LENGTH_SHORT).show();
 
@@ -126,10 +124,7 @@ public class report extends Activity {
                     LocationEmail = "amjad.nasser.al@gmail.com";
 
                 } else {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
-
-                }
-            }
+                    LocationEmail = "amjad.nasser.al@gmail.com"; } }
 
         });//end method
 
@@ -141,20 +136,14 @@ public class report extends Activity {
         returm_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                back_map3();
-            }
-        });
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void run() {
-                if (userType!= null) {
-                if(userType.equals("Voice command")){ read(); } }
+                back_map3(); }});
 
-                 }}, 3000); //  1000 = 1 sec
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            read();
-        }
+        if (userType!= null) {
+            if(userType.equals("Voice command")){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    read();
+                }
+            } }
     }
 
     public void Execute(){
@@ -168,18 +157,13 @@ public class report extends Activity {
 
       // Send Email  to JavaMailAPI class
     private void senEmail() {
-        String mReason;
-        if(rd_reason== null){
-            mReason = (String) rd4.getText();}
-        else {
-            mReason = (String) rd_reason.getText(); }
+        String mReason = ckeck_reason();
+
         String mEmail = LocationEmail;
         String mSubject = "Complaint about speed bump";
 
-
-
         String mContent= "We are sending this e-mail to report the speed bump located at this coordinates "+coord +"\n"+"and the reason for reporting is the following:  "+mReason+"\n"+"Thank you.";
-// "amjad.nasser.al@gmail.com"
+
         if(mEmail == null ){
             JavaMailAPI javaMailAPI = new JavaMailAPI(this, "amjad.nasser.al@gmail.com",mSubject ,mContent );
 
@@ -193,6 +177,13 @@ public class report extends Activity {
     public void checkReason(View view) {
         int radioID = radioGroup_reason.getCheckedRadioButtonId();
         rd_reason = findViewById(radioID);
+    }
+    public String ckeck_reason(){
+        String t=(String) rd4.getText(); ;
+        int radioID = radioGroup_reason.getCheckedRadioButtonId();
+        rd_reason = findViewById(radioID);
+        if(rd_reason!=null) { t = (String) rd_reason.getText(); }
+        return t ;
     }
 
     public void back_map3(){
@@ -241,7 +232,7 @@ public class report extends Activity {
     public void read(){
 
         final String emailid1;
-        emailid1 =  "select the reason by number   " ;
+        emailid1 = "select your area "+ "select the reason by number  " ;
                // "and if your  city is not riyadh please choose your city ";
 
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -289,38 +280,67 @@ public class report extends Activity {
                     assert result != null;
                     String[] newA = spliteArray(result);
                     testtype(newA);
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                        @Override
-                        public void run() {
                             Execute();
-                        }}, 3000); //  1000 = 1 sec
+
 
 
                     break;} }}
     // this method check radio buttons
     public void testtype(String[] x){
         for (String n: x) {
-            if (n.equals("5")) {
+            if (n.equals("1")) {
               //  ((RadioButton) radioGroup_reason.getChildAt(5)).setChecked(true);
                 rd5.setChecked(true);
             }
-            if (n.equals("1")) {
+            if (n.equals("2")) {
                 rd1.setChecked(true);
               //  ((RadioButton) radioGroup_reason.getChildAt(0)).setChecked(true);
             }
-            if (n.equals("2")) {
+            if (n.equals("3")) {
                 rd2.setChecked(true);
               //  ((RadioButton) radioGroup_reason.getChildAt(1)).setChecked(true);
             }
-            if (n.equals("3")) {
+            if (n.equals("4")) {
                 rd3.setChecked(true);
              //   ((RadioButton) radioGroup_reason.getChildAt(2)).setChecked(true);
             }
-            if (n.equals("4")) {
+            if (n.equals("5")) {
                 rd4.setChecked(true);
                // ((RadioButton) radioGroup_reason.getChildAt(3)).setChecked(true);
             }
+            // Check the item and send email
+            if (n.equals(Alriyadh)) {
+                LocationEmail = "mgoodh.18@gmail.com";
+            }else if(n.equals(Makkah)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Almadinah)) {
+                LocationEmail = "mgoodh.18@gmail.com";
+            }  else if(n.equals(Eastern_Region)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Asir)) {
+                LocationEmail = "mgoodh.18@gmail.com";
+            } else if(n.equals(Alqassim)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Jeddah)) {
+                LocationEmail = "mgoodh.18@gmail.com";
+            }else if(n.equals(Albaha)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Jazan)) {//
+                LocationEmail = "mgoodh.18@gmail.com ";
+            }else if(n.equals(Tabuk)){
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Hail)) {
+                LocationEmail = "mgoodh.18@gmail.com";
+            }else if(n.equals(Alahsa)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Altaif)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+            }else if(n.equals(Najran)) {
+                LocationEmail = "amjad.nasser.al@gmail.com";
+
+            } else {
+                LocationEmail = "amjad.nasser.al@gmail.com"; }
+
             }}
 
 
