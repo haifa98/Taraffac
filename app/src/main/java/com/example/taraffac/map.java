@@ -415,7 +415,7 @@ if(CheckAddingType.equals("Voice command")) {
       //  }
 
         TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
-        txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
+       // txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
     }
 
    /* private boolean useMetricUnits() {
@@ -500,10 +500,10 @@ if(CheckAddingType.equals("Voice command")) {
 
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
                                         f2 = 10.00f; //
-                                        if(Float.compare(nCurrentSpeed, f2) > 0){// if the user speed less than 10k/h will not notify
+                                      //  if(Float.compare(nCurrentSpeed, f2) > 0){// if the user speed less than 10k/h will not notify
                                         Alertt(bump_type, bump_size);
                                         notify_lat = bump_lat_not;
-                                        notify_long = bump_long_not; } } } }} } } }
+                                        notify_long = bump_long_not; } } } }} } } //}
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }}); }

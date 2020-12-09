@@ -34,7 +34,7 @@ public class edit_speed_bump extends AppCompatActivity {
     public String Cushion="Cushion";
     public String Table="Table";
     public String Small="Small";
-
+    String size1,type1;
     public String Midium="Medium";
     DatabaseReference dataBympUpdate;
     double latitude;
@@ -94,6 +94,8 @@ public class edit_speed_bump extends AppCompatActivity {
 
         }       //end  show the retrieve data
         // voice
+         size1 = checkSize();
+         type1 = checkType();
         if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
 
 
@@ -220,8 +222,8 @@ public void delete(){
     public void read(){
 
         final String emailid1;
-        emailid1 =  "if you want to edit select the type and size   " +
-                "Or if you want to delete say Delete ?" + " or is you want to cancel say cancel";
+        emailid1 =  "the type is "+type1+ "the size is "+ size1+ "..... if you want to edit select the type and size   " +
+                "Or if you want to delete say Delete ?" + " or if you want to cancel say cancel";
 
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -241,7 +243,7 @@ public void delete(){
 
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
-            public void run() {getSpeechInput(); }}, 7000); //  1000 = 1 sec
+            public void run() {getSpeechInput(); }}, 10000); //  1000 = 1 sec
     }
 
     // speech to text

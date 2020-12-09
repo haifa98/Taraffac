@@ -43,7 +43,7 @@ public class edit_profile extends AppCompatActivity {
     FirebaseFirestore fStore;
     FirebaseUser user;
  RadioButton  Radiodisplay, RadioVoice , RadioType;
-     //TextView itFullName , ProfileEditEmail;
+
     TextInputLayout ProfileEditFullName , ProfileEditEmail;
     RadioGroup RadioGroupTypeUpdate;
 

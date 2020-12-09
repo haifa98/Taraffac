@@ -38,12 +38,7 @@
 
         <activity
             android:name=".map"
-            android:label="@string/title_activity_map"/>
-
-
-        <activity android:name=".edit_profile" />
-        <activity android:name=".profile" />
-        <activity android:name=".MainActivity" >
+            android:label="@string/title_activity_map">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,6 +46,10 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".edit_profile" />
+        <activity android:name=".profile" />
+        <activity android:name=".MainActivity"/>
         <activity android:name=".edit_speed_bump" />
         <activity android:name=".register"/>
         <activity android:name=".login" />

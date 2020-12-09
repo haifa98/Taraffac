@@ -32,8 +32,8 @@ public class add extends AppCompatActivity {
     Button add;
     Button save;
     Button cancel;
-    double latitude;
-    double longitude;
+    double latitude=0;
+    double longitude=0;
     RadioGroup type;
     RadioButton type1;
     RadioGroup size;
@@ -115,8 +115,7 @@ public static String[] spliteArray(ArrayList<String> array) {
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public void read(){
 
-    final String emailid1;
-    emailid1 =  "what is the type of the bump ? is it cushion, table or hump ?  " +
+    final String emailid1 =  "what is the type of the bump ? is it cushion, table or hump ?  " +
             "and what is the size of the bump ? is it small, medium or large ?";
 
     mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -251,6 +250,7 @@ private void getSpeechInput() {
 
         }
     public void back_map1(View view) {
+
         onBackPressed();
     }
 }
