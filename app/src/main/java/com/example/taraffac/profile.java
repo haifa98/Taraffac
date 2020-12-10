@@ -140,7 +140,8 @@ public class profile extends AppCompatActivity {
 
 
     public void back_profile1(View view) {
-        onBackPressed();
+        Intent go_map1= new Intent(this,map.class);
+        startActivity(go_map1);
     }
 }
 

@@ -200,7 +200,9 @@ public class edit_profile extends AppCompatActivity {
 
 
     public void return_main(View view) {
-        onBackPressed();
+        Intent go_map1= new Intent(this,map.class);
+        go_map1.putExtra("state", true);
+        startActivity(go_map1);
 
     }
 

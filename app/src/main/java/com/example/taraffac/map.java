@@ -624,10 +624,10 @@ public void report(){
             if(result.equals("at") || result.equals("add")){
                 add();
             }
-            if(result.equals("edit") && Float.compare(nCurrentSpeed, f2) < 0 &&x < 0.300 && notify_lat > 0){
+            if(result.equals("edit") && Float.compare(nCurrentSpeed, f2) > 0 && x < 0.300 && notify_lat > 0){
                 edit();
             }
-            if(result.equals("report") && Float.compare(nCurrentSpeed, f2) < 0 && x < 0.300 && notify_lat > 0){
+            if(result.equals("report") && Float.compare(nCurrentSpeed, f2) > 0 && x < 0.300 && notify_lat > 0){
                 report(); }
         }
         speech.startListening(recognizerIntent);

@@ -167,7 +167,10 @@ public void delete(){
         }
 
 
-        onBackPressed();
+        Intent go_map1= new Intent(this,map.class);
+        go_map1.putExtra("state", true);
+        startActivity(go_map1);
+
     }// Update Speed Bump
 
 
@@ -178,7 +181,9 @@ public void delete(){
 
 
     public void back_ntofiy(View view) {
-        onBackPressed();
+        Intent go_map1= new Intent(this,map.class);
+        go_map1.putExtra("state", true);
+        startActivity(go_map1);
 
     }
 
@@ -220,7 +225,10 @@ public void delete(){
     // this is the main methon for voice command
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void read(){
-
+        // "read" method is the main method for voice command
+        // first will enable the text to speech then send the text to method "speak" to read the text for the user
+        // then call method "getSpeechInput" to start speech recognition , after the user speech method "onActivityresult"
+        // this method will get the user speech.
         final String emailid1;
         emailid1 =  "the type is "+type1+ "the size is "+ size1+ "..... if you want to edit select the type and size   " +
                 "Or if you want to delete say Delete ?" + " or if you want to cancel say cancel";
@@ -263,7 +271,9 @@ public void delete(){
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(data==null){
-            onBackPressed();
+            Intent go_map1= new Intent(this,map.class);
+            go_map1.putExtra("state", true);
+            startActivity(go_map1);
             Toast t = Toast.makeText(this, " The Update was failed", Toast.LENGTH_SHORT);
             t.setGravity(Gravity.TOP, 0, 90);
             t.show();

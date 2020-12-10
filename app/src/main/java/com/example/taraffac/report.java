@@ -152,9 +152,10 @@ public class report extends Activity {
         coord = ""+lat+ ","+longitude;
         senEmail();
         Toast.makeText(this, " The Report Was Sent Successfully", Toast.LENGTH_SHORT).show();
-        onBackPressed();
+        Intent go_map1= new Intent(this,map.class);
+        go_map1.putExtra("state", true);
+        startActivity(go_map1);
     }
-
       // Send Email  to JavaMailAPI class
     private void senEmail() {
         String mReason = ckeck_reason();
@@ -173,7 +174,6 @@ public class report extends Activity {
 
         javaMailAPI.execute();}
     }
-
     public void checkReason(View view) {
         int radioID = radioGroup_reason.getCheckedRadioButtonId();
         rd_reason = findViewById(radioID);
@@ -187,12 +187,10 @@ public class report extends Activity {
     }
 
     public void back_map3(){
-        onBackPressed();
-      //  Intent go_map1= new Intent(this,map.class);
-    //   startActivity(go_map1);
+        Intent go_map1= new Intent(this,map.class);
+        go_map1.putExtra("state", true);
+        startActivity(go_map1);
     }
-
-
     // this method convert text to speech
     void speak(String s){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

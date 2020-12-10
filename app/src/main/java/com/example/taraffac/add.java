@@ -72,11 +72,9 @@ public class add extends AppCompatActivity {
                 save();
             }
         });
-      //  Toast.makeText(this, userType, Toast.LENGTH_SHORT).show();
+
 if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
     }
-
-
 // this method convert text to speech
     void speak(String s){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -91,16 +89,13 @@ if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
             mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
         }
     }
-    @Override
+    @Override // shutdown the text to speech
     protected void onDestroy() {
         super.onDestroy();
-        // Don't forget to shutdown tts!
         if (mTts != null) {
             Log.v(TAG,"onDestroy: shutdown TTS");
             mTts.stop();
-            mTts.shutdown();
-        }
-    }
+            mTts.shutdown(); } }
 
 // the result from user voice become as array list and this method split the values for each element in arraylist
 public static String[] spliteArray(ArrayList<String> array) {
@@ -108,12 +103,15 @@ public static String[] spliteArray(ArrayList<String> array) {
     for(String line : array) {
         tmp = line.split("\\s+"); //split on one or more spaces
     }
-    return tmp;
-}
+    return tmp; }
 
 // this is the main method for voice command
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public void read(){
+        // "read" method is the main method for voice command
+    // first will enable the text to speech then send the text to method "speak" to read the text for the user
+    // then call method "getSpeechInput" to start speech recognition , after the user speech method "onActivityresult"
+    // this method will get the user speech.
 
     final String emailid1 =  "what is the type of the bump ? is it cushion, table or hump ?  " +
             "and what is the size of the bump ? is it small, medium or large ?";
@@ -246,11 +244,15 @@ private void getSpeechInput() {
             t.setGravity(Gravity.TOP, 0, 90);
             t.show();
 // return to map page
-            onBackPressed();
+            Intent go_map1= new Intent(this,map.class);
+            go_map1.putExtra("state", true);
+            startActivity(go_map1);
 
         }
     public void back_map1(View view) {
 
-        onBackPressed();
+        Intent go_map1= new Intent(this,map.class);
+        go_map1.putExtra("state", true);
+        startActivity(go_map1);
     }
 }
