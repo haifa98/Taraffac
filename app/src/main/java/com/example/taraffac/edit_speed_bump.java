@@ -66,7 +66,7 @@ public class edit_speed_bump extends AppCompatActivity {
 
         dataBympUpdate = FirebaseDatabase.getInstance().getReference("SpeedBump");//.child(bump_id);
 
-        // show the retrieve data
+        // retrieve data
         TypeValue= getIntent().getExtras().getString("type");
         SizeValue =getIntent().getExtras().getString("size");
         bump_id =getIntent().getExtras().getString("key");
@@ -76,6 +76,7 @@ public class edit_speed_bump extends AppCompatActivity {
         deleteCount=getIntent().getExtras().getInt("deleteCount");
         userType = getIntent().getExtras().getString("userType");
 
+        // check on radio buttons by the bump information
         if (TypeValue.equals(Cushion) ) {
 
             RadioType1.setChecked(true);
@@ -92,20 +93,21 @@ public class edit_speed_bump extends AppCompatActivity {
         }else{
             RadioSize3.setChecked(true);
 
-        }       //end  show the retrieve data
-        // voice
+        }       //end
          size1 = checkSize();
          type1 = checkType();
+        // check the adding type, if the adding type is Voice command function read() will be called
         if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
 
 
-        // Delete Speed Bump
+        // delete() will be call if the user press in DELETE
         But_Delete_bump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { delete();
 
             }
         });
+        // Update_Bump() will be call if the user press in SAVE
         But_Update_bump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,8 +115,9 @@ public class edit_speed_bump extends AppCompatActivity {
             }
         });
 
-    }// end method  ;
+    }// end method
 
+    // get type & size from the layout and store it in variable  as string
     public String checkType(){
         int radioID = RadioGroupTypeUpdate.getCheckedRadioButtonId();
         RadioType = findViewById(radioID);
@@ -129,10 +132,12 @@ public class edit_speed_bump extends AppCompatActivity {
         return CheckSize ;
     }
 public void delete(){
-        if(deleteCount>=3){
-    dataBympUpdate.child(bump_loc).child(bump_id).removeValue();
+        // if user choose to delete the bump
+        if(deleteCount>=3){ // if the delete option variable has value of 3 or more
+    dataBympUpdate.child(bump_loc).child(bump_id).removeValue();// the bump will be removed from DB
             Toast.makeText(this, " The speed bump was deleted successfully ", Toast.LENGTH_SHORT).show();
-}else{
+}else{ // if the delete option variable has value of less than 3
+            // the delete option variable will increase 1, then update the bump in DB
     String TypeText,SizeText;
     TypeText=checkType();
     SizeText=checkSize();
@@ -145,13 +150,12 @@ public void delete(){
     }
     public void Update_Bump() {// Update Speed Bump
         String TypeText,SizeText;
+        // get the updated type and size
         TypeText=checkType();
         SizeText=checkSize();
 
         if(!TypeText.isEmpty() & !SizeText.isEmpty() ) {
-
-// add in database
-
+// update in DB
             SpeedBump bump = new SpeedBump ( latitude, longitude, TypeText, SizeText,deleteCount);
             dataBympUpdate.child(bump_loc).child(bump_id).setValue(bump);
 
@@ -162,23 +166,12 @@ public void delete(){
             Toast t = Toast.makeText(this, " The Update was failed", Toast.LENGTH_SHORT);
             t.setGravity(Gravity.TOP, 0, 90);
             t.show();
-
-
         }
-
-
         Intent go_map1= new Intent(this,map.class);
         go_map1.putExtra("state", true);
         startActivity(go_map1);
 
     }// Update Speed Bump
-
-
-    public void back_map2(View view) {
-        Intent go_map1= new Intent(this,map.class);
-        startActivity(go_map1);
-    }
-
 
     public void back_ntofiy(View view) {
         Intent go_map1= new Intent(this,map.class);
@@ -186,10 +179,9 @@ public void delete(){
         startActivity(go_map1);
 
     }
-
-
     // this method convert text to speech
     void speak(String s){
+        // check the android version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.v(TAG, "Speak new API");
             Bundle bundle = new Bundle();
@@ -202,7 +194,7 @@ public void delete(){
             mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
         }
     }
-    @Override
+    @Override // shutdown the text to speech
     protected void onDestroy() {
         super.onDestroy();
         // Don't forget to shutdown tts!
@@ -225,12 +217,13 @@ public void delete(){
     // this is the main methon for voice command
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void read(){
+
         // "read" method is the main method for voice command
         // first will enable the text to speech then send the text to method "speak" to read the text for the user
         // then call method "getSpeechInput" to start speech recognition , after the user speech method "onActivityresult"
         // this method will get the user speech.
         final String emailid1;
-        emailid1 =  "the type is "+type1+ "the size is "+ size1+ "..... if you want to edit select the type and size   " +
+        emailid1 =  "the type is .."+type1+ "the size is.. "+ size1+ "..... if you want to edit select the type and size   " +
                 "Or if you want to delete say Delete ?" + " or if you want to cancel say cancel";
 
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -244,14 +237,15 @@ public void delete(){
                     }
                     else{
                         Log.v("TTS","onInit succeeded");
+                        // send emailid1 to method speak to convert it to speech
                         speak(emailid1); }
                 } else { Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show(); }}
         });
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+// start speech recognition after 11 sec
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
-            public void run() {getSpeechInput(); }}, 10000); //  1000 = 1 sec
+            public void run() {getSpeechInput(); }}, 11000); //  1000 = 1 sec
     }
 
     // speech to text
@@ -259,7 +253,7 @@ public void delete(){
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
+// start the speech recognition
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
         } else {
@@ -270,7 +264,7 @@ public void delete(){
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if(data==null){ // if user didn't say any thing the edit will failed and return user to map
             Intent go_map1= new Intent(this,map.class);
             go_map1.putExtra("state", true);
             startActivity(go_map1);
@@ -283,7 +277,7 @@ public void delete(){
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (result == null) {
+                    if (result == null) { // if user didn't say any thing the edit will failed and return user to map
                         Intent go_map1= new Intent(this,map.class);
                         startActivity(go_map1);
                         Toast t = Toast.makeText(this, " The Update was failed", Toast.LENGTH_SHORT);
@@ -291,11 +285,12 @@ public void delete(){
                         t.show();
                     }
                     assert result != null;
-                    String[] newA = spliteArray(result);
-                    state1 = testtype(newA);
-                    if (state1.equals("delete")) {
+                    String[] newA = spliteArray(result);// split the result to words
+                    // send words to check what user choose
+                    state1 = theResult(newA);
+                    if (state1.equals("delete")) { // if user say delete will call method delete
                         delete();
-                    }else if (state1.equals("cancel")){
+                    }else if (state1.equals("cancel")){ // if user say cancel, will be returned to map
                         Intent go_map1= new Intent(this,map.class);
                         startActivity(go_map1);
                 }else {
@@ -303,9 +298,8 @@ public void delete(){
 
                     break;} }}
 
-
-    // this method check radio buttons
-    public String testtype(String[] x){
+    // this method check radio buttons by user voice command
+    public String theResult(String[] x){
         String state =null;
 
         for (String n: x) {
@@ -339,10 +333,5 @@ public void delete(){
         if (n.equals("cancel")){
             state="cancel";
         }
-        }
-
-    return state;}
-
-
-}
+        }return state;}}
 

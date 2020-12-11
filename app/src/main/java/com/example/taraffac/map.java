@@ -84,7 +84,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
     FloatingActionButton add;
     ToggleButton active;
     FusedLocationProviderClient client;
-    private Geocoder geocoder;
     DatabaseReference ref;
     float nCurrentSpeed;
     boolean state = false;
@@ -157,7 +156,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        geocoder = new Geocoder(this);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         showbumps(); // call showbumps method to display bumps markers on the map
@@ -179,7 +177,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         });
 // check if active for add
         add.setOnClickListener(new View.OnClickListener() {@Override public void onClick(View view) {
-
             if (active.isChecked()) { add(); }
         else { //
                 Toast.makeText(map.this, "The system is deactivated ", Toast.LENGTH_SHORT).show();}
@@ -200,7 +197,7 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
                 assert documentSnapshot != null;
                 CheckAddingType= documentSnapshot.getString("addingType"); }});
 
-        //speedometer code, to
+        //speedometer code, to set a default value
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -214,17 +211,6 @@ public class map extends FragmentActivity implements LocationListener, OnMapRead
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         this.updateSpeed(null); // update the speed of the user
-/*
-        CheckBox chkUseMetricUntis = (CheckBox) this.findViewById(R.id.chkMetricUnits);
-        chkUseMetricUntis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // TODO Auto-generated method stub
-                map.this.updateSpeed(null);
-            }
-        });
- */
 
         // check for audio permission
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
@@ -397,34 +383,23 @@ public void StartRecognition(){
         nCurrentSpeed = 0;
 // check if the location is not null
         if(location != null)
-        { // will get the user speed
+        { //  get the user speed depend on the user location
             location.setUseMetricunits(true);
             nCurrentSpeed = location.getSpeed();
         }
-
+        // convert the strCurrentSpeed value to string
         Formatter fmt = new Formatter(new StringBuilder());
         fmt.format(Locale.US, "%5.1f", nCurrentSpeed);
         String strCurrentSpeed = fmt.toString();
         strCurrentSpeed = strCurrentSpeed.replace(' ', '0');
 
-       // String strUnits = "miles/hour";
-       // if(this.useMetricUnits())
-      //  {
         String strUnits = "km/h";
-      //  }
 
         TextView txtCurrentSpeed = (TextView) this.findViewById(R.id.txtCurrentSpeed);
         txtCurrentSpeed.setText(strCurrentSpeed + " " + strUnits);
     }
 
-   /* private boolean useMetricUnits() {
-        // TODO Auto-generated method stub
-        CheckBox chkUseMetricUnits = (CheckBox) this.findViewById(R.id.chkMetricUnits);
-        return chkUseMetricUnits.isChecked();
-    }
-
-    */
-    @Override
+    @Override // if the user location changing will update the speed by call the above method
     public void onLocationChanged(@NonNull Location location) {
         // TODO Auto-generated method stub
         if(location != null)

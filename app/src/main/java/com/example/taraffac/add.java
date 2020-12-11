@@ -56,27 +56,31 @@ public class add extends AppCompatActivity {
         type = (RadioGroup) findViewById(R.id.add_type);
         size = (RadioGroup) findViewById(R.id.add_size);
 
-// get latlng from map class
+// get user location from map class
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             userType = extras.getString("userType");
              latitude = extras.getDouble("Latitude");
              longitude = extras.getDouble("Longitude");
         }
+        // conect the DB
         dataBymp = FirebaseDatabase.getInstance().getReference("SpeedBump");
+        // set the default type & size of the bump
         ((RadioButton) type.getChildAt(0)).setChecked(true);
         ((RadioButton) size.getChildAt(1)).setChecked(true);
+        // save() will be call if the user press in SAVE
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 save();
             }
         });
-
+// check the adding type, if the adding type is Voice command function read() will be called
 if(userType.toLowerCase().contains("Voice".toLowerCase())){ read(); }
     }
 // this method convert text to speech
     void speak(String s){
+        // check the android version
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Log.v(TAG, "Speak new API");
             Bundle bundle = new Bundle();
@@ -127,6 +131,7 @@ public void read(){
                 }
                 else{
                     Log.v("TTS","onInit succeeded");
+                    // send emailid1 to method speak to convert it to speech
                     speak(emailid1); }
             } else { Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show(); }}
     });
@@ -142,7 +147,7 @@ private void getSpeechInput() {
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
+// start the speech recognition
     if (intent.resolveActivity(getPackageManager()) != null) {
         startActivityForResult(intent, 10);
     } else {
@@ -153,26 +158,38 @@ private void getSpeechInput() {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if(data==null){ // if user say add and didn't choose the type & size the bump will be saved
             save();
         }
-
         switch (requestCode) {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     if (result == null) {
-                        save();
-                    }
+                        // if user say add and didn't choose the type & size the bump will be saved
+                        save(); }
                     assert result != null;
-                    String[] newA = spliteArray(result); // split each sentence to words
-                    testtype(newA);// send words to this function
-                    save(); // save in DB
+                    String[] newA = spliteArray(result); // split the result to words
+                    // send words to check what user choose
+                    String x= theResult(newA);
+                    if (x.equals("cancel")) { // if user say cancel, will be returned to map
+                        Intent go_map1= new Intent(this,map.class);
+                        go_map1.putExtra("state", true);
+                        startActivity(go_map1);
 
-                    break;} }}
+                    } else{
+                            save(); // save in DB
+                        }
+                    }
+
+                    break;} }
    // this method check radio buttons by user voice command
-   public void testtype(String[] x){
+   public String theResult(String[] x){
+
        for (String n: x) {
+           if (n.equals("cancel")) {
+               return "cancel";
+           }
            if (n.equals("cushion")) {
                ((RadioButton) type.getChildAt(2)).setChecked(true);
            }
@@ -190,7 +207,8 @@ private void getSpeechInput() {
            }
            if (n.equals("large")) {
                ((RadioButton) size.getChildAt(2)).setChecked(true);
-           }}}
+           }}
+    return null;}
 
 // cancel add and go to homepage
     public void go_map(View v){
@@ -219,11 +237,12 @@ private void getSpeechInput() {
         // get type and size values
         String type2 = checkType();
         String size2 = checkSize();
-
+// if lat and long updated by user location, the bump will be saved in DB
         if( latitude > 0 && longitude > 0 ) {
             saveInDB(type2,size2);
         }else {
             if(latitude==0 || longitude == 0) {
+                // if lat and long not update by user location then the bump will not be saved in DB
                 Toast t = Toast.makeText(this, " The Adding was failed", Toast.LENGTH_SHORT);
                 t.setGravity(Gravity.TOP, 0, 90);
                 t.show(); } }
@@ -233,8 +252,8 @@ private void getSpeechInput() {
             String id = dataBymp.push().getKey();
 
             SpeedBump bump = new SpeedBump ( latitude, longitude, type, size,0);
-            // create sub child for bump - replace '.' with '-' because '.' is not allowed in id firebase
 
+            // create sub parent for bump - replace '.' with '-' because '.' is not allowed in id firebase
             String sub1 = new DecimalFormat("00.00").format(latitude);
             String sub2=  new DecimalFormat("00.00").format(longitude);
             sub = sub1.replace('.','-')+"_"+sub2.replace('.','-');
@@ -250,7 +269,7 @@ private void getSpeechInput() {
 
         }
     public void back_map1(View view) {
-
+// back to map
         Intent go_map1= new Intent(this,map.class);
         go_map1.putExtra("state", true);
         startActivity(go_map1);

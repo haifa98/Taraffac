@@ -70,6 +70,7 @@ public class report extends Activity {
         autoCompleteTextView=findViewById(R.id.autoCompleteText);
         radioGroup_reason= findViewById(R.id.report_reason);
         Bundle extras = getIntent().getExtras();
+        // retrieve user adding type from map
         if (extras != null) {
             userType = extras.getString("userType"); }
         //interface drop down list
@@ -86,12 +87,8 @@ public class report extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 //Store the Item in a AutoCompleteTextView filled
                 selection = (String) parent.getItemAtPosition(position);
-                // retrieve values from map
 
-           //     userType = getIntent().getExtras().getString("userType");
-                Toast.makeText(report.this, userType, Toast.LENGTH_SHORT).show();
-
-                // Check the item and send email
+                // Check the city and send email
                 if (selection.equals(Alriyadh)) {
                     LocationEmail = "mgoodh.18@gmail.com";
                 }else if(selection.equals(Makkah)) {
@@ -127,17 +124,16 @@ public class report extends Activity {
                     LocationEmail = "amjad.nasser.al@gmail.com"; } }
 
         });//end method
-
+// if user press on SEND button, the Execute() will be called
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Execute(); }});
-       // Toast to =  Toast.makeText(this, " The Report Was Sent Successfully"  , Toast.LENGTH_SHORT);
         returm_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 back_map3(); }});
-
+// check the adding type, if the adding type is Voice command function read() will be called
         if (userType!= null) {
             if(userType.equals("Voice command")){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -147,9 +143,11 @@ public class report extends Activity {
     }
 
     public void Execute(){
+        //get lat & long from map
         lat = getIntent().getExtras().getDouble("latitude");
         longitude = getIntent().getExtras().getDouble("longitude");
         coord = ""+lat+ ","+longitude;
+        // go th method senEmail() to get the reason and get the city
         senEmail();
         Toast.makeText(this, " The Report Was Sent Successfully", Toast.LENGTH_SHORT).show();
         Intent go_map1= new Intent(this,map.class);
@@ -158,28 +156,26 @@ public class report extends Activity {
     }
       // Send Email  to JavaMailAPI class
     private void senEmail() {
+        // retrieve reason value
         String mReason = ckeck_reason();
-
         String mEmail = LocationEmail;
         String mSubject = "Complaint about speed bump";
 
         String mContent= "We are sending this e-mail to report the speed bump located at this coordinates "+coord +"\n"+"and the reason for reporting is the following:  "+mReason+"\n"+"Thank you.";
-
+      // if user didn't choose a city, this will be the default email
         if(mEmail == null ){
             JavaMailAPI javaMailAPI = new JavaMailAPI(this, "amjad.nasser.al@gmail.com",mSubject ,mContent );
-
-            javaMailAPI.execute();
+            javaMailAPI.execute(); // go to class javaMailAPI to send the email
         }else {
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, mEmail,mSubject ,mContent );
-
-        javaMailAPI.execute();}
-    }
+        javaMailAPI.execute();} // go to class javaMailAPI to send the email
+    }// check the reason by buttons
     public void checkReason(View view) {
         int radioID = radioGroup_reason.getCheckedRadioButtonId();
         rd_reason = findViewById(radioID);
-    }
+    }// check the reason by buttons
     public String ckeck_reason(){
-        String t=(String) rd4.getText(); ;
+        String t=(String) rd4.getText();// set a default value
         int radioID = radioGroup_reason.getCheckedRadioButtonId();
         rd_reason = findViewById(radioID);
         if(rd_reason!=null) { t = (String) rd_reason.getText(); }
@@ -193,7 +189,7 @@ public class report extends Activity {
     }
     // this method convert text to speech
     void speak(String s){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // check the android version
             Log.v(TAG, "Speak new API");
             Bundle bundle = new Bundle();
             bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
@@ -205,10 +201,9 @@ public class report extends Activity {
             mTts.speak(s, TextToSpeech.QUEUE_FLUSH, param);
         }
     }
-    @Override
+    @Override  // shutdown the text to speech
     protected void onDestroy() {
         super.onDestroy();
-        // Don't forget to shutdown tts!
         if (mTts != null) {
             Log.v(TAG,"onDestroy: shutdown TTS");
             mTts.stop();
@@ -228,10 +223,13 @@ public class report extends Activity {
     // this is the main method for voice command
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void read(){
-
+        // "read" method is the main method for voice command
+        // first will enable the text to speech then send the text to method "speak" to read the text for the user
+        // then call method "getSpeechInput" to start speech recognition , after the user speech method "onActivityresult"
+        // this method will get the user speech.
         final String emailid1;
-        emailid1 = "select your area "+ "select the reason by number  " ;
-               // "and if your  city is not riyadh please choose your city ";
+        emailid1 = "select your area "+ "select the reason by number  "
+               + "and if your city is not riyadh please choose your city ";
 
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -244,11 +242,12 @@ public class report extends Activity {
                     }
                     else{
                         Log.v("TTS","onInit succeeded");
+                        // send emailid1 to method speak to convert it to speech
                         speak(emailid1); }
                 } else { Toast.makeText(getApplicationContext(), "Initialization failed", Toast.LENGTH_SHORT).show(); }}
         });
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
+// start speech recognition after 6 sec
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {getSpeechInput(); }}, 6000); //  1000 = 1 sec
@@ -259,7 +258,7 @@ public class report extends Activity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
+// start the speech recognition
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, 10);
         } else {
@@ -270,7 +269,7 @@ public class report extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data==null){
+        if(data==null){  // if user didn't say anything, the user will be returned to map
             back_map3();
         }
 
@@ -278,45 +277,37 @@ public class report extends Activity {
             case 10:
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    if (result == null) {
+                    if (result == null) { // if user didn't say anything, the user will be returned to map
                         back_map3();
                     }
                     assert result != null;
-                    String[] newA = spliteArray(result);
-                    String a = testtype(newA);
-                    if(a.equals("cancel")){
+                    String[] newA = spliteArray(result);// split the result to words
+                    // send words to check what user choose
+                    String a = theResult(newA);
+                    if(a.equals("cancel")){ // if user say cancel, will be returned to map
                         back_map3();
                     }else {
                     Execute(); }
 
                     break;} }}
     // this method check radio buttons
-    public String testtype(String[] x){
+    public String theResult(String[] x){
         String state = null;
         for (String n: x) {
             if (n.equals("cancel")) {
                 state="cancel";
-
             }
             if (n.equals("1")) {
-              //  ((RadioButton) radioGroup_reason.getChildAt(5)).setChecked(true);
                 rd5.setChecked(true);
             }
             if (n.equals("2")) {
                 rd1.setChecked(true);
-              //  ((RadioButton) radioGroup_reason.getChildAt(0)).setChecked(true);
             }
             if (n.equals("3")) {
                 rd2.setChecked(true);
-              //  ((RadioButton) radioGroup_reason.getChildAt(1)).setChecked(true);
             }
             if (n.equals("4")) {
                 rd3.setChecked(true);
-             //   ((RadioButton) radioGroup_reason.getChildAt(2)).setChecked(true);
-            }
-            if (n.equals("5")) {
-                rd4.setChecked(true);
-               // ((RadioButton) radioGroup_reason.getChildAt(3)).setChecked(true);
             }
             // Check the item and send email
             if (n.equals(Alriyadh)) {
