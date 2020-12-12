@@ -9,11 +9,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,17 +22,13 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -66,16 +60,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import static android.widget.Toast.makeText;
-
 
 @RequiresApi(api = Build.VERSION_CODES.KITKAT)
 public class map extends FragmentActivity implements LocationListener, OnMapReadyCallback, IBaseGpsListener, RecognitionListener {
@@ -474,10 +464,10 @@ public void StartRecognition(){
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
                                         f2 = 10.00f; //
                                         // if the user speed less than 10k/h will not notify
-                                        if(Float.compare(nCurrentSpeed, f2) > 0){
+                                  //      if(Float.compare(nCurrentSpeed, f2) > 0){
                                         Alertt(bump_type, bump_size); // send alert
                                         notify_lat = bump_lat_not;
-                                        notify_long = bump_long_not; } } } }} } } }
+                                        notify_long = bump_long_not; } } } }} } } //}
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }}); }
@@ -596,8 +586,8 @@ public void report(){
             if(result.equals("new") || result.equals("add")){
                 add();
             }// if the user say "edit" and the user speed above 10km/h and the distance between the user less than 300m
-            // then the user can edit by voice command
-            if(result.equals("edit") && Float.compare(nCurrentSpeed, f2) > 0 && x < 0.300){
+            // then the user can edit by voice command && Float.compare(nCurrentSpeed, f2) > 0
+            if(result.equals("edit") && x < 0.300){
                 edit();
             }// if the user say "report" and the user speed above 10km/h and the distance between the user less than 300m
             // then the user can report by voice command

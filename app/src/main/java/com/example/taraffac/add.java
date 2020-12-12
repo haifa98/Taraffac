@@ -15,13 +15,10 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -118,7 +115,7 @@ public void read(){
     // this method will get the user speech.
 
     final String emailid1 =  "what is the type of the bump ? is it cushion, table or hump ?  " +
-            "and what is the size of the bump ? is it small, medium or large ?";
+            "and what is the size of the bump ? is it small, medium or large ?,, or if you want to cancel say cancel";
 
     mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
         @Override
@@ -171,7 +168,7 @@ private void getSpeechInput() {
                     assert result != null;
                     String[] newA = spliteArray(result); // split the result to words
                     // send words to check what user choose
-                    String x= theResult(newA);
+                    String x = theResult(newA);
                     if (x.equals("cancel")) { // if user say cancel, will be returned to map
                         Intent go_map1= new Intent(this,map.class);
                         go_map1.putExtra("state", true);
@@ -208,7 +205,7 @@ private void getSpeechInput() {
            if (n.equals("large")) {
                ((RadioButton) size.getChildAt(2)).setChecked(true);
            }}
-    return null;}
+    return "add";}
 
 // cancel add and go to homepage
     public void go_map(View v){
@@ -238,7 +235,7 @@ private void getSpeechInput() {
         String type2 = checkType();
         String size2 = checkSize();
 // if lat and long updated by user location, the bump will be saved in DB
-        if( latitude > 0 && longitude > 0 ) {
+        if( latitude != 0 && longitude !=  0 ) {
             saveInDB(type2,size2);
         }else {
             if(latitude==0 || longitude == 0) {
@@ -247,7 +244,6 @@ private void getSpeechInput() {
                 t.setGravity(Gravity.TOP, 0, 90);
                 t.show(); } }
     }
-
         public void saveInDB(String type, String size){
             String id = dataBymp.push().getKey();
 
