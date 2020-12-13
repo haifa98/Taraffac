@@ -10,7 +10,6 @@ import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -90,38 +89,38 @@ public class report extends Activity {
 
                 // Check the city and send email
                 if (selection.equals(Alriyadh)) {
-                    LocationEmail = "mgoodh.18@gmail.com";
+                    LocationEmail = "eSupport@alriyadh.gov.sa";
                 }else if(selection.equals(Makkah)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "info@holymakkah.gov.sa";
             }else if(selection.equals(Almadinah)) {
-                    LocationEmail = "mgoodh.18@gmail.com";
+                    LocationEmail = "webmasher@amana-md.gov.sa";
 
             }  else if(selection.equals(Eastern_Region)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "HELP@EAMANA.GOV.SA";
                 }else if(selection.equals(Asir)) {
-                    LocationEmail = "mgoodh.18@gmail.com";
+                    LocationEmail = "as@ars.gov.sa";
 
                 } else if(selection.equals(Alqassim)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "info@qassim.gov.sa";
                 }else if(selection.equals(Jeddah)) {
-                    LocationEmail = "mgoodh.18@gmail.com";
+                    LocationEmail = "csc1@jeddah.gov.sa";
                 }else if(selection.equals(Albaha)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "baha@mob.gov.sa";
                 }else if(selection.equals(Jazan)) {
-                    LocationEmail = "mgoodh.18@gmail.com";
+                    LocationEmail = "info@jazan.sa";
                 }else if(selection.equals(Tabuk)){
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "info@tabukmgov.sa";
                 }else if(selection.equals(Hail)) {
-                    LocationEmail = "mgoodh.18@gmail.com";
+                    LocationEmail = "mayor@amanathail.gov.sa";
                 }else if(selection.equals(Alahsa)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "info@alhasa.gov.sa";
                 }else if(selection.equals(Altaif)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "admin@taifcity.gov.sa";
                 }else if(selection.equals(Najran)) {
-                    LocationEmail = "amjad.nasser.al@gmail.com";
+                    LocationEmail = "Link@najran.gov.sa";
 
                 } else {
-                    LocationEmail = "amjad.nasser.al@gmail.com"; } }
+                    LocationEmail = "it@arar-mu.gov.sa"; } }
 
         });//end method
 // if user press on SEND button, the Execute() will be called
@@ -164,7 +163,7 @@ public class report extends Activity {
         String mContent= "We are sending this e-mail to report the speed bump located at this coordinates "+coord +"\n"+"and the reason for reporting is the following:  "+mReason+"\n"+"Thank you.";
       // if user didn't choose a city, this will be the default email
         if(mEmail == null ){
-            JavaMailAPI javaMailAPI = new JavaMailAPI(this, "amjad.nasser.al@gmail.com",mSubject ,mContent );
+            JavaMailAPI javaMailAPI = new JavaMailAPI(this, "eSupport@alriyadh.gov.sa",mSubject ,mContent );
             javaMailAPI.execute(); // go to class javaMailAPI to send the email
         }else {
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, mEmail,mSubject ,mContent );
@@ -311,38 +310,36 @@ public class report extends Activity {
             }
             // Check the item and send email
             if (n.equals(Alriyadh)) {
-                LocationEmail = "mgoodh.18@gmail.com";
+                LocationEmail = "eSupport@alriyadh.gov.sa";
             }else if(n.equals(Makkah)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "info@holymakkah.gov.sa";
             }else if(n.equals(Almadinah)) {
-                LocationEmail = "mgoodh.18@gmail.com";
+                LocationEmail = "webmasher@amana-md.gov.sa";
             }  else if(n.equals(Eastern_Region)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "HELP@EAMANA.GOV.SA";
             }else if(n.equals(Asir)) {
-                LocationEmail = "mgoodh.18@gmail.com";
+                LocationEmail = "as@ars.gov.sa";
             } else if(n.equals(Alqassim)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "info@qassim.gov.sa";
             }else if(n.equals(Jeddah)) {
-                LocationEmail = "mgoodh.18@gmail.com";
+                LocationEmail = "csc1@jeddah.gov.sa";
             }else if(n.equals(Albaha)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "baha@mob.gov.sa";
             }else if(n.equals(Jazan)) {//
-                LocationEmail = "mgoodh.18@gmail.com ";
+                LocationEmail = "info@jazan.sa";
             }else if(n.equals(Tabuk)){
-                LocationEmail = "amjad.nasser.al@gmail.com";
-            }else if(n.equals("city")){
-                LocationEmail = "haifa98125@gmail.com";
+                LocationEmail = "info@tabukmgov.sa";
             }else if(n.equals(Hail)) {
-                LocationEmail = "mgoodh.18@gmail.com";
+                LocationEmail = "mayor@amanathail.gov.sa";
             }else if(n.equals(Alahsa)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "info@alhasa.gov.sa";
             }else if(n.equals(Altaif)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "admin@taifcity.gov.sa";
             }else if(n.equals(Najran)) {
-                LocationEmail = "amjad.nasser.al@gmail.com";
+                LocationEmail = "Link@najran.gov.sa";
 
             } else {
-                LocationEmail = "amjad.nasser.al@gmail.com"; }
+                LocationEmail = "it@arar-mu.gov.sa"; }
 
             }
     return state;}

@@ -122,8 +122,7 @@
                         android:background="#ffffff"
                         android:fontFamily="monospace"
                         android:text="@string/deactivate"
-                        android:textColor="@color/Color_white"
-                        android:textOff="@string/activate"
+                        android:textColor="@drawable/text_color1"                        android:textOff="@string/activate"
                         android:textOn="@string/deactivate"
                         android:textSize="10.5dp" />
 

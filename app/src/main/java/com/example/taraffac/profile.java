@@ -44,8 +44,6 @@ public class profile extends AppCompatActivity {
     StorageReference  storageReference;
     FirebaseUser  firebaseUser;
 
-    String usedId;
-
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -53,7 +51,6 @@ public class profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         edit = findViewById(R.id.edit_profile);
-       // log = findViewById(R.id.but_log_out5);
         del = findViewById(R.id.delete_profile);
         imageProfil1= findViewById(R.id.user_image);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -64,9 +61,9 @@ public class profile extends AppCompatActivity {
         fullName =findViewById(R.id.name_pro);
         Email= findViewById(R.id.email_pro);
         fStore =FirebaseFirestore.getInstance();
-        //////////////////////
 
-        //retrev data ///
+
+        //retrieve data from database
         final DocumentReference documentReference =fStore.collection("users").document(Objects.requireNonNull(fAuth.getCurrentUser()).getUid());
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override

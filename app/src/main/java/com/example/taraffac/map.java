@@ -314,7 +314,7 @@ public void StartRecognition(){
                         String bump_size = bump.getSize();
 
                         LatLng latLng = new LatLng(bump_lat, bump_long);
-                        String bump_info = " type : " + bump_type + " size : " + bump_size;
+                        String bump_info = " Type : " + bump_type +   " Size : " + bump_size;
                  // set height & width - apply style on the marker
                         int height = 130;
                         int width = 130;
