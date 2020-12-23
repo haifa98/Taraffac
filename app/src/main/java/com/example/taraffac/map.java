@@ -457,7 +457,7 @@ public void StartRecognition(){
                             bump_loc= locationSnapshot.getKey();
                             // x is the distance in km between the bump and user location
                             x = distance(bump_lat_not, bump_long_not, not_lat, not_long);
-                            if (x < 0.300) {
+                            if (x < 0.100) {
                                 // check the bump is added by the user, then will not notify
                                 if (add_lat != bump_lat_not & add_long != bump_long_not) {
                                   // check the bump is not the last bump notified
