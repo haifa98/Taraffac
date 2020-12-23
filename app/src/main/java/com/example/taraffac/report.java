@@ -89,7 +89,8 @@ public class report extends Activity {
 
                 // Check the city and send email
                 if (selection.equals(Alriyadh)) {
-                    LocationEmail = "eSupport@alriyadh.gov.sa";
+                    LocationEmail =   "haifa98125@gmail.com";
+                   // LocationEmail = "eSupport@alriyadh.gov.sa";
                 }else if(selection.equals(Makkah)) {
                     LocationEmail = "info@holymakkah.gov.sa";
             }else if(selection.equals(Almadinah)) {
@@ -163,7 +164,7 @@ public class report extends Activity {
         String mContent= "We are sending this e-mail to report the speed bump located at this coordinates "+coord +"\n"+"and the reason for reporting is the following:  "+mReason+"\n"+"Thank you.";
       // if user didn't choose a city, this will be the default email
         if(mEmail == null ){
-            JavaMailAPI javaMailAPI = new JavaMailAPI(this, "eSupport@alriyadh.gov.sa",mSubject ,mContent );
+            JavaMailAPI javaMailAPI = new JavaMailAPI(this, "haifa98125@gmail.com",mSubject ,mContent );
             javaMailAPI.execute(); // go to class javaMailAPI to send the email
         }else {
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, mEmail,mSubject ,mContent );
@@ -227,7 +228,7 @@ public class report extends Activity {
         // then call method "getSpeechInput" to start speech recognition , after the user speech method "onActivityresult"
         // this method will get the user speech.
         final String emailid1;
-        emailid1 = "select your area "+ "select the reason by number  "
+        emailid1 = "select the reason by number  "
                + "and if your city is not riyadh please choose your city ";
 
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -310,7 +311,8 @@ public class report extends Activity {
             }
             // Check the item and send email
             if (n.equals(Alriyadh)) {
-                LocationEmail = "eSupport@alriyadh.gov.sa";
+                LocationEmail = "haifa98125@gmail.com";
+               // LocationEmail = "eSupport@alriyadh.gov.sa";
             }else if(n.equals(Makkah)) {
                 LocationEmail = "info@holymakkah.gov.sa";
             }else if(n.equals(Almadinah)) {

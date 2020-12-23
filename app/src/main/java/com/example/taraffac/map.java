@@ -462,12 +462,12 @@ public void StartRecognition(){
                                 if (add_lat != bump_lat_not & add_long != bump_long_not) {
                                   // check the bump is not the last bump notified
                                     if (notify_lat != bump_lat_not || notify_long != bump_long_not) {
-                                        f2 = 10.00f; //
-                                        // if the user speed less than 10k/h will not notify
-                                  //      if(Float.compare(nCurrentSpeed, f2) > 0){
+                                        f2 = 15.00f; //
+                                        // if the user speed less than 15k/h will not notify
+                                       if(Float.compare(nCurrentSpeed, f2) > 0){
                                         Alertt(bump_type, bump_size); // send alert
                                         notify_lat = bump_lat_not;
-                                        notify_long = bump_long_not; } } } }} } } //}
+                                        notify_long = bump_long_not; } } } }} } } }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }}); }
@@ -586,12 +586,12 @@ public void report(){
             if(result.equals("new") || result.equals("add")){
                 add();
             }// if the user say "edit" and the user speed above 10km/h and the distance between the user less than 300m
-            // then the user can edit by voice command && Float.compare(nCurrentSpeed, f2) > 0
-            if(result.equals("edit") && x < 0.300){
+            // then the user can edit by voice command
+            if(result.equals("edit") && x < 0.300 && Float.compare(nCurrentSpeed, f2) > 0){
                 edit();
             }// if the user say "report" and the user speed above 10km/h and the distance between the user less than 300m
             // then the user can report by voice command
-            if(result.equals("report") &&  x < 0.300 && notify_lat > 0){
+            if(result.equals("report") &&  x < 0.300 && notify_lat > 0 && Float.compare(nCurrentSpeed, f2) > 0){
                 report(); }
         }
         speech.startListening(recognizerIntent); // start listen again
