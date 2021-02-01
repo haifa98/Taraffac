@@ -121,7 +121,8 @@ public class report extends Activity {
                     LocationEmail = "Link@najran.gov.sa";
 
                 } else {
-                    LocationEmail = "it@arar-mu.gov.sa"; } }
+                    LocationEmail = "haifa98125@gmail.com"; //"it@arar-mu.gov.sa";
+                } }
 
         });//end method
 // if user press on SEND button, the Execute() will be called
@@ -285,14 +286,13 @@ public class report extends Activity {
                     // send words to check what user choose
                     String a = theResult(newA);
                     if(a.equals("cancel")){ // if user say cancel, will be returned to map
-                        back_map3();
-                    }else {
+                        back_map3(); }else {
                     Execute(); }
 
                     break;} }}
     // this method check radio buttons
     public String theResult(String[] x){
-        String state = null;
+        String state = "report";
         for (String n: x) {
             if (n.equals("cancel")) {
                 state="cancel";
